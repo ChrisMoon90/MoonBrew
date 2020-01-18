@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+    <script src="static/js/application.js"></script>	
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="static/bootstrap.css">
+
+    <Title>SmokerPi Home</Title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+</head>
+  
+<body>
+    <!--BOOTSTRAP JUMBOTRON HEADER-->
+    <div class="container">
+      <div class="jumbotron">
+        <h1>MOON BREW CO.</h1>
+        <p>SMOKER LIVE FEED & CONTROL PANEL</p>
+        <!--p>Details <a href='https://www.shanelynn.ie/asynchronous-updates-to-a-webpage-with-flask-and-socket-io/' target='_blank'>here.</a></p>-->
+      </div>
+    </div>
+
+    <!--MAIN TABLE-->
+    <div class="container"><!-- id="content"--> 
+      <div class="table-responsive">          
+      <table class="table">
+        
+        <!--Table Headers-->
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Sensor Name</th>
+            <th>Sensor ID</th>
+            <th>Current Value</th>
+          </tr>
+        </thead>
+        
+        <tbody>
+            
+          <!--Table First Row-->
+          <tr>
+            <td>1</td>
+            
+            <td>Smoker Temp</td>
+            
+            <td>            
+                <div class="form-group">
+                    <select class="form-control form-control-sm"id="DropDown1" onchange="getDropDownVal1();">
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                    </select>
+                </div>
+                <script>
+                    function getDropDownVal1()
+                    {
+                        var selectedValue1 = document.getElementById("DropDown1").value;
+                        console.log(selectedValue1);
+                    }
+                </script>
+                
+
+            </td>
+            
+            <td><div id="log"></div></td>
+          </tr>
+          
+          <!--Table Second Row-->
+          <tr>
+            <td>2</td>
+            
+            <td>Meat Temp</td>
+            
+            <td>
+              <div class="form-group">
+                <select class="form-control form-control-sm" id="DropDown2" onchange="getDropDownVal2();">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                </select>
+              </div>              
+            <script>
+                function getDropDownVal2()
+                {
+                    var selectedValue2 = document.getElementById("DropDown2").value;
+                    console.log(selectedValue2);
+                }
+            </script>           
+            </td>
+            <td><div id="temp"></div></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    <!--BUTTONS FROM BOOTSTRAP-->
+    <div class="container">
+      <button type="button" class="btn btn-primary">Primary Button</button>
+      <button type="button" class="btn btn-primary active">Active Primary</button>
+      <button type="button" class="btn btn-primary disabled">Disabled Primary</button>
+    </div>	
+    
+    <!--SocketIO Portion-->
+    <script type="text/javascript">
+    $(document).ready(function() {
+        
+        var socket = io.connect('http://192.168.0.30:5001');
+        
+        socket.on('connect', function() {
+            socket.send('User has connected!');
+        });
+    });               
+    </script>     
+    
+</body>
+</html>
