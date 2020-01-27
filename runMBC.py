@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#!/usr/local/lib/python3.7
+# -*- coding: utf-8 -*-
 
 import flask
 from flask_socketio import SocketIO, emit
@@ -26,18 +27,28 @@ def randomNumberGenerator():
     while not thread_stop_event.isSet():
         number = round(random()*10, 1)
         print(number)
-        socketio.emit('newnumber', {'number': number}, namespace='/test')
+        socketio.emit('newnumber', {'number': number}) #, namespace='/test')
         socketio.sleep(2)
 
-def RTD_Temp():
-    print("Starting RTD Temp Process")
+def RTD_Temp1():
+    print("Starting RTD Temp Process 1")
+    sensor1 = sensors.get_sensor(0)
     while not thread_stop_event.isSet():
-        temp = sensors.run_Temp()
-        temp1 = temp, " °F"
-        print(temp1)
-        socketio.emit('newtemp', {'temp': temp1}, namespace='/test2')
+        temp1 = sensors.run_Temp(sensor1)
+        print("Temp1 = ", temp1)
+        temp1_out = temp1, " °F"
+        socketio.emit('newtemp1', {'temp1': temp1_out}) #, namespace='/test2')
         socketio.sleep(2)
 
+def RTD_Temp2():
+    print("Starting RTD Temp Process 2")
+    sensor2 = sensors.get_sensor(1)
+    while not thread_stop_event.isSet():
+        temp2 = sensors.run_Temp(sensor2)
+        print("Temp2 = ", temp2)
+        temp2_out = temp2, " °F"
+        socketio.emit('newtemp2', {'temp2': temp2_out}) #, namespace='/test2')
+        socketio.sleep(2)
 
 @app.route('/')
 def index():
@@ -45,29 +56,21 @@ def index():
         return flask.render_template('index.html')
     except ValueError:
             return str(e)
-
-@socketio.on('connect', namespace='/test')
-def test_connect():
+       
+@socketio.on('connect') #, namespace='/test2')
+def MBC_connect():
+    print('Client connected')
     global thread
-    print('Client connected')   
     if not thread.isAlive():
         print("Starting Thread1")
-        thread = socketio.start_background_task(randomNumberGenerator)
-
-@socketio.on('disconnect', namespace='/test')
-def test_disconnect():
-    print('Client disconnected')
-    
-    
-@socketio.on('connect', namespace='/test2')
-def test_connect2():
+        thread = socketio.start_background_task(RTD_Temp1)    
     global thread2
     if not thread2.isAlive():
         print("Starting Thread2")
-        thread2 = socketio.start_background_task(RTD_Temp)
+        thread2 = socketio.start_background_task(RTD_Temp2)
 
-@socketio.on('disconnect', namespace='/test2')
-def test_disconnect2():
+@socketio.on('disconnect') #, namespace='/test2')
+def MBC_disconnect():
     print('Client disconnected')
     
 @socketio.on('message')
@@ -78,5 +81,4 @@ def handleMessage(msg):
  
 if __name__ == '__main__':
     app.debug=True
-    socketio.run(app, host='192.168.0.30', port=5001)
-    
+    socketio.run(app, host='192.168.0.31', port=5000)

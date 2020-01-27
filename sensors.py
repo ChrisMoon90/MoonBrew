@@ -60,10 +60,10 @@ def get_ftdi_device_list():
         dev_list.append(serial)
     return dev_list
 
-def get_sensor():  #SELECT DEVICE   
+def get_sensor(index):  #SELECT DEVICE   
+    print("Index2 = ", index)
     devices = get_ftdi_device_list()
     while True:
-        index = 0
         try:
             dev = AtlasDevice(devices[int(index)])
             return dev
@@ -86,15 +86,15 @@ def get_temp(dev_IN):    #COLLECT TEMP READING
                 print( "Error1, ", e)
                 time.sleep(2)
 
-def run_Temp():
-    dev_active = get_sensor()
+def run_Temp(dev_active):
+    print("dev_active = ", dev_active)
     dev_active.send_cmd("C,0") # turn off continuous mode
     dev_active.flush()
     try:
         while True:
             temp_long = get_temp(dev_active)
             temp = round(float(temp_long), 2)
-            print("Response: = ",temp)
+            #print("Response: = ",temp)
             return temp
     except pylibftdi.FtdiError as e:
         print("Error1, ", e)
@@ -103,11 +103,11 @@ def run_Temp():
 
 #USE BELOW FOR DEBUGGING
 if __name__ == '__main__':
-    
-    q = run_Temp()
+    index = 0
+    dev_active = get_sensor(index)
+    q = run_Temp(dev_active)
     print("q = ", q)
     
-    dev_active = get_sensor()
     dlist = get_ftdi_device_list()
     print(">> Opened device ", dlist[0])
     delaytime = 2

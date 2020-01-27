@@ -62,14 +62,14 @@
                     function getDropDownVal1()
                     {
                         var selectedValue1 = document.getElementById("DropDown1").value;
-                        console.log(selectedValue1);
+                        console.log("Dropdown1 = ", selectedValue1);
                     }
                 </script>
                 
 
             </td>
             
-            <td><div id="log"></div></td>
+            <td><div id="temp1"></div></td>
           </tr>
           
           <!--Table Second Row-->
@@ -89,11 +89,11 @@
                 function getDropDownVal2()
                 {
                     var selectedValue2 = document.getElementById("DropDown2").value;
-                    console.log(selectedValue2);
+                    console.log("Dropdown2 = ", selectedValue2);
                 }
             </script>           
             </td>
-            <td><div id="temp"></div></td>
+            <td><div id="temp2"></div></td>
           </tr>
         </tbody>
       </table>
@@ -111,10 +111,10 @@
     <script type="text/javascript">
     $(document).ready(function() {
         
-        var socket = io.connect('http://192.168.0.30:5001');
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
         
         socket.on('connect', function() {
-            socket.send('User has connected!');
+            socket.send('User has connected!4');
         });
     });               
     </script>     
