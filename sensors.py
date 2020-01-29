@@ -91,11 +91,10 @@ def run_Temp(dev_active):
     dev_active.send_cmd("C,0") # turn off continuous mode
     dev_active.flush()
     try:
-        while True:
-            temp_long = get_temp(dev_active)
-            temp = round(float(temp_long), 2)
-            #print("Response: = ",temp)
-            return temp
+        temp_long = get_temp(dev_active)
+        temp = round(float(temp_long), 2)
+        #print("Response: = ",temp)
+        return temp
     except pylibftdi.FtdiError as e:
         print("Error1, ", e)
         time.sleep(2)

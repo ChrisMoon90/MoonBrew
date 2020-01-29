@@ -22,14 +22,6 @@ thread2 = Thread()
 thread_stop_event = Event()
 thread_stop_event2 = Event()
 
-def randomNumberGenerator():
-    print("Making random numbers")
-    while not thread_stop_event.isSet():
-        number = round(random()*10, 1)
-        print(number)
-        socketio.emit('newnumber', {'number': number}) #, namespace='/test')
-        socketio.sleep(2)
-
 def RTD_Temp1():
     print("Starting RTD Temp Process 1")
     sensor1 = sensors.get_sensor(0)
@@ -37,7 +29,7 @@ def RTD_Temp1():
         temp1 = sensors.run_Temp(sensor1)
         print("Temp1 = ", temp1)
         temp1_out = temp1, " °F"
-        socketio.emit('newtemp1', {'temp1': temp1_out}) #, namespace='/test2')
+        socketio.emit('newtemp1', {'temp1': temp1_out})
         socketio.sleep(2)
 
 def RTD_Temp2():
@@ -47,7 +39,7 @@ def RTD_Temp2():
         temp2 = sensors.run_Temp(sensor2)
         print("Temp2 = ", temp2)
         temp2_out = temp2, " °F"
-        socketio.emit('newtemp2', {'temp2': temp2_out}) #, namespace='/test2')
+        socketio.emit('newtemp2', {'temp2': temp2_out})
         socketio.sleep(2)
 
 @app.route('/')
@@ -57,9 +49,9 @@ def index():
     except ValueError:
             return str(e)
        
-@socketio.on('connect') #, namespace='/test2')
+@socketio.on('connect')
 def MBC_connect():
-    print('Client connected')
+    print('Client Connected')
     global thread
     if not thread.isAlive():
         print("Starting Thread1")
@@ -69,15 +61,23 @@ def MBC_connect():
         print("Starting Thread2")
         thread2 = socketio.start_background_task(RTD_Temp2)
 
-@socketio.on('disconnect') #, namespace='/test2')
+@socketio.on('disconnect')
 def MBC_disconnect():
-    print('Client disconnected')
+    print('Client Disconnected')
     
 @socketio.on('message')
 def handleMessage(msg):
     print('Message: ' +msg)
     #send(msg, broadcast=True)
-
+    
+@socketio.on('sensor_change1')
+def change_sensor1(index):
+    print("Smoker sensor changed to: ", index)
+    
+@socketio.on('sensor_change2')
+def change_sensor2(index):
+    print("Meat sensor changed to: ", index)
+    
  
 if __name__ == '__main__':
     app.debug=True
