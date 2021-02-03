@@ -6,7 +6,7 @@ from flask_socketio import SocketIO, emit
 from random import random
 from time import sleep
 from threading import Thread, Event
-import sensors
+import sensor_i2c
 
 app = flask.Flask(__name__)
 app.config['SECRET_KEY'] = 'MBC'
@@ -22,21 +22,27 @@ thread2 = Thread()
 thread_stop_event = Event()
 thread_stop_event2 = Event()
 
-def RTD_Temp1():
+device_list = sensor_i2c.get_devices()
+active_i2c_devs = sensor_i2c.get_i2c_list(device_list)
+print(active_i2c_devs)
+
+def RTD_Temp1(index1):
     print("Starting RTD Temp Process 1")
-    sensor1 = sensors.get_sensor(0)
+    i2c_addr = active_i2c_devs[index1]
+    print(i2c_addr)
     while not thread_stop_event.isSet():
-        temp1 = sensors.run_Temp(sensor1)
+        temp1 = sensor_i2c.get_reading(device_list,i2c_addr)
         print("Temp1 = ", temp1)
         temp1_out = temp1, " °F"
         socketio.emit('newtemp1', {'temp1': temp1_out})
         socketio.sleep(2)
 
-def RTD_Temp2():
+def RTD_Temp2(index2):
     print("Starting RTD Temp Process 2")
-    sensor2 = sensors.get_sensor(1)
+    i2c_addr2 = active_i2c_devs[index2]
+    print(i2c_addr2)
     while not thread_stop_event.isSet():
-        temp2 = sensors.run_Temp(sensor2)
+        temp1 = sensor_i2c.get_reading(device_list,i2c_addr2)
         print("Temp2 = ", temp2)
         temp2_out = temp2, " °F"
         socketio.emit('newtemp2', {'temp2': temp2_out})
@@ -55,11 +61,11 @@ def MBC_connect():
     global thread
     if not thread.isAlive():
         print("Starting Thread1")
-        thread = socketio.start_background_task(RTD_Temp1)    
+        thread = socketio.start_background_task(RTD_Temp1(1))    
     global thread2
     if not thread2.isAlive():
         print("Starting Thread2")
-        thread2 = socketio.start_background_task(RTD_Temp2)
+        thread2 = socketio.start_background_task(RTD_Temp2(0))
 
 @socketio.on('disconnect')
 def MBC_disconnect():
