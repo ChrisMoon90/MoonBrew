@@ -42,7 +42,7 @@ def get_reading(device_list,i2c_addr):
         if(switched):
             long_temp = device.query("r")
             split_temp = long_temp.split(":")
-            temp = split_temp[1].rstrip("\x00")
+            temp = float(split_temp[1].rstrip("\x00"))            
             return temp
     except IOError:
         print("Query failed \n - Address may be invalid, use list command to see available addresses")
@@ -56,4 +56,4 @@ if __name__ == '__main__':
     index = 1
     i2c_addr = active_i2c_devs[index]
     temp_reading = get_reading(device_list,i2c_addr)
-    print("t("+str(index)+")= " + temp_reading)
+    print("t("+str(index)+")= %.3f" % (temp_reading))
