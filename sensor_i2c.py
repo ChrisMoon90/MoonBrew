@@ -14,8 +14,7 @@ from AtlasI2C import (
 def get_devices():
     device = AtlasI2C()
     device_address_list = device.list_i2c_devices()
-    device_list = []
-    
+    device_list = []   
     for i in device_address_list:
         device.set_i2c_address(i)
         response = device.query("I")

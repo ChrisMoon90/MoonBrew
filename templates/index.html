@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
-    <!--script src="https://code.jquery-3.5.1.min.js"></script-->
     <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="static/bootstrap.css">
@@ -51,10 +50,10 @@
             
             <td>            
                 <div class="form-group">
-                    <select class="form-control form-control-sm"id="DropDown1" onchange="getDropDownVal1();">
-                      <option>Select Sensor</option>
-                      <option value=0>1</option>
-                      <option value=1>2</option>
+                    <select class="form-control form-control-sm"id="DropDown1" data-toggle="dropdown" value="Select Sensor" onchange="getDropDownVal1();">
+                  <option value=0>1</option>
+                  <option value=1>2</option>
+                  <option value=2>3</option>
                     </select>
                 </div>
             </td>
@@ -66,18 +65,36 @@
           <tr>
             <td>2</td>
             
-            <td>Meat Temp</td>
+            <td>Meat Temp 1</td>
             
             <td>
               <div class="form-group">
-                <select class="form-control form-control-sm" id="DropDown2" onchange="getDropDownVal2();">
-                  <option>Select Sensor</option>
+                <select class="form-control form-control-sm" id="DropDown2" data-toggle="dropdown" value="Select Sensor" onchange="getDropDownVal2();">
                   <option value=0>1</option>
                   <option value=1>2</option>
+                  <option value=2>3</option>
                 </select>
               </div>                       
             </td>
             <td><div id="Temp2"></div></td>
+          </tr>
+          
+          <!--Table Third Row-->
+          <tr>
+            <td>3</td>
+            
+            <td>Meat Temp 2</td>
+            
+            <td>
+              <div class="form-group">
+                <select class="form-control form-control-sm" id="DropDown3" data-toggle="dropdown" value="Select Sensor" onchange="getDropDownVal3();">
+                  <option value=0>1</option>
+                  <option value=1>2</option>
+                  <option value=2>3</option>
+                </select>
+              </div>                       
+            </td>
+            <td><div id="Temp3"></div></td>
           </tr>
         </tbody>
       </table>

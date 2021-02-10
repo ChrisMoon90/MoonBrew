@@ -1,39 +1,41 @@
-//connect to the socket server.
+//Connect to the socket server.
 var socket = io()
 
+indexes = {}
+socket.on('indexes', function(msg){
+    indexes['s0'] = msg['s0'];
+    indexes['s1'] = msg['s1'];
+    indexes['s2'] = msg['s2'];
+    console.log('Server Indexes Received: ', indexes);
+});
 function getDropDownVal1() {
-    var selectedValue1 = document.getElementById("DropDown1").value;
-    return selectedValue1;
+    var selectedvalue1 = document.getElementById("DropDown1").value;
+    indexes['s0'] = selectedvalue1;
+    console.log('User Index Change s0: ', indexes);
+    socket.emit("index_change", indexes);
 }
 function getDropDownVal2() {
-    var selectedValue2 = document.getElementById("DropDown2").value;
-    return selectedValue2
+    var selectedvalue2 = document.getElementById("DropDown2").value;
+    indexes['s1'] = selectedvalue2;
+    console.log('User Index Change s1: ', indexes);
+    socket.emit("index_change", indexes);
 }
-
-//Add function to emit sensor change only when index changed
-    //console.log("Dropdown1 Index = ", selectedValue1);
-    //socket.emit('sensor_change', { index: selectedValue1});
-//make if statment to check for values from python
-
-$(document).ready(function(){
-    //Incoming Temp Readings
-    socket.on('newtemps', function(msg){
-        console.log('TEMP UPDATE', msg);
-        temp_in = msg;
-        selectedValue1 = getDropDownVal1();
-        var Temp1 = temp_in[selectedValue1];
-        $('#Temp1').html(Temp1);
-        selectedValue2 = getDropDownVal2();
-        var Temp2 = temp_in[selectedValue2];
-        $('#Temp2').html(Temp2);
-    });
-    
-    socket.on('connected', function(msg){
-        console.log('After connect', msg);
-    });
-    
-    socket.on('connect', function() {
-        socket.send('User has connected!');
-    });
+function getDropDownVal3() {
+    var selectedvalue3 = document.getElementById("DropDown3").value;
+    indexes['s2'] = selectedvalue3;
+    console.log('User Index Change s2: ', indexes);
+    socket.emit("index_change", indexes);
+}
+//Incoming Temp Readings
+socket.on('newtemps', function(temp_in){
+    console.log('TEMP UPDATE', temp_in);
+    var sensor1 = indexes['s0'];
+    var Temp1 = temp_in[sensor1];
+    $('#Temp1').html(Temp1);        
+    var sensor2 = indexes['s1'];
+    var Temp2 = temp_in[sensor2];
+    $('#Temp2').html(Temp2);        
+    var sensor3 = indexes['s2'];
+    var Temp3 = temp_in[sensor3];
+    $('#Temp3').html(Temp3);
 });
-
