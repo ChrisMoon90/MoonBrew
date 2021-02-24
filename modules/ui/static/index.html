@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="static/bootstrap.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.js"></script>
+    
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <Title>SmokerPi Home</Title>
+</head>
+  
+<body>
+    <!--BOOTSTRAP JUMBOTRON HEADER-->
+    <div class="container">
+      <div class="jumbotron">
+        <h1>MOON BREW CO.</h1>
+        <p>SMOKER LIVE FEED & CONTROL PANEL</p>
+      </div>
+    </div>
+
+    <!--MAIN TABLE-->
+    <div class="container">
+      <div class="table-responsive">          
+      <table class="table">  
+        <!--Table Headers-->
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Sensor Name</th>
+            <th> </th>
+            <th>Sensor ID</th>
+            <th>Current Value</th>
+          </tr>
+        </thead>
+        <tbody>   
+          <!--Table First Row-->
+          <tr>
+            <td>1</td>
+            <td>Smoker Temp</td>
+            <td><div id="Sensor0"></div></td>
+              <td>
+              <div>
+                <select class="form-select form-select-sm" id="DropDown1" aria-label=".form-select-sm example" onchange="getDropDownVal1();">
+                  <option selected>Edit</option>
+                  <option value=0>1</option>
+                  <option value=1>2</option>
+                  <option value=2>3</option>
+                </select>
+              </div>                     
+            </td>
+            <td><div id="Temp1"></div></td>
+          </tr>
+          <!--Table Second Row-->
+          <tr>
+            <td>2</td>
+            <td>Meat Temp 1</td>
+            <td><div id="Sensor1"></div></td>
+            <td>
+              <div class="form-group">
+                <select class="form-select form-select-sm" id="DropDown2" aria-label=".form-select-sm example" onchange="getDropDownVal2();">
+                  <option selected>Edit</option>
+                  <option value=0>1</option>
+                  <option value=1>2</option>
+                  <option value=2>3</option>
+                </select>
+              </div>                       
+            </td>
+            <td><div id="Temp2"></div></td>
+          </tr>
+          <!--Table Third Row-->
+          <tr>
+            <td>3</td>
+            <td>Meat Temp 2</td>
+              <td><div id="Sensor2"></div></td>
+              <td>
+              <div class="form-group">
+                <select class="form-select form-select-sm" id="DropDown3" aria-label=".form-select-sm example" onchange="getDropDownVal3();">
+                  <option selected>Edit</option>
+                  <option value=0>1</option>
+                  <option value=1>2</option>
+                  <option value=2>3</option>
+                </select>
+              </div>                       
+            </td>
+            <td><div id="Temp3"></div></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>  
+
+<div id='root'></div>
+<script src="static/js/application.js"></script>
+
+</body>
+</html>
