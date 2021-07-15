@@ -1,6 +1,7 @@
 #!/usr/local/lib/python3.7
 # -*- coding: utf-8 -*-
-
+import eventlet
+eventlet.monkey_patch()
 from modules import *
 
 print("Startup Complete")
