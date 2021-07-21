@@ -17,7 +17,7 @@ def get_db_indexes():
 def MBC_connect():
     print('Client Connected')
     socketio.emit('connected',  {'connected': 'Connection Request Accepted'})
-    indexes = get_db_indexes()
+    #indexes = get_db_indexes()
     socketio.emit('indexes', indexes)
    
 @socketio.on('disconnect')
@@ -50,3 +50,5 @@ def index0():
 print("Starting Threads")
 thread = socketio.start_background_task(target=RTD_Temp, sleep = 0)
 thread2 = socketio.start_background_task(target=save_to_file, sleep = 15)
+
+indexes = get_db_indexes()
