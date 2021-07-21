@@ -17,7 +17,6 @@ def get_db_indexes():
 def MBC_connect():
     print('Client Connected')
     socketio.emit('connected',  {'connected': 'Connection Request Accepted'})
-    #indexes = get_db_indexes()
     socketio.emit('indexes', indexes)
    
 @socketio.on('disconnect')
