@@ -1,0 +1,5 @@
+Temp_Indexes
+{'s0': 2, 's1': 0, 's2': 1}
+
+Fan_Indexes
+{'f0': 1, 'f1': 1, 'f2': 2}

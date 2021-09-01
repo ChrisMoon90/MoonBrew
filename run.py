@@ -1,5 +1,6 @@
-#!/usr/local/lib/python3.7
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+
 import eventlet
 eventlet.monkey_patch()
 from modules import *
