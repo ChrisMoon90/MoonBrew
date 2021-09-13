@@ -61,28 +61,21 @@ class tempAPI:
     def emit_temp(self):
         socketio.emit('newtemps', self.temps)
 
-
-class logAPI:
-    def __init__(self, a):
-        self.running = False
-        self.temps = a.temps
-
-    def set_run_state(self, logState):
-        self.running = logState
-        print("Logging run_state changed: ", self.running)
-
-    def save_to_file(self, sleep):
-        print("Starting Logging")
-        while self.running:
-            filename = "./logs/Temps.log"
-            formatted_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-            msg = "%s, %s\n" % (formatted_time, self.temps)
-            print("Saving to File: %s" %self.temps)
-            with open(filename, "a") as file:
-                file.write(msg)
-            socketio.sleep(sleep)
-        print("Log Thread Terminated")
-
+    def temp_index_change(self, temp_indexes_in):
+        temp_indexes = temp_indexes_in
+        filename = "./config.txt"
+        with open(filename, 'r') as f:
+            cur_line = 0
+            cfile = f.readlines()
+            for line in cfile:
+                cur_line +=1
+                if "Temp_Indexes" in line:
+                    cfile[cur_line] = str(temp_indexes) + '\n'
+        with open(filename, 'w') as f:
+            for i in range(0,len(cfile)):
+                f.write(str(cfile[i]))
+        socketio.emit('temp_indexes', temp_indexes)
+        print("Temp_Indexes Received from Client & Broadcasted: %s" % temp_indexes)
 
 
 #RUN FOR DEBUGGING PURPOSES                    
