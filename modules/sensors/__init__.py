@@ -8,6 +8,10 @@ from modules.sensors.AtlasI2C import (
 class tempAPI:   
     def __init__(self):
         self.temps = {'time': None, 0: None, 1: None, 2: None}
+        self.get_temp_indexes()
+        self.device_list = self.get_devices()
+        self.active_i2c_devs = self.get_i2c_list(self.device_list)
+        thread1 = socketio.start_background_task(target=self.RTD_Temp, dev_list=self.device_list, active_devs=self.active_i2c_devs, sleep=2)
    
     def get_devices(self):
         device = AtlasI2C()
@@ -61,8 +65,15 @@ class tempAPI:
     def emit_temp(self):
         socketio.emit('newtemps', self.temps)
 
+    def get_temp_indexes(self):
+        indexes = get_config_indexes()
+        self.temp_indexes = indexes[0]
+
+    def send_temp_indexes(self):
+        socketio.emit('temp_indexes', self.temp_indexes)
+
     def temp_index_change(self, temp_indexes_in):
-        temp_indexes = temp_indexes_in
+        self.temp_indexes = temp_indexes_in
         filename = "./config.txt"
         with open(filename, 'r') as f:
             cur_line = 0
@@ -70,12 +81,12 @@ class tempAPI:
             for line in cfile:
                 cur_line +=1
                 if "Temp_Indexes" in line:
-                    cfile[cur_line] = str(temp_indexes) + '\n'
+                    cfile[cur_line] = str(self.temp_indexes) + '\n'
         with open(filename, 'w') as f:
             for i in range(0,len(cfile)):
                 f.write(str(cfile[i]))
-        socketio.emit('temp_indexes', temp_indexes)
-        print("Temp_Indexes Received from Client & Broadcasted: %s" % temp_indexes)
+        socketio.emit('temp_indexes', self.temp_indexes)
+        print("Temp_Indexes Received from Client & Broadcasted: %s" % self.temp_indexes)
 
 
 #RUN FOR DEBUGGING PURPOSES                    
