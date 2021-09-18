@@ -10,7 +10,6 @@ class logAPI:
 
     def set_run_state(self, logState):
         self.running = logState
-        print("Logging run_state changed: ", self.running)
 
     def save_to_file(self, sleep):
         print("Starting Logging")
@@ -24,15 +23,22 @@ class logAPI:
             socketio.sleep(sleep)
         print("Log Thread Terminated")
 
+    def send_log_state(self):
+        socketio.emit('logState', self.running)
+        print("LogState Sent: ", self.running)
+    
+    def send_fetched_log_state(self):
+        socketio.emit('fetched_logState', self.running)
+        print("Fetched LogState Sent: ", self.running)
+
     def toggle_logState(self, logState_in):
-        print("logstate: ", logState_in)
         logState = not logState_in
         self.set_run_state(logState)
         if logState == True:
             thread2 = socketio.start_background_task(target=self.save_to_file, sleep = 15)
         else:
             print("Stopping Logging Thread") 
-        socketio.emit('logState', logState)
+        self.send_log_state()
 
     def delete_log(self):   
         filename = "./logs/Temps.log"

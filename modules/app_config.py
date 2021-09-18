@@ -45,7 +45,5 @@ def get_config_indexes():
             f.write(str(temp_indexes) + "\n\n")
             f.write("Fan_Indexes\n")
             f.write(str(fan_indexes))
-    print("Config_temp_indexes: ", temp_indexes)
-    print("Config fan_indexes: ", fan_indexes)
     indexes = [temp_indexes, fan_indexes]
     return indexes

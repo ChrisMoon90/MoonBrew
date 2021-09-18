@@ -24,6 +24,7 @@ class fanAPI:
 
     def send_fan_indexes(self):
         socketio.emit('fan_indexes', self.fan_indexes)
+        print("Sent fan_indexes: ", self.fan_indexes)
 
     def get_fan_indexes(self):
         indexes = get_config_indexes()
@@ -50,7 +51,7 @@ class fanAPI:
 
     def send_fan_states(self):
         socketio.emit("fan_states", self.fan_states)
-        print("Sendng fan_states: ", self.fan_states)
+        print("Sent fan_states: ", self.fan_states)
 
     def toggle_fan_state(self, fanID, fan_state):
         self.fan_states[int(fanID)] = fan_state

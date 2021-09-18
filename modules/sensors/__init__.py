@@ -71,6 +71,7 @@ class tempAPI:
 
     def send_temp_indexes(self):
         socketio.emit('temp_indexes', self.temp_indexes)
+        print("Sent Temp_indexes: ", self.temp_indexes)
 
     def temp_index_change(self, temp_indexes_in):
         self.temp_indexes = temp_indexes_in
