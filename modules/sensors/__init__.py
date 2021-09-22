@@ -8,6 +8,7 @@ from modules.sensors.AtlasI2C import (
 class tempAPI:   
     def __init__(self):
         self.temps = {'time': None, 0: None, 1: None, 2: None}
+        self.last_reading = [0, 0, 0]
         self.get_temp_indexes()
         self.device_list = self.get_devices()
         self.active_i2c_devs = self.get_i2c_list(self.device_list)
@@ -41,26 +42,46 @@ class tempAPI:
                     device = i
                     switched = True
             if(switched):
-                long_temp = device.query("r")
-                split_temp = long_temp.split(":")
+                temp_raw = device.query("r")
+                split_temp = temp_raw.split(":")
                 temp = float(split_temp[1].rstrip("\x00"))            
                 return temp
-        except IOError:
-            print("Query failed \n - Address may be invalid, use list command to see available addresses")
+        except:
+            temp_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+            msg = "%s, Error Running get_reading (float), temp_raw: %s\n" % (temp_time, temp_raw)
+            self.log_error(msg)
+            return None
 
     def RTD_Temp(self, dev_list, active_devs, sleep):
         print("Starting RTD Temp Background Process")
-        while True:        
-            temp_time = time.strftime("%H:%M:%S", time.localtime())
-            self.temps['time'] = temp_time
-            num_sensors = len(active_devs)
-            for i in range(0, num_sensors):
-                i2c_addr = active_devs[i]
-                cur_temp = self.get_reading(dev_list,i2c_addr)           
-                self.temps[i] = cur_temp
-            print("Temp Output: %s" % self.temps)      
-            self.emit_temp()
+        while True:
+            try:      
+                # print("Last Temps: ", self.last_reading)  
+                temp_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+                self.temps['time'] = temp_time
+                num_sensors = len(active_devs)
+                for i in range(0, num_sensors):
+                    i2c_addr = active_devs[i]                    
+                    cur_temp = self.get_reading(dev_list,i2c_addr)
+                    temp_dif = abs(cur_temp - self.last_reading[i]) 
+                    if temp_dif > 20:
+                        msg = "%s, Error: large temp_dif on sensor %s, Current Temp: %s, Previous Temp: %s\n" % (temp_time, i, cur_temp, self.last_reading[i])
+                        self.log_error(msg)
+                    else:
+                        self.temps[i] = cur_temp
+                    self.last_reading[i] = cur_temp
+                print("Temp Output: %s" % self.temps)                  
+                self.emit_temp()
+            except:
+                msg = "%s, Error Running RTD Temp Loop Thread\n" % temp_time
+                self.log_error(msg)
             socketio.sleep(sleep)
+
+    def log_error(self, msg):
+        error_log = "./logs/TempError.log"
+        print(msg)
+        with open(error_log, "a") as file:
+            file.write(msg)          
                         
     def emit_temp(self):
         socketio.emit('newtemps', self.temps)
