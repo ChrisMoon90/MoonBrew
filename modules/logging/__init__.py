@@ -7,20 +7,27 @@ class logAPI:
     def __init__(self, a):
         self.running = False
         self.temps = a.temps
+        self.filename = "./logs/Temps.csv"
 
     def set_run_state(self, logState):
         self.running = logState
 
     def save_to_file(self, sleep):
         print("Starting Logging")
-        while self.running:
-            filename = "./logs/Temps.log"
+        while self.running: 
             formatted_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-            msg = "%s, %s\n" % (formatted_time, self.temps)
-            print("Saving to File: %s" %self.temps)
-            with open(filename, "a") as file:
-                file.write(msg)
-            socketio.sleep(sleep)
+            msg = "%s, %s, %s, %s\n" % (formatted_time, self.temps[0], self.temps[1], self.temps[2])
+            print("Saving to File: %s" % self.temps)
+            if os.path.exists(self.filename):
+                with open(self.filename, "a") as f:
+                    f.write(msg)
+                socketio.sleep(sleep)
+            else:
+                print("Temp.csv file does not exist. File will be created.")
+                header = "Time, Smoker Temp, Meat Temp 1, Meat Temp 2\n"
+                with open(self.filename, 'a') as f:
+                    f.write(header)
+                    f.write(msg)
         print("Log Thread Terminated")
 
     def send_log_state(self):
@@ -41,9 +48,8 @@ class logAPI:
         self.send_log_state()
 
     def delete_log(self):   
-        filename = "./logs/Temps.log"
-        if os.path.exists(filename):
-            os.remove(filename)
+        if os.path.exists(self.filename):
+            os.remove(self.filename)
             msg = "Temp Log File Successfully Deleted"
             print(msg)
             socketio.emit('log_deleted', msg)

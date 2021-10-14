@@ -91,6 +91,21 @@ def change_logState(logState_in):
 def del_log():
     b.delete_log()
 
+# TIMER FUNCTIONS ############################
+@socketio.on('fetch_timer')
+def send_start_time():
+    e.send_start_time()
+
+@socketio.on('start_timer')
+def start_timer():
+    e.start_timer()
+
+@socketio.on('reset_timer')
+def reset_timer():
+    e.reset_timer()
+
+
+
 
 # CREATE MAIN API CLASSES #################
 print("Creating API Classes")
@@ -102,3 +117,5 @@ b = logAPI(a)
 c = fanAPI()
 
 d = hysteresisAPI(a, c)
+
+e = timerAPI()

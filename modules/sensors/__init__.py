@@ -68,7 +68,10 @@ class tempAPI:
                         msg = "%s, Error: large temp_dif on sensor %s, Current Temp: %s, Previous Temp: %s\n" % (temp_time, i, cur_temp, self.last_reading[i])
                         self.log_error(msg)
                     else:
-                        self.temps[i] = cur_temp
+                        if cur_temp < 0:
+                            self.temps[i] = 0
+                        else:
+                            self.temps[i] = cur_temp
                     self.last_reading[i] = cur_temp
                 print("Temp Output: %s" % self.temps)                  
                 self.emit_temp()

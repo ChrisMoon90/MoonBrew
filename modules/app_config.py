@@ -11,16 +11,23 @@ socketio = SocketIO(app, cors_allowed_origins='*')
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://localhost:5432/flask_todo'
 #db = SQLAlchemy(app)
 
-app.register_blueprint(react, url_prefix='/ui')
+app.register_blueprint(react, url_prefix='/') # was '/ui'
 #print(app.url_map)
 
-@app.route('/')
-def index0():
-    try:      
-        return redirect('/ui')
-    except ValueError:
-            return str(e)
+# @app.route('/')
+# def index0():
+#     try:      
+#         return flask.redirect('/ui')
+#     except ValueError:
+#             return str(e)
 
+@app.route('/data')
+def send_csv_data():
+    filename = "./logs/Temps.csv"
+    with open(filename, "r") as file:
+        file.seek(0)
+        csv_data = file.read()
+    return csv_data
 
 def get_config_indexes(): 
     filename = "./config.txt"
