@@ -53,7 +53,7 @@ class tempAPI:
         print("Starting RTD Temp Background Process")
         while True:
             try:      
-                # print("Last Temps: ", self.last_reading)  
+                # print("Last Temps: ", self.last_reading)   
                 temp_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
                 self.temps['time'] = temp_time
                 num_sensors = len(active_devs)
