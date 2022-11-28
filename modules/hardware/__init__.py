@@ -12,6 +12,7 @@ class fanAPI:
         self.set_outputs()
         self.get_fan_indexes()
         self.fan_states = { 0: "OFF", 1: "OFF", 2: "OFF"}
+        GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BCM)
         for i in self.outputs:
             GPIO.setup(i, GPIO.OUT)

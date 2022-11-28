@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
+print("Starting MoonBrewCo...")
 import eventlet
 eventlet.monkey_patch()
 from modules import *

@@ -7,12 +7,12 @@ from modules.sensors.AtlasI2C import (
 
 class tempAPI:   
     def __init__(self):
-        self.temps = {'time': None, 0: None, 1: None, 2: None}
-        self.last_reading = [0, 0, 0]
+        self.temps = {'time': None, 0: 0, 1: 0, 2: 0}
+        self.last_reading = [0,0,0]
         self.get_temp_indexes()
         self.device_list = self.get_devices()
         self.active_i2c_devs = self.get_i2c_list(self.device_list)
-        thread1 = socketio.start_background_task(target=self.RTD_Temp, dev_list=self.device_list, active_devs=self.active_i2c_devs, sleep=2)
+        thread1 = socketio.start_background_task(target=self.Atlas_Temp, dev_list=self.device_list, active_devs=self.active_i2c_devs, sleep=2)
    
     def get_devices(self):
         device = AtlasI2C()
@@ -45,14 +45,11 @@ class tempAPI:
                 temp_raw = device.query("r")
                 split_temp = temp_raw.split(":")
                 temp = float(split_temp[1].rstrip("\x00"))            
-                return temp
         except:
-            temp_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-            msg = "%s, Error Running get_reading (float), temp_raw: %s\n" % (temp_time, temp_raw)
-            self.log_error(msg)
-            return None
+            temp = "ERR"
+        return temp
 
-    def RTD_Temp(self, dev_list, active_devs, sleep):
+    def Atlas_Temp(self, dev_list, active_devs, sleep):
         print("Starting RTD Temp Background Process")
         while True:
             try:      
@@ -64,27 +61,34 @@ class tempAPI:
                     i2c_addr = active_devs[i]                    
                     cur_temp = self.get_reading(dev_list,i2c_addr)
                     temp_dif = abs(cur_temp - self.last_reading[i]) 
-                    if temp_dif > 20:
-                        msg = "%s, Error: large temp_dif on sensor %s, Current Temp: %s, Previous Temp: %s\n" % (temp_time, i, cur_temp, self.last_reading[i])
-                        self.log_error(msg)
+                    if self.last_reading[i] == 0:
+                        pass
                     else:
-                        if cur_temp < 0:
-                            self.temps[i] = 0
+                        if cur_temp == "ERR":                        
+                            msg = "%s, Error Running get_reading (float), temp_raw: %s" % (temp_time, cur_temp)
+                            self.log_error(msg)
                         else:
-                            self.temps[i] = cur_temp
-                    self.last_reading[i] = cur_temp
-                print("Temp Output: %s" % self.temps)                  
+                            if cur_temp <= 0:
+                                pass
+                            else:
+                                if temp_dif < 20:
+                                    self.temps[i] = cur_temp                      
+                                else:
+                                    msg = "%s, Temp Error: sensor %s, Current Temp: %s, Previous Temp: %s" % (temp_time, i, cur_temp, self.last_reading[i])
+                                    self.log_error(msg)                    
+                    self.last_reading[i] = cur_temp                                
                 self.emit_temp()
             except:
-                msg = "%s, Error Running RTD Temp Loop Thread\n" % temp_time
+                msg = "%s, Error Running Temp Loop Thread on Sensor %s" % (temp_time, i)
                 self.log_error(msg)
+            print("Temp Output: %s" % self.temps)
             socketio.sleep(sleep)
 
     def log_error(self, msg):
         error_log = "./logs/TempError.log"
         print(msg)
         with open(error_log, "a") as file:
-            file.write(msg)          
+            file.write("%s\n" % (msg))         
                         
     def emit_temp(self):
         socketio.emit('newtemps', self.temps)
