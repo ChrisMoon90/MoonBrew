@@ -16,15 +16,15 @@ class logAPI:
         print("Starting Logging")
         while self.running: 
             formatted_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-            msg = "%s, %s, %s, %s\n" % (formatted_time, self.temps[0], self.temps[1], self.temps[2])
-            print("Saving to File: %s" % self.temps)
+            msg = "%s, %.3f, %.3f, %.3f" % (formatted_time, self.temps[0], self.temps[1], self.temps[2])
+            print("Saving to File: %s" % msg)
             if os.path.exists(self.filename):
                 with open(self.filename, "a") as f:
-                    f.write(msg)
+                    f.write("%s\n" % msg)
                 socketio.sleep(sleep)
             else:
                 print("Temp.csv file does not exist. File will be created.")
-                header = "Time, Smoker Temp, Meat Temp 1, Meat Temp 2\n"
+                header = "Time, Sensor 1, Sensor 2, Sensor 3\n"
                 with open(self.filename, 'a') as f:
                     f.write(header)
                     f.write(msg)
