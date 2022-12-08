@@ -21,9 +21,9 @@ def MBC_disconnect():
 
 
 # TEMP FUNCTIONS ############################
-@socketio.on('fetch_temps')
-def send_temps():
-    a.emit_temp()
+# @socketio.on('fetch_temps')
+# def send_temps():
+#     a.emit_temp()
 
 @socketio.on('fetch_temp_indexes')
 def send_temp_indexes():

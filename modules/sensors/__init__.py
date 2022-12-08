@@ -12,11 +12,11 @@ class tempAPI:
         self.active_i2c_devs = self.get_i2c_list(self.device_list)       
         self.temps = {}
         self.last_reading = {}
-        for i in self.active_i2c_devs:
-            i = int(i)
+        for i in range(len(self.active_i2c_devs)):
+            thread = "sensor_thread_%s" % i
             self.temps[i] = "{0:.3f}".format(0)
             self.last_reading[i] = 0
-            i = socketio.start_background_task(target=self.Atlas_Temp, dev_list=self.device_list, i2c_addr=i, sleep=0.5)
+            thread = socketio.start_background_task(target=self.Atlas_Temp, dev_list=self.device_list, i2c_addr=self.active_i2c_devs[i], i=i, sleep=0.5)
         socketio.sleep(1)
         emit_thread = socketio.start_background_task(target=self.emit_temp, sleep=2)
    
@@ -55,27 +55,27 @@ class tempAPI:
             temp = "ERR"
         return temp
 
-    def Atlas_Temp(self, dev_list, i2c_addr, sleep):
-        print("Starting RTD Temp Background Process on I2C %s" % i2c_addr)
+    def Atlas_Temp(self, dev_list, i2c_addr, i, sleep):
+        print("Starting RTD Temp Background Process on I2C Dev %s" % i2c_addr)
         while True:
             try:      
                 # print("Last Temps: ", self.last_reading) 
                 temp_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())                    
                 cur_temp = self.get_reading(dev_list, i2c_addr)
-                temp_dif = abs(cur_temp - self.last_reading[i2c_addr]) 
+                temp_dif = abs(cur_temp - self.last_reading[i]) 
                 if cur_temp == "ERR":
                     msg = "%s, Error Running get_reading (float), sensor %s, temp_raw: %s" % (temp_time, i2c_addr, cur_temp)
                     self.log_error(msg)
                 else:
-                    if cur_temp <= 0 and self.last_reading[i2c_addr] <= 0:                        
-                        self.temps[i2c_addr] = "{0:.3f}".format(0)
+                    if cur_temp <= 0 and self.last_reading[i] <= 0:                        
+                        self.temps[i] = "{0:.3f}".format(0)
                     else:
                         if temp_dif < 20 or temp_dif == cur_temp:
-                            self.temps[i2c_addr] = "{0:.3f}".format(cur_temp)                    
+                            self.temps[i] = "{0:.3f}".format(cur_temp)                    
                         else:
-                            msg = "%s, Large Temp Change Error: sensor %s, Current Temp: %s, Previous Temp: %s" % (temp_time, i2c_addr, cur_temp, self.last_reading[i2c_addr])
+                            msg = "%s, Large Temp Change Error: sensor %s, Current Temp: %s, Previous Temp: %s" % (temp_time, i2c_addr, cur_temp, self.last_reading[i])
                             self.log_error(msg)  
-                self.last_reading[i2c_addr] = cur_temp                                
+                self.last_reading[i] = cur_temp                                
             except:
                 msg = "%s, Error Running Temp Loop Thread on Sensor %s" % (temp_time, i2c_addr)
                 self.log_error(msg)           
