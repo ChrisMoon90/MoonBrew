@@ -5,10 +5,10 @@ from modules.app_config import socketio
 
 class hysteresisAPI:
 
-    def __init__(self, a, c):
+    def __init__(self, ti2c, hw):
         self.isRunning = False
-        self.tempAPI = a
-        self.fanAPI = c
+        self.tempAPI = ti2c
+        self.fanAPI = hw
         self.tar_temp = 200
         self.temp_tol = 1
 

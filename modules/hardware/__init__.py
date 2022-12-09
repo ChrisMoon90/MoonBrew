@@ -8,7 +8,7 @@ from modules.app_config import *
 
 class fanAPI:
 
-    def __init__(self):
+    def __init__(self, c):
         self.set_outputs()
         self.get_fan_indexes()
         self.fan_states = { 0: "OFF", 1: "OFF", 2: "OFF"}

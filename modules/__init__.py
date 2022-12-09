@@ -2,8 +2,9 @@
 # from flask_socketio import emit
 
 from modules.app_config import *
+from modules.cache import *
 import modules.ui
-from modules.sensors import *
+from modules.sensors.i2c import *
 from modules.hardware import *
 from modules.logging import *
 from modules.controls import *
@@ -11,12 +12,12 @@ from modules.controls import *
 
 # CONNECTION FUNCTIONS ######################
 @socketio.on('connect')
-def MBC_connect():
+def MlC_connect():
     print('Client Connected')
     socketio.emit('connected',  {'connected': 'Connection Request Accepted'})
    
 @socketio.on('disconnect')
-def MBC_disconnect():
+def MlC_disconnect():
     print('Client Disconnected')
 
 
@@ -27,69 +28,69 @@ def MBC_disconnect():
 
 @socketio.on('fetch_temp_indexes')
 def send_temp_indexes():
-    a.send_temp_indexes()
+    ti2c.send_temp_indexes()
 
 @socketio.on('temp_index_change')
 def mod_temp_index(temp_indexes_in):
-    a.temp_index_change(temp_indexes_in)
+    ti2c.temp_index_change(temp_indexes_in)
 
 
 # FAN FUNCTIONS ############################
 @socketio.on('fetch_fan_indexes')
 def send_fan_indexes():
-    c.send_fan_indexes()
+    hw.send_fan_indexes()
 
 @socketio.on('fetch_fan_states')
 def send_fan_states():
-    c.send_fan_states()
+    hw.send_fan_states()
     
 @socketio.on('fan_index_change')
 def change_fan_index(fan_indexes_in):
-    c.fan_index_change(fan_indexes_in)
+    hw.fan_index_change(fan_indexes_in)
 
 @socketio.on('toggle_fan_state')
 def change_fan_state(fanID, fan_state):
-    c.toggle_fan_state(fanID, fan_state)
+    hw.toggle_fan_state(fanID, fan_state)
 
 
-# CONTROL FUNCTIONS ########################
+# HYSTERESIS CONTROL FUNCTIONS ########################
 @socketio.on('fetch_auto_state')
 def send_auto_state():
-    d.send_auto_state()
+    h.send_auto_state()
 
 @socketio.on('toggle_auto_state')
 def change_auto_state():
-    d.toggle_auto_state()
+    h.toggle_auto_state()
 
 @socketio.on('Fetch_TarTemp')
 def fetch_target_temp():
-    d.fetch_tar_temp()
+    h.fetch_tar_temp()
 
 @socketio.on('TarTemp_Update')
 def update_target_temp(tar_temp):
-    d.set_tar_temp(tar_temp)
+    h.set_tar_temp(tar_temp)
 
 @socketio.on('Fetch_TempTol')
 def get_temp_tol():
-    d.fetch_temp_tol()
+    h.fetch_temp_tol()
 
 @socketio.on('ToggleTempTol')
 def update_temp_tol(temp_tol):
-    d.set_temp_tol(temp_tol)
+    h.set_temp_tol(temp_tol)
 
 
 # LOG FUNCTIONS ############################
 @socketio.on('fetch_log_state')
 def send_log_state():
-    b.send_fetched_log_state()
+    l.send_fetched_log_state()
 
 @socketio.on('toggle_logState')
 def change_logState(logState_in):
-    b.toggle_logState(logState_in)
+    l.toggle_logState(logState_in)
 
 @socketio.on('delete_log')
 def del_log():
-    b.delete_log()
+    l.delete_log()
 
 # TIMER FUNCTIONS ############################
 @socketio.on('fetch_timer')
@@ -110,12 +111,14 @@ def reset_timer():
 # CREATE MAIN API CLASSES #################
 print("Creating API Classes")
 
-a = tempAPI()
+c = CacheAPI()
 
-b = logAPI(a)
+ti2c = i2cAPI(c)
 
-c = fanAPI()
+l = logAPI(ti2c)
 
-d = hysteresisAPI(a, c)
+hw = fanAPI(c)
+
+h = hysteresisAPI(ti2c, hw)
 
 e = timerAPI()
