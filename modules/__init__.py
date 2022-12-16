@@ -4,7 +4,7 @@
 from modules.app_config import *
 from modules.cache import *
 import modules.ui
-from modules.sensors.i2c import *
+from modules.sensors import *
 from modules.hardware import *
 from modules.logging import *
 from modules.controls import *
@@ -113,7 +113,11 @@ print("Creating API Classes")
 
 c = CacheAPI()
 
-ti2c = i2cAPI(c)
+t = TempAPI(c)
+
+# tftdi = ftdiAPI(t, c)
+
+ti2c = i2cAPI(t, c)
 
 l = logAPI(ti2c)
 
@@ -122,3 +126,26 @@ hw = fanAPI(c)
 h = hysteresisAPI(ti2c, hw)
 
 e = timerAPI()
+
+
+# INITIALIZE BACKGROUND TASKS ###############
+def run_init_fnct(function, *args):
+    function(*args)
+
+def build_init(i):
+    args = [c]
+    for key in i:
+        if key == "function":
+            function = i[key]
+        else:
+            arg = i[key]
+            args.append(arg)
+    args = tuple(args)
+    run_init_fnct(function, *args)
+
+def initializer():
+    for i in c.cache["init"]:
+        thread = socketio.start_background_task(target=build_init, i=i)
+
+print("Starting Background Tasks")
+initializer()

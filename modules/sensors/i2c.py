@@ -6,8 +6,7 @@ from modules.sensors.AtlasI2C import (
 
 
 class i2cAPI:   
-    def __init__(self, c):
-        self.get_temp_indexes()
+    def __init__(self, t, c):
         self.device_list = self.get_devices()
         self.active_i2c_devs = self.get_i2c_list(self.device_list)       
         self.temps = {}
@@ -16,9 +15,10 @@ class i2cAPI:
             thread = "sensor_thread_%s" % i
             self.temps[i] = "{0:.3f}".format(0)
             self.last_reading[i] = 0
-            thread = socketio.start_background_task(target=self.Atlas_Temp, dev_list=self.device_list, i2c_addr=self.active_i2c_devs[i], i=i, sleep=0.5)
+            c.cache["init"].append({"function": self.Atlas_I2C_Temp, "sleep": 0.5, "sensor_num": i, "device": self.device_list[i], "dev_id": self.active_i2c_devs[i]})
+            c.cache["sensors"][i] = {"type": "i2c", "dev_id": self.active_i2c_devs[i], "prev_temp": self.last_reading[i], "cur_temp": self.temps[i]}           
         socketio.sleep(1)
-        emit_thread = socketio.start_background_task(target=self.emit_temp, sleep=2)
+        # emit_thread = socketio.start_background_task(target=self.emit_temp, c=c, sleep=2)
    
     def get_devices(self):
         device = AtlasI2C()
@@ -41,27 +41,30 @@ class i2cAPI:
                 i2c_list.append(i2c_num)
         return i2c_list
 
-    def get_reading(self, device_list,i2c_addr):
-        try:
-            for i in device_list:
-                if(i.address == int(i2c_addr)):
-                    device = i
-                    switched = True
-            if(switched):
-                temp_raw = device.query("r")
-                split_temp = temp_raw.split(":")
-                temp = float(split_temp[1].rstrip("\x00"))            
-        except:
-            temp = "ERR"
-        return temp
+    # def get_reading(self, device_list,i2c_addr):
+    #     try:
+    #         for i in device_list:
+    #             if(i.address == int(i2c_addr)):
+    #                 device = i
+    #                 switched = True
+    #         if(switched):
+    #             temp_raw = device.query("r")
+    #             split_temp = temp_raw.split(":")
+    #             temp = float(split_temp[1].rstrip("\x00"))            
+    #     except:
+    #         temp = "ERR"
+    #     return temp
 
-    def Atlas_Temp(self, dev_list, i2c_addr, i, sleep):
+    def Atlas_I2C_Temp(self, c, sleep, sensor_num, device, dev_id, ):
+        i2c_addr = dev_id
+        i = sensor_num
         print("Starting RTD Temp Background Process on I2C Dev %s" % i2c_addr)
         while True:
             try:      
-                # print("Last Temps: ", self.last_reading) 
                 temp_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())                    
-                cur_temp = self.get_reading(dev_list, i2c_addr)
+                temp_raw = device.query("r")
+                split_temp = temp_raw.split(":")
+                cur_temp = float(split_temp[1].rstrip("\x00"))
                 temp_dif = abs(cur_temp - self.last_reading[i]) 
                 if cur_temp == "ERR":
                     msg = "%s, Error Running get_reading (float), sensor %s, temp_raw: %s" % (temp_time, i2c_addr, cur_temp)
@@ -74,49 +77,14 @@ class i2cAPI:
                             self.temps[i] = "{0:.3f}".format(cur_temp)                    
                         else:
                             msg = "%s, Large Temp Change Error: sensor %s, Current Temp: %s, Previous Temp: %s" % (temp_time, i2c_addr, cur_temp, self.last_reading[i])
-                            self.log_error(msg)  
+                            self.log_error(msg) 
+                c.cache["sensors"][i]['cur_temp'] = self.temps[i]
+                c.cache["sensors"][i]['prev_temp'] = self.last_reading[i]
                 self.last_reading[i] = cur_temp                                
             except:
                 msg = "%s, Error Running Temp Loop Thread on Sensor %s" % (temp_time, i2c_addr)
                 self.log_error(msg)           
             socketio.sleep(sleep)
-
-    def log_error(self, msg):
-        error_log = "./logs/TempError.log"
-        print(msg)
-        with open(error_log, "a") as file:
-            file.write("%s\n" % (msg))         
-                        
-    def emit_temp(self, sleep):
-        while True:
-            temp_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) 
-            print("Temp Output at %s --> %s" % (temp_time, self.temps))
-            socketio.emit('newtemps', self.temps)
-            socketio.sleep(sleep)
-
-    def get_temp_indexes(self):
-        indexes = get_config_indexes()
-        self.temp_indexes = indexes[0]
-
-    def send_temp_indexes(self):
-        socketio.emit('temp_indexes', self.temp_indexes)
-        print("Sent Temp_indexes: ", self.temp_indexes)
-
-    def temp_index_change(self, temp_indexes_in):
-        self.temp_indexes = temp_indexes_in
-        filename = "./config.txt"
-        with open(filename, 'r') as f:
-            cur_line = 0
-            cfile = f.readlines()
-            for line in cfile:
-                cur_line +=1
-                if "Temp_Indexes" in line:
-                    cfile[cur_line] = str(self.temp_indexes) + '\n'
-        with open(filename, 'w') as f:
-            for i in range(0,len(cfile)):
-                f.write(str(cfile[i]))
-        socketio.emit('temp_indexes', self.temp_indexes)
-        print("Temp_Indexes Received from Client & Broadcasted: %s" % self.temp_indexes)
 
 
 #RUN FOR DEBUGGING PURPOSES                    
