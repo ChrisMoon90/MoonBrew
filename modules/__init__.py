@@ -106,8 +106,6 @@ def reset_timer():
     e.reset_timer()
 
 
-
-
 # CREATE MAIN API CLASSES #################
 print("Creating API Classes")
 
@@ -129,9 +127,6 @@ e = timerAPI()
 
 
 # INITIALIZE BACKGROUND TASKS ###############
-def run_init_fnct(function, *args):
-    function(*args)
-
 def build_init(i):
     args = [c]
     for key in i:
@@ -140,8 +135,7 @@ def build_init(i):
         else:
             arg = i[key]
             args.append(arg)
-    args = tuple(args)
-    run_init_fnct(function, *args)
+    function(*args)
 
 def initializer():
     for i in c.cache["init"]:

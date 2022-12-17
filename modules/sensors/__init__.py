@@ -1,12 +1,10 @@
 from modules.app_config import *
-# from modules import c
 from modules.sensors.i2c import *
 
 class TempAPI:
     def __init__(self, c):
         self.get_temp_indexes()
         c.cache["init"].append({"function": self.emit_temp, "sleep": 2})
-        # emit_thread = socketio.start_background_task(target=self.emit_temp, c=c, sleep=2)
 
     def log_error(self, msg):
         error_log = "./logs/TempError.log"
