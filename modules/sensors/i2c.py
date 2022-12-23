@@ -73,7 +73,7 @@ class i2cAPI:
 
 #RUN FOR DEBUGGING PURPOSES                    
 if __name__ == '__main__': 
-    atest = tempAPI()
+    atest = i2cAPI()
     device_list = atest.get_devices()
     active_i2c_devs = atest.get_i2c_list(device_list)
     print(active_i2c_devs)

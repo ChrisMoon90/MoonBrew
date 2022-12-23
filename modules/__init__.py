@@ -1,5 +1,6 @@
 # from flask import redirect
 # from flask_socketio import emit
+import pprint
 
 from modules.app_config import *
 from modules.cache import *
@@ -143,3 +144,6 @@ def initializer():
 
 print("Starting Background Tasks")
 initializer()
+
+print("Full Compiled Cache")
+pprint.pprint(c.cache)
