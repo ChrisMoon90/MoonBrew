@@ -3,19 +3,21 @@
 import RPi.GPIO as GPIO
 import time
 
-from modules.app_config import *
+from modules.app_config import socketio
 
 
-class fanAPI:
+class hardwareAPI:
 
     def __init__(self, c):
         self.set_outputs()
-        self.get_fan_indexes()
-        self.fan_states = { 0: "OFF", 1: "OFF", 2: "OFF"}
+        # self.get_fan_indexes()
+        # self.fan_states = { 0: "OFF", 1: "OFF", 2: "OFF"}
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BCM)
         for i in self.outputs:
             GPIO.setup(i, GPIO.OUT)
+        for x in range(3):
+            c.cache['hardware'][x]['state'] = "OFF"
 
     def set_outputs(self):
         output1 = 26
@@ -27,9 +29,9 @@ class fanAPI:
         socketio.emit('fan_indexes', self.fan_indexes)
         print("Sent fan_indexes: ", self.fan_indexes)
 
-    def get_fan_indexes(self):
-        indexes = get_config_indexes()
-        self.fan_indexes = indexes[1]
+    # def get_fan_indexes(self):
+        # indexes = get_config_params()
+        # self.fan_indexes = indexes[1]
 
     def fan_index_change(self, fan_indexes_in):
         self.fan_indexes = fan_indexes_in

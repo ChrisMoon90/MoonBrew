@@ -3,23 +3,13 @@ from flask_socketio import SocketIO
 import os
 from modules.ui.endpoints import react
 
+
 app = flask.Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app, cors_allowed_origins='*')
 
-#app.add_url_rule('/favicon.ico',redirect_to=url_for('static', filename='favicon.ico'))
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://localhost:5432/flask_todo'
-#db = SQLAlchemy(app)
-
 app.register_blueprint(react, url_prefix='/') # was '/ui'
 #print(app.url_map)
-
-# @app.route('/')
-# def index0():
-#     try:      
-#         return flask.redirect('/ui')
-#     except ValueError:
-#             return str(e)
 
 @app.route('/data')
 def send_csv_data():
@@ -29,7 +19,7 @@ def send_csv_data():
         csv_data = file.read()
     return csv_data
 
-def get_config_indexes(): 
+def get_config_params(c): 
     filename = "./config.txt"
     if os.path.exists(filename):
         with open(filename, 'r+') as f:
@@ -52,5 +42,13 @@ def get_config_indexes():
             f.write(str(temp_indexes) + "\n\n")
             f.write("Fan_Indexes\n")
             f.write(str(fan_indexes))
-    indexes = [temp_indexes, fan_indexes]
-    return indexes
+    x = 0
+    for key, value in temp_indexes:
+        c.cache['sensors'][x]['index'] = value
+        x +=1
+    x = 0
+    for key, value in fan_indexes:
+        c.cache['hardware'][x]['index'] = value
+        x +=1
+    # indexes = [temp_indexes, fan_indexes]
+    # return indexes

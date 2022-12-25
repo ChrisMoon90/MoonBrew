@@ -6,9 +6,12 @@ class CacheAPI:
 
             "init": [],
             "sensors":{},
-            "hardware":[],
+            "hardware":{
+                0:{},
+                1:{},
+                2:{}
+                }
 
         }
-        # print(self.cache)
 
 

@@ -1,10 +1,7 @@
-# from flask import redirect
-# from flask_socketio import emit
 import pprint
 
 from modules.app_config import *
 from modules.cache import *
-import modules.ui
 from modules.sensors import *
 from modules.hardware import *
 from modules.logging import *
@@ -120,7 +117,7 @@ ti2c = i2cAPI(t, c)
 
 l = logAPI(ti2c)
 
-hw = fanAPI(c)
+hw = hardwareAPI(c)
 
 h = hysteresisAPI(ti2c, hw)
 
@@ -144,6 +141,11 @@ def initializer():
 
 print("Starting Background Tasks")
 initializer()
+
+
+# GET CONFIG PARAMETERS ###################
+get_config_params(c)
+
 
 print("Full Compiled Cache")
 pprint.pprint(c.cache)
