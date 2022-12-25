@@ -8,7 +8,7 @@ from modules.app_config import socketio
 
 class hardwareAPI:
 
-    def __init__(self, c):
+    def __init__(self, cache):
         self.set_outputs()
         # self.get_fan_indexes()
         # self.fan_states = { 0: "OFF", 1: "OFF", 2: "OFF"}
@@ -17,7 +17,7 @@ class hardwareAPI:
         for i in self.outputs:
             GPIO.setup(i, GPIO.OUT)
         for x in range(3):
-            c.cache['hardware'][x]['state'] = "OFF"
+            cache['hardware'][x]['state'] = "OFF"
 
     def set_outputs(self):
         output1 = 26

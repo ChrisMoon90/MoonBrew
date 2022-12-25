@@ -1,7 +1,7 @@
 import pprint
 
 from modules.app_config import *
-from modules.cache import *
+# from modules.cache import *
 from modules.sensors import *
 from modules.hardware import *
 from modules.logging import *
@@ -104,29 +104,46 @@ def reset_timer():
     e.reset_timer()
 
 
+# CREATE CACHE #################
+cache = {           
+        "init": [],
+        "sensors":{},
+        "hardware":{
+            0:{},
+            1:{},
+            2:{}
+            },
+        "system": {
+            "auto_state": "OFF"
+        }
+    }
+
+
+# GET CONFIG PARAMETERS ###################
+get_config_params(cache)
+
+
 # CREATE MAIN API CLASSES #################
 print("Creating API Classes")
 
-c = CacheAPI()
-
-t = TempAPI(c)
+t = TempAPI(cache)
 
 # tftdi = ftdiAPI(t, c)
 
-ti2c = i2cAPI(t, c)
+ti2c = i2cAPI(t, cache)
 
 l = logAPI(ti2c)
 
-hw = hardwareAPI(c)
+hw = hardwareAPI(cache)
 
-h = hysteresisAPI(ti2c, hw)
+h = hysteresisAPI(cache, ti2c, hw)
 
 e = timerAPI()
 
 
 # INITIALIZE BACKGROUND TASKS ###############
 def build_init(i):
-    args = [c]
+    args = [cache]
     for key in i:
         if key == "function":
             function = i[key]
@@ -136,16 +153,11 @@ def build_init(i):
     function(*args)
 
 def initializer():
-    for i in c.cache["init"]:
+    for i in cache["init"]:
         thread = socketio.start_background_task(target=build_init, i=i)
 
 print("Starting Background Tasks")
 initializer()
 
-
-# GET CONFIG PARAMETERS ###################
-get_config_params(c)
-
-
 print("Full Compiled Cache")
-pprint.pprint(c.cache)
+pprint.pprint(cache)

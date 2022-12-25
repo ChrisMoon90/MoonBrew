@@ -5,13 +5,13 @@ from modules.app_config import socketio
 
 class hysteresisAPI:
 
-    def __init__(self, ti2c, hw):
+    def __init__(self, cache, ti2c, hw):
         self.isRunning = False
         self.tempAPI = ti2c
         self.fanAPI = hw
-        self.tar_temp = 200
-        self.temp_tol = 1
-
+        self.tar_temp = cache['system']['tar_temp']
+        self.temp_tol = cache['system']['temp_tol']
+        
     def fetch_tar_temp(self):
         socketio.emit("TarTemp", self.tar_temp)
         print("Sent Target Temp: ", self.tar_temp)

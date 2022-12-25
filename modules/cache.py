@@ -3,14 +3,17 @@
 class CacheAPI:
     def __init__(self):
         self.cache = {
-
+            
             "init": [],
             "sensors":{},
             "hardware":{
                 0:{},
                 1:{},
                 2:{}
-                }
+                },
+            "system": {
+                "auto_state": "OFF"
+            }
 
         }
 
