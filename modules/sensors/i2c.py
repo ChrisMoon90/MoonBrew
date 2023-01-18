@@ -1,11 +1,11 @@
 import time
-from modules.app_config import *
+from modules.app_config import socketio, cache
 from modules.sensors.AtlasI2C import (
     AtlasI2C
 )
 
 class i2cAPI:   
-    def __init__(self, t, cache):
+    def __init__(self, t):
         self.device_list = self.get_devices()
         self.active_i2c_devs = self.get_i2c_list(self.device_list)       
         self.temps = {}
@@ -15,10 +15,7 @@ class i2cAPI:
             self.temps[i] = "{0:.3f}".format(0)
             self.last_reading[i] = 0
             cache["init"].append({"function": self.Atlas_I2C_Temp, "sleep": 0.5, "sensor_num": i, "device": self.device_list[i], "dev_id": self.active_i2c_devs[i]})
-            cache["sensors"][i]['type']  = "i2c"
-            cache["sensors"][i]['dev_id'] = self.active_i2c_devs[i]
-            cache["sensors"][i]['prev_temp']  = self.last_reading[i]
-            cache["sensors"][i]['cur_temp']  = self.temps[i]        
+            cache["sensors"][i] = {'type': "i2c", 'dev_id': self.active_i2c_devs[i], 'prev_temp': self.last_reading[i], 'cur_temp': self.temps[i]}      
         socketio.sleep(1)
    
     def get_devices(self):
@@ -42,12 +39,12 @@ class i2cAPI:
                 i2c_list.append(i2c_num)
         return i2c_list
 
-    def Atlas_I2C_Temp(self, cache, sleep, sensor_num, device, dev_id):
+    def Atlas_I2C_Temp(self, sleep, sensor_num, device, dev_id):
         i2c_addr = dev_id
         i = sensor_num
         print("Starting RTD Temp Background Process on I2C Dev %s" % i2c_addr)
         while True:
-            try:      
+            try:
                 temp_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())                    
                 temp_raw = device.query("r")
                 split_temp = temp_raw.split(":")

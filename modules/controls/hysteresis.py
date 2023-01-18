@@ -1,11 +1,10 @@
 #!/usr/bin/python3
-
-from modules.app_config import socketio
+from modules.app_config import *
 
 
 class hysteresisAPI:
 
-    def __init__(self, cache, ti2c, hw):
+    def __init__(self, ti2c, hw):
         self.isRunning = False
         self.tempAPI = ti2c
         self.fanAPI = hw

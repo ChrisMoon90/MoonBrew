@@ -3,15 +3,13 @@
 import RPi.GPIO as GPIO
 import time
 
-from modules.app_config import socketio
+from modules.app_config import socketio, cache
 
 
 class hardwareAPI:
 
-    def __init__(self, cache):
+    def __init__(self):
         self.set_outputs()
-        # self.get_fan_indexes()
-        # self.fan_states = { 0: "OFF", 1: "OFF", 2: "OFF"}
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BCM)
         for i in self.outputs:

@@ -1,8 +1,20 @@
-Temp_Indexes
-{'s0': 0, 's1': 1, 's2': 2}
+Mode
+brew
 
-Fan_Indexes
-{'f0': 0, 'f1': 1, 'f2': 2}
+Boil_Kettle
+{'s0': 0, 'h0': 0, 'h1': 1}
+
+Mash_Tun
+{'s0': 0, 'h0': 0}
+
+Hot_Liquor_Tank
+{'s0': 0, 'h0': 0, 'h1': 1}
+
+Fermenter
+{'s0': 0, 's1': 1, 's2': 2, 'h0': 0, 'h1': 1}
+
+Smoker
+{'s0': 0, 's1': 1, 'h0': 0, 'h1': 1}
 
 Target_Temp
 200

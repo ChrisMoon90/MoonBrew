@@ -104,57 +104,36 @@ def reset_timer():
     e.reset_timer()
 
 
-# CREATE CACHE #################
-cache = {           
-        "init": [],
-        "sensors":{},
-        "hardware":{
-            0:{},
-            1:{},
-            2:{}
-            },
-        "system": {
-            "auto_state": "OFF"
-        }
-    }
-
-
-# GET CONFIG PARAMETERS ###################
-get_config_params(cache)
-
-
 # CREATE MAIN API CLASSES #################
 print("Creating API Classes")
 
-t = TempAPI(cache)
+t = TempAPI()
 
-# tftdi = ftdiAPI(t, c)
+# tftdi = ftdiAPI(t)
 
-ti2c = i2cAPI(t, cache)
+ti2c = i2cAPI(t)
 
 l = logAPI(ti2c)
 
-hw = hardwareAPI(cache)
+hw = hardwareAPI()
 
-h = hysteresisAPI(cache, ti2c, hw)
+h = hysteresisAPI(ti2c, hw)
 
 e = timerAPI()
 
 
 # INITIALIZE BACKGROUND TASKS ###############
-def build_init(i):
-    args = [cache]
-    for key in i:
-        if key == "function":
-            function = i[key]
-        else:
-            arg = i[key]
-            args.append(arg)
-    function(*args)
-
 def initializer():
     for i in cache["init"]:
-        thread = socketio.start_background_task(target=build_init, i=i)
+        args = []
+        for key in i:
+            if key == "function":
+                function = i[key]
+            else:
+                arg = i[key]
+                args.append(arg)
+        thread = socketio.start_background_task(function, *args)
+
 
 print("Starting Background Tasks")
 initializer()
