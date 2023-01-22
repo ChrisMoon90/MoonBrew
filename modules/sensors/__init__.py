@@ -3,7 +3,7 @@ from modules.sensors.i2c import *
 
 class TempAPI:
     def __init__(self):
-        cache["init"].append({"function": self.emit_temp, "sleep": 2})
+        cache["INIT"].append({"function": self.emit_temp, "sleep": 2})
 
     def log_error(self, msg):
         error_log = "./logs/TempError.log"
@@ -15,8 +15,8 @@ class TempAPI:
         print("Starting Emit Temp Thread")
         while True:
             temp_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) 
-            print(cache['sensors'])
-            socketio.emit('newtemps', cache['sensors']) ###############   NEED TO FIX!!!!!!
+            print(cache['SENSORS'])
+            socketio.emit('newtemps', cache['SENSORS']) ###############   NEED TO FIX!!!!!!
             socketio.sleep(sleep)
 
     def get_temp_indexes(self, cache):

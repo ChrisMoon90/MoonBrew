@@ -15,7 +15,7 @@ class hardwareAPI:
         for i in self.outputs:
             GPIO.setup(i, GPIO.OUT)
         for x in range(3):
-            cache['hardware'][x]['state'] = "OFF"
+            cache['HARDWARE'][x]['state'] = "OFF"
 
     def set_outputs(self):
         output1 = 26

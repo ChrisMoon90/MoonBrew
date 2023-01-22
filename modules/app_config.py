@@ -2,6 +2,8 @@ import flask
 from flask_socketio import SocketIO
 import os
 import pprint
+import json
+
 from modules.ui.endpoints import react
 
 
@@ -25,16 +27,16 @@ def send_csv_data():
 # SET UP CACHE & CONFIG PARAMETERS ###################
 global cache
 cache = {           
-        "init": [],
-        "sensors":{},
-        "hardware":{
+        "INIT": [],
+        "SENSORS":{},
+        "HARDWARE":{
             0:{},
             1:{},
             2:{}
             },
-        "vessels":{},
-        "system": {
-            "auto_state": "OFF"
+        "VESSELS":{},
+        "SYSTEM": {
+            "Auto_State": "OFF"
         }
     }
 
@@ -64,7 +66,7 @@ def get_config_params():
                     temp_tol = eval(cfile[cur_line].rstrip("\n"))
     else:
         print("Index file does not exist. Config file will be created.")
-        mode = 'brew'
+        mode = 'Brew'
         bk_indexes = {'s0':0, 'h0':0, 'h1':1}
         mt_indexes = {'s0':0, 'h0':0}
         hlt_indexes = {'s0':0, 'h0':0, 'h1':1}
@@ -82,12 +84,48 @@ def get_config_params():
             f.write("Target_Temp\n" + str(tar_temp) + "\n\n")
             f.write("Temp_Tollerance\n" + str(temp_tol) + "\n\n")
     # ADD TO CACHE
-    vessels = {'boil_kettle': bk_indexes, 'mash_tun': mt_indexes, 'hot_liquor_tank': hlt_indexes, 'fermenter': ferm_indexes, 'smoker': smkr_indexes}
+    vessels = {'Boil_Kettle': bk_indexes, 'Mash_Tun': mt_indexes, 'Hot_Liquor_Tank': hlt_indexes, 'Fermenter': ferm_indexes, 'Smoker': smkr_indexes}
     for key in vessels:
-        cache['vessels'][key] = vessels[key]
-    cache['system']['mode'] = mode
-    cache['system']['tar_temp'] = tar_temp
-    cache['system']['temp_tol'] = temp_tol
+        cache['VESSELS'][key] = vessels[key]
+    cache['SYSTEM']['Mode'] = mode
+    cache['SYSTEM']['Tar_Temp'] = tar_temp
+    cache['SYSTEM']['Temp_Tol'] = temp_tol
     #pprint.pprint(cache)
 
+def update_config(loc, val):
+    filename = "./config.txt"
+    with open(filename, 'r') as f:
+        cur_line = 0
+        cfile = f.readlines()
+        for line in cfile:
+            cur_line +=1
+            if loc in line:
+                cfile[cur_line] = str(val) + '\n'
+    with open(filename, 'w') as f:
+        for i in range(0,len(cfile)):
+            f.write(str(cfile[i]))
+
 get_config_params()
+
+
+class CacheAPI:
+    def __init__(self):
+        self.cache = cache
+
+    def cache_update(self):
+        self.cache = cache
+
+    def send_cache(self):
+        self.cache_update()
+        cache_emit = self.cache
+        try: 
+            del cache_emit['INIT']
+        except:
+            pass
+        socketio.emit('cache', cache_emit)
+
+    def update_param(self, type, loc, val):
+        update_config(loc, val)
+        self.cache[type][loc] = val
+        self.send_cache()
+        print('Parameter Update --> %s: %s' % (loc, val))
