@@ -16,7 +16,8 @@ class TempAPI:
         while True:
             temp_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) 
             print(cache['SENSORS'])
-            socketio.emit('newtemps', cache['SENSORS']) ###############   NEED TO FIX!!!!!!
+            # socketio.emit('newtemps', cache['SENSORS']) ###############   NEED TO FIX!!!!!!
+            socketio.emit('cache', cache)
             socketio.sleep(sleep)
 
     def get_temp_indexes(self, cache):

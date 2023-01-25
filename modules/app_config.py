@@ -34,10 +34,14 @@ cache = {
             1:{},
             2:{}
             },
-        "VESSELS":{},
-        "SYSTEM": {
-            "Auto_State": "OFF"
-        }
+        "VESSELS":{
+            'Boil_Kettle': {'auto_state': 'OFF'},
+            'Mash_Tun': {'auto_state': 'OFF'},
+            'Hot_Liquor_Tank': {'auto_state': 'OFF'},
+            'Fermenter': {'auto_state': 'OFF'},
+            'Smoker': {'auto_state': 'OFF'}
+        },
+        "SYSTEM": {}
     }
 
 def get_config_params(): 
@@ -71,7 +75,7 @@ def get_config_params():
         mt_indexes = {'s0':0, 'h0':0}
         hlt_indexes = {'s0':0, 'h0':0, 'h1':1}
         ferm_indexes = {'s0':0, 's1':1,'s2':2, 'h0':0, 'h1':1}
-        smkr_indexes = {'s0':0, 's1':1, 'h0':0, 'h1':1}
+        smkr_indexes = {'s0':0, 's1':1, 's2':2, 'h0':0, 'h1':1}
         tar_temp = 200
         temp_tol = 5
         with open(filename, 'w') as f:
@@ -84,9 +88,11 @@ def get_config_params():
             f.write("Target_Temp\n" + str(tar_temp) + "\n\n")
             f.write("Temp_Tollerance\n" + str(temp_tol) + "\n\n")
     # ADD TO CACHE
-    vessels = {'Boil_Kettle': bk_indexes, 'Mash_Tun': mt_indexes, 'Hot_Liquor_Tank': hlt_indexes, 'Fermenter': ferm_indexes, 'Smoker': smkr_indexes}
-    for key in vessels:
-        cache['VESSELS'][key] = vessels[key]
+    vessel_indexes = [bk_indexes, mt_indexes, hlt_indexes, ferm_indexes, smkr_indexes]
+    x = 0
+    for key in cache['VESSELS']:
+        cache['VESSELS'][key]['indexes'] = vessel_indexes[x]
+        x+=1
     cache['SYSTEM']['Mode'] = mode
     cache['SYSTEM']['Tar_Temp'] = tar_temp
     cache['SYSTEM']['Temp_Tol'] = temp_tol
