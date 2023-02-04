@@ -41,62 +41,47 @@ cache = {
             'Fermenter': {'auto_state': 'OFF'},
             'Smoker': {'auto_state': 'OFF'}
         },
-        "SYSTEM": {}
+        "SYSTEM": {
+            'log_state': 'OFF',
+            'timer_start': None
+        }
     }
 
 def get_config_params(): 
     filename = "./config.txt"
+    settings = ['Boil_Kettle', 'Mash_Tun', 'Hot_Liquor_Tank', 'Fermenter', 'Smoker']
     if os.path.exists(filename):
-        with open(filename, 'r+') as f:
-            cur_line = 0
-            cfile = f.readlines()
-            for x in cfile:
-                cur_line += 1
-                if "Mode" in x:
-                    mode = cfile[cur_line].rstrip("\n")
-                if "Boil_Kettle" in x:
-                    bk_indexes = eval(cfile[cur_line].rstrip("\n"))
-                if "Mash_Tun" in x:
-                    mt_indexes = eval(cfile[cur_line].rstrip("\n"))
-                if "Hot_Liquor_Tank" in x:
-                    hlt_indexes = eval(cfile[cur_line].rstrip("\n"))
-                if "Fermenter" in x:
-                    ferm_indexes = eval(cfile[cur_line].rstrip("\n"))
-                if "Smoker" in x:
-                    smkr_indexes = eval(cfile[cur_line].rstrip("\n"))
-                if "Target_Temp" in x:
-                    tar_temp = eval(cfile[cur_line].rstrip("\n"))
-                if "Temp_Tollerance" in x:
-                    temp_tol = eval(cfile[cur_line].rstrip("\n"))
+        pass
     else:
         print("Index file does not exist. Config file will be created.")
-        mode = 'Brew'
-        bk_indexes = {'s0':0, 'h0':0, 'h1':1}
-        mt_indexes = {'s0':0, 'h0':0}
-        hlt_indexes = {'s0':0, 'h0':0, 'h1':1}
-        ferm_indexes = {'s0':0, 's1':1,'s2':2, 'h0':0, 'h1':1}
-        smkr_indexes = {'s0':0, 's1':1, 's2':2, 'h0':0, 'h1':1}
-        tar_temp = 200
-        temp_tol = 5
         with open(filename, 'w') as f:
-            f.write("Mode\n" + str(mode) + "\n\n")
-            f.write("Boil_Kettle\n" + str(bk_indexes) + "\n\n")
-            f.write("Mash_Tun\n" + str(mt_indexes) + "\n\n")
-            f.write("Hot_Liquor_Tank\n" + str(hlt_indexes) + "\n\n")
-            f.write("Fermenter\n" + str(ferm_indexes) + "\n\n")
-            f.write("Smoker\n" + str(smkr_indexes) + "\n\n")
-            f.write("Target_Temp\n" + str(tar_temp) + "\n\n")
-            f.write("Temp_Tollerance\n" + str(temp_tol) + "\n\n")
+            f.write("Mode\nBrew\n\n")
+            a = {'Actors': {1: {'name': 'Actor1', 'index': 0}, 2: {'name': 'Actor2', 'index': 1}},
+                'Sensors': {1: {'name': 'Temp', 'index': 0}, 2: {'name': 'Temp', 'index': 1}, 3: {'name': 'Temp', 'index': 2}},
+                'Params': {'tar_temp': 200, 'temp_tol': 2}}
+            for i in settings:
+                f.write(str(i) + '\n')
+                for p in a:
+                    f.write("'" + str(p) + "': " + str(a[p]) + '\n')
+                f.write('\n')
     # ADD TO CACHE
-    vessel_indexes = [bk_indexes, mt_indexes, hlt_indexes, ferm_indexes, smkr_indexes]
-    x = 0
-    for key in cache['VESSELS']:
-        cache['VESSELS'][key]['indexes'] = vessel_indexes[x]
-        x+=1
-    cache['SYSTEM']['Mode'] = mode
-    cache['SYSTEM']['Tar_Temp'] = tar_temp
-    cache['SYSTEM']['Temp_Tol'] = temp_tol
-    #pprint.pprint(cache)
+    with open(filename, 'r+') as f:
+        x = 0
+        cfile = f.readlines()          
+        for line in cfile:
+            for i in settings:
+                if 'Mode' in line:
+                    mode = str(cfile[x + 1]).rstrip("\n")
+                    cache['SYSTEM']['Mode'] = mode
+                    break
+                elif i in line:
+                    actors = cfile[x + 1].rstrip("\n")
+                    sensors = cfile[x + 2].rstrip("\n")
+                    params = cfile[x + 3].rstrip("\n")
+                    set = eval('{' + actors + ', ' + sensors + ', ' + params + '}')
+                    cache['VESSELS'][i] = set
+            x += 1
+
 
 def update_config(loc, val):
     filename = "./config.txt"

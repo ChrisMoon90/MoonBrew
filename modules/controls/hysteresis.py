@@ -8,8 +8,8 @@ class hysteresisAPI:
         self.isRunning = False
         self.tempAPI = ti2c
         self.fanAPI = hw
-        self.tar_temp = cache['SYSTEM']['Tar_Temp']
-        self.temp_tol = cache['SYSTEM']['Temp_Tol']
+        # self.tar_temp = cache['VESSELS']['Tar_Temp']
+        # self.temp_tol = cache['SYSTEM']['Temp_Tol']
         
     def fetch_tar_temp(self):
         socketio.emit("TarTemp", self.tar_temp)
