@@ -27,6 +27,10 @@ def get_cache():
 def set_mode(mode):
     c.update_param('SYSTEM','Mode', mode)
 
+@socketio.on('vessel_update')
+def update_vessel(vessel, v_dict):
+    c.update_param('VESSELS',vessel, v_dict)
+
 
 # TEMP FUNCTIONS ############################
 # @socketio.on('fetch_temps')

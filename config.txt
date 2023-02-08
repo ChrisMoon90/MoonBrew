@@ -2,7 +2,7 @@ Mode
 Brew
 
 Boil_Kettle
-'Actors': {1: {'name': 'Actor1', 'index': 0}, 2: {'name': 'Actor2', 'index': 1}}
+{'Actors': {'1': {'name': 'Actor1', 'index': 0}, '2': {'name': 'Actor2', 'index': 1}}, 'Sensors': {'1': {'name': 'Temp', 'index': 0}, '2': {'name': 'Temp', 'index': 1}, '3': {'name': 'Temp', 'index': 0}}, 'Params': {'tar_temp': 200, 'temp_tol': 2}}
 'Sensors': {1: {'name': 'Temp', 'index': 0}, 2: {'name': 'Temp', 'index': 1}, 3: {'name': 'Temp', 'index': 2}}
 'Params': {'tar_temp': 200, 'temp_tol': 2}
 
