@@ -23,13 +23,13 @@ def MBC_disconnect():
 def get_cache():
     c.send_cache()
 
-@socketio.on('mode_change')
-def set_mode(mode):
-    c.update_param('SYSTEM','Mode', mode)
+@socketio.on('system_update')
+def update_system(s_dict):
+    c.update_cache('SYSTEM', s_dict)
 
 @socketio.on('vessel_update')
 def update_vessel(vessel, v_dict):
-    c.update_param('VESSELS',vessel, v_dict)
+    c.update_cache('VESSELS', vessel, v_dict)
 
 
 # TEMP FUNCTIONS ############################
