@@ -7,6 +7,18 @@ from modules.sensors.AtlasI2C import (
 class i2cAPI:   
     def __init__(self, t):
         self.device_list = self.get_devices()
+        dev_type = []
+        for i in self.device_list:
+            info = i.get_device_info().rstrip("\x00")
+            b = info.split(" ")
+            type = b[0]
+            if type == "RTD":
+                dev_type.append("Temp")
+            elif type == "pH":
+                dev_type.append("pH")
+            else:
+                dev_type.append("Other")
+        # print("dev_types: %s" % dev_type)
         self.active_i2c_devs = self.get_i2c_list(self.device_list)       
         self.temps = {}
         self.last_reading = {}
@@ -15,7 +27,7 @@ class i2cAPI:
             self.temps[i] = "{0:.3f}".format(0)
             self.last_reading[i] = 0
             cache["INIT"].append({"function": self.Atlas_I2C_Temp, "sleep": 0.5, "sensor_num": i, "device": self.device_list[i], "dev_id": self.active_i2c_devs[i]})
-            cache["SENSORS"][i] = {'type': "i2c", 'dev_id': self.active_i2c_devs[i], 'prev_temp': self.last_reading[i], 'cur_temp': self.temps[i]}      
+            cache["SENSORS"][i] = {'type': dev_type[i], 'com_type': "i2c", 'dev_id': self.active_i2c_devs[i], 'prev_temp': self.last_reading[i], 'cur_temp': self.temps[i]}      
         socketio.sleep(1)
    
     def get_devices(self):

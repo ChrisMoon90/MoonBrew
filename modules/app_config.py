@@ -101,9 +101,9 @@ def update_config(dir, *args):
                 if args[0] in line:
                     dict = args[1]
                     print('Dict: %s' % dict)
-                    cfile[cur_line] = "'Actors:' " + str(dict['Actors']) + '\n'
-                    cfile[cur_line+1] = "'Sensors:' " + str(dict['Sensors']) + '\n'
-                    cfile[cur_line+2] = "'Params:' " + str(dict['Params']) + '\n'
+                    cfile[cur_line] = "'Actors': " + str(dict['Actors']) + '\n'
+                    cfile[cur_line+1] = "'Sensors': " + str(dict['Sensors']) + '\n'
+                    cfile[cur_line+2] = "'Params': " + str(dict['Params']) + '\n'
     with open(filename, 'w') as f:
         for i in range(0,len(cfile)):
             f.write(str(cfile[i]))
