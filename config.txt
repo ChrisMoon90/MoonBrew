@@ -1,9 +1,9 @@
 SYSTEM
-'Static': {'Mode': 'Brew'}
+'Static': {'Mode': 'Smoke'}
 
 Boil_Kettle
 'Actors': {'1': {'name': 'Pump 1', 'index': 0}, '2': {'name': 'Chiller', 'index': 'None'}}
-'Sensors': {'1': {'name': 'BK Temp', 'index': 0}, '2': {'name': '', 'index': 0}, '3': {'name': '', 'index': 'None'}}
+'Sensors': {'1': {'name': 'BK Temp', 'index': 1}, '2': {'name': '', 'index': 1}, '3': {'name': '', 'index': 'None'}}
 'Params': {'tar_temp': '212', 'temp_tol': '1'}
 
 Mash_Tun

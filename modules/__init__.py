@@ -32,64 +32,6 @@ def update_vessel(vessel, v_dict):
     c.update_cache('VESSELS', vessel, v_dict)
 
 
-# TEMP FUNCTIONS ############################
-# @socketio.on('fetch_temps')
-# def send_temps():
-#     a.emit_temp()
-
-# @socketio.on('fetch_temp_indexes')
-# def send_temp_indexes():
-#     ti2c.send_temp_indexes()
-
-# @socketio.on('temp_index_change')
-# def mod_temp_index(temp_indexes_in):
-#     ti2c.temp_index_change(temp_indexes_in)
-
-
-# # FAN FUNCTIONS ############################
-# @socketio.on('fetch_fan_indexes')
-# def send_fan_indexes():
-#     hw.send_fan_indexes()
-
-# @socketio.on('fetch_fan_states')
-# def send_fan_states():
-#     hw.send_fan_states()
-    
-# @socketio.on('fan_index_change')
-# def change_fan_index(fan_indexes_in):
-#     hw.fan_index_change(fan_indexes_in)
-
-# @socketio.on('toggle_fan_state')
-# def change_fan_state(fanID, fan_state):
-#     hw.toggle_fan_state(fanID, fan_state)
-
-
-# # HYSTERESIS CONTROL FUNCTIONS ########################
-# @socketio.on('fetch_auto_state')
-# def send_auto_state():
-#     h.send_auto_state()
-
-# @socketio.on('toggle_auto_state')
-# def change_auto_state():
-#     h.toggle_auto_state()
-
-# @socketio.on('Fetch_TarTemp')
-# def fetch_target_temp():
-#     h.fetch_tar_temp()
-
-# @socketio.on('TarTemp_Update')
-# def update_target_temp(tar_temp):
-#     h.set_tar_temp(tar_temp)
-
-# @socketio.on('Fetch_TempTol')
-# def get_temp_tol():
-#     h.fetch_temp_tol()
-
-# @socketio.on('ToggleTempTol')
-# def update_temp_tol(temp_tol):
-#     h.set_temp_tol(temp_tol)
-
-
 # # LOG FUNCTIONS ############################
 # @socketio.on('fetch_log_state')
 # def send_log_state():
@@ -122,7 +64,7 @@ print("Creating API Classes")
 
 c = CacheAPI()
 
-t = TempAPI()
+t = SensorAPI()
 
 # tftdi = ftdiAPI(t)
 
