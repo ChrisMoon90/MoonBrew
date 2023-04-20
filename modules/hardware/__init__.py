@@ -15,7 +15,8 @@ class hardwareAPI:
         for i in self.outputs:
             GPIO.setup(i, GPIO.OUT)
         for x in range(3):
-            cache['HARDWARE'][x]['state'] = "OFF"
+            cache['ACTORS'][x]['state'] = "OFF"
+            cache['ACTORS'][x]['dev_id'] = "Actor " + str(x + 1)
 
     def set_outputs(self):
         output1 = 26
@@ -23,36 +24,36 @@ class hardwareAPI:
         output3 = 21
         self.outputs = [output1, output2, output3]
 
-    def send_fan_indexes(self):
-        socketio.emit('fan_indexes', self.fan_indexes)
-        print("Sent fan_indexes: ", self.fan_indexes)
+    # def send_fan_indexes(self):
+    #     socketio.emit('fan_indexes', self.fan_indexes)
+    #     print("Sent fan_indexes: ", self.fan_indexes)
 
     # def get_fan_indexes(self):
         # indexes = get_config_params()
         # self.fan_indexes = indexes[1]
 
-    def fan_index_change(self, fan_indexes_in):
-        self.fan_indexes = fan_indexes_in
-        filename = "./config.txt"
-        with open(filename, 'r') as f:
-            cur_line = 0
-            cfile = f.readlines()
-            for line in cfile:
-                cur_line +=1
-                if "Fan_Indexes" in line:
-                    cfile[cur_line] = str(self.fan_indexes) + '\n'
-        with open(filename, 'w') as f:
-            for i in range(0,len(cfile)):
-                f.write(str(cfile[i]))    
-        self.send_fan_indexes()     
-        print("Fan_Indexes Received from Client & Broadcasted: %s" % self.fan_indexes)
+    # def fan_index_change(self, fan_indexes_in):
+    #     self.fan_indexes = fan_indexes_in
+    #     filename = "./config.txt"
+    #     with open(filename, 'r') as f:
+    #         cur_line = 0
+    #         cfile = f.readlines()
+    #         for line in cfile:
+    #             cur_line +=1
+    #             if "Fan_Indexes" in line:
+    #                 cfile[cur_line] = str(self.fan_indexes) + '\n'
+    #     with open(filename, 'w') as f:
+    #         for i in range(0,len(cfile)):
+    #             f.write(str(cfile[i]))    
+    #     self.send_fan_indexes()     
+    #     print("Fan_Indexes Received from Client & Broadcasted: %s" % self.fan_indexes)
     
-    def set_fan_states(self, fan_states_in):
-        self.fan_states = fan_states_in
+    # def set_fan_states(self, fan_states_in):
+    #     self.fan_states = fan_states_in
 
-    def send_fan_states(self):
-        socketio.emit("fan_states", self.fan_states)
-        print("Sent fan_states: ", self.fan_states)
+    # def send_fan_states(self):
+    #     socketio.emit("fan_states", self.fan_states)
+    #     print("Sent fan_states: ", self.fan_states)
 
     def toggle_fan_state(self, fanID, fan_state):
         self.fan_states[int(fanID)] = fan_state

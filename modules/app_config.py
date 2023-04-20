@@ -30,7 +30,7 @@ global cache
 cache = {           
         "INIT": [],
         "SENSORS":{},
-        "HARDWARE":{
+        "ACTORS":{
             0:{},
             1:{},
             2:{}
