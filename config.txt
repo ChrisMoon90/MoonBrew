@@ -1,28 +1,28 @@
 SYSTEM
-'Static': {'Mode': 'Brew'}
+'Static': {'Mode': 'Ferment'}
 
 Boil_Kettle
-'Actors': {'1': {'name': 'Pump 1', 'index': '1'}, '2': {'name': 'Pump 2', 'index': '2'}}
-'Sensors': {'1': {'name': 'BK Temp', 'index': '1'}, '2': {'name': '', 'index': '0'}, '3': {'name': '', 'index': '2'}}
-'Params': {'tar_temp': '212', 'temp_tol': '1'}
+'Actors': {'0': {'name': 'Acting', 'index': 0}, '1': {'name': 'Tuple', 'index': 0}}
+'Sensors': {'0': {'name': 'Okay3?', 'index': 0}, '1': {'name': 'NOt good?', 'index': '1'}, '2': {'name': 'Sensors5', 'index': '0'}}
+'Params': {'tar_temp': 200, 'temp_tol': 2}
 
 Mash_Tun
-'Actors': {'1': {'name': 'Pump 1', 'index': 0}, '2': {'name': 'Actor2', 'index': 1}}
-'Sensors': {'1': {'name': 'MT Temp', 'index': 0}, '2': {'name': 'Temp', 'index': '1'}, '3': {'name': 'Temp', 'index': 'None'}}
-'Params': {'tar_temp': '152', 'temp_tol': '1'}
+'Actors': {'0': {'name': 'Actor1', 'index': 0}}
+'Sensors': {'0': {'name': 'Temp', 'index': 0}, '1': {'name': 'Temp', 'index': 0}}
+'Params': {'tar_temp': 200, 'temp_tol': 2}
 
 Hot_Liquor_Tank
-'Actors': {'1': {'name': 'Pump 2', 'index': 1}, '2': {'name': 'Actor2', 'index': 'None'}}
-'Sensors': {'1': {'name': 'HLT Temp', 'index': 2}, '2': {'name': 'Temp', 'index': 'None'}, '3': {'name': 'Temp', 'index': 'None'}}
-'Params': {'tar_temp': '165', 'temp_tol': 2}
+'Actors': {}
+'Sensors': {'0': {'name': 'Temp', 'index': '1'}}
+'Params': {'tar_temp': 200, 'temp_tol': 2}
 
 Fermenter
-'Actors': {'1': {'name': 'Heater', 'index': 0}, '2': {'name': 'Glycol Chiller', 'index': 2}}
-'Sensors': {'1': {'name': 'Temp', 'index': 0}, '2': {'name': 'Temp', 'index': 1}, '3': {'name': 'Temp', 'index': 2}}
+'Actors': {'0': {'name': 'Trying', 'index': '0'}, '1': {'name': 'Sever', 'index': '2'}}
+'Sensors': {'0': {'name': 'Testing', 'index': '1'}, '1': {'name': 'Double', 'index': '0'}}
 'Params': {'tar_temp': 200, 'temp_tol': 2}
 
 Smoker
-'Actors': {'1': {'name': 'Fan1', 'index': 0}, '2': {'name': 'Induct', 'index': 1}}
-'Sensors': {'1': {'name': 'Internal Temp', 'index': 1}, '2': {'name': 'Temp', 'index': 1}, '3': {'name': 'Temp', 'index': 0}}
-'Params': {'tar_temp': '400', 'temp_tol': '5'}
+'Actors': {}
+'Sensors': {'0': {'name': 'Temp', 'index': 0}, '1': {'name': 'Okay?', 'index': '2'}}
+'Params': {'tar_temp': 200, 'temp_tol': 2}
 

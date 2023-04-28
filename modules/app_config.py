@@ -59,8 +59,8 @@ def get_config_params():
         with open(filename, 'w') as f:
             f.write("SYSTEM\n")
             f.write("'Static': {'Mode': 'Brew'}\n\n")
-            a = {'Actors': {1: {'name': 'Actor1', 'index': 0}, 2: {'name': 'Actor2', 'index': 1}},
-                'Sensors': {1: {'name': 'Temp', 'index': 0}, 2: {'name': 'Temp', 'index': 1}, 3: {'name': 'Temp', 'index': 2}},
+            a = {'Actors': {}, #{1: {'name': 'Actor1', 'index': 0}, 2: {'name': 'Actor2', 'index': 1}},
+                'Sensors': {}, #{1: {'name': 'Temp', 'index': 0}, 2: {'name': 'Temp', 'index': 1}, 3: {'name': 'Temp', 'index': 2}},
                 'Params': {'tar_temp': 200, 'temp_tol': 2}}
             for i in settings:
                 f.write(str(i) + '\n')
@@ -137,3 +137,21 @@ class CacheAPI:
         self.send_cache()
         pprint.pprint(self.cache)
         # print('Parameter Update --> %s: %s' % (dir, args))
+
+    def add_remove_hardware(self, mod_type, vessel, hw_type):
+        v_dict = self.cache['VESSELS'][vessel]
+        count = len(v_dict[hw_type])
+        print(type(count))
+        print(v_dict)
+        if mod_type == "add":
+            if hw_type == "Actors":
+                print("Adding Actor")
+                v_dict[hw_type][str(count)] = {'name': 'Actor1', 'index': 0}
+            else:
+                print("Adding Sensor")
+                v_dict[hw_type][str(count)] = {'name': 'Temp', 'index': 0}
+        else:
+            print("Deleting " + hw_type)
+            del v_dict[hw_type][str(count - 1)]
+        print(v_dict)
+        self.update_cache('VESSELS', vessel, v_dict)

@@ -29,7 +29,13 @@ def update_system(s_dict):
 
 @socketio.on('vessel_update')
 def update_vessel(vessel, v_dict):
+    print('v_dict in: ')
+    print(v_dict)
     c.update_cache('VESSELS', vessel, v_dict)
+
+@socketio.on('add_rm_hardware')
+def add_rm_hw(mod_type, vessel, hw_type):
+    c.add_remove_hardware(mod_type, vessel, hw_type)
 
 
 # # LOG FUNCTIONS ############################
