@@ -7,9 +7,6 @@ from modules.sensors.AtlasI2C import (
 class i2cAPI:   
     def __init__(self, t):
         self.device_list = self.get_devices()
-        # for i in self.device_list:
-
-        # print("dev_types: %s" % dev_type)
         self.active_i2c_devs = self.get_i2c_list(self.device_list)       
         self.temps = {}
         self.last_reading = {}
@@ -27,7 +24,7 @@ class i2cAPI:
             self.temps[i] = "{0:.3f}".format(0)
             self.last_reading[i] = 0
             cache["INIT"].append({"function": self.Atlas_I2C_Temp, "sleep": 0.5, "sensor_num": i, "device": self.device_list[i], "dev_id": self.active_i2c_devs[i]})
-            cache["SENSORS"][i] = {'com_type': "i2c", 'dev_id': dev_id, 'prev_temp': self.last_reading[i], 'cur_temp': self.temps[i]}      
+            cache["SENSORS"][i] = {'com_type': "i2c", 'dev_id': dev_id, 'prev_read': self.last_reading[i], 'cur_read': self.temps[i]}      
         socketio.sleep(1)
    
     def get_devices(self):
@@ -74,9 +71,9 @@ class i2cAPI:
                         else:
                             msg = "%s, Large Temp Change Error: sensor %s, Current Temp: %s, Previous Temp: %s" % (temp_time, i2c_addr, cur_temp, self.last_reading[i])
                             self.log_error(msg) 
-                cache["SENSORS"][i]['cur_temp'] = self.temps[i]
-                cache["SENSORS"][i]['prev_temp'] = self.last_reading[i]
-                self.last_reading[i] = cur_temp                                
+                cache["SENSORS"][i]['cur_read'] = self.temps[i]
+                cache["SENSORS"][i]['prev_read'] = self.last_reading[i]
+                self.last_reading[i] = cur_temp                             
             except:
                 msg = "%s, Error Running Temp Loop Thread on Sensor %s" % (temp_time, i2c_addr)
                 self.log_error(msg)           
