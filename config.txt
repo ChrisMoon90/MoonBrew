@@ -1,28 +1,28 @@
 SYSTEM
-'Static': {'Mode': 'Ferment'}
+'Static': {'Mode': 'Smoke', 'log_rate': '1'}
 
 Boil_Kettle
-'Actors': {'0': {'name': 'Acting', 'index': '2'}, '1': {'name': 'Acting', 'index': '1'}}
-'Sensors': {'0': {'name': 'Inst', 'index': 0}, '1': {'name': 'Trying', 'index': '2'}, '2': {'name': 'Temp', 'index': 0}}
-'Params': {'tar_temp': 200, 'temp_tol': 2}
-
-Mash_Tun
 'Actors': {'0': {'name': 'Actor1', 'index': 0}, '1': {'name': 'Actor1', 'index': 0}}
-'Sensors': {'0': {'name': 'Temp', 'index': 0}, '1': {'name': 'Temp', 'index': 0}}
-'Params': {'tar_temp': 200, 'temp_tol': 2}
-
-Hot_Liquor_Tank
-'Actors': {'0': {'name': 'Actor1', 'index': 0}}
 'Sensors': {'0': {'name': 'Temp', 'index': 0}}
 'Params': {'tar_temp': 200, 'temp_tol': 2}
 
-Fermenter
-'Actors': {'0': {'name': 'Trying', 'index': '0'}, '1': {'name': 'Sever', 'index': '2'}}
-'Sensors': {'0': {'name': 'Testing', 'index': '0'}, '1': {'name': 'Double', 'index': '1'}, '2': {'name': 'Temp', 'index': '2'}}
+Mash_Tun
+'Actors': {}
+'Sensors': {}
 'Params': {'tar_temp': 200, 'temp_tol': 2}
 
-Smoker
+Hot_Liquor_Tank
 'Actors': {}
-'Sensors': {'0': {'name': 'Temp', 'index': 0}, '1': {'name': 'Okay?', 'index': '2'}}
+'Sensors': {}
+'Params': {'tar_temp': 200, 'temp_tol': 2}
+
+Fermenter
+'Actors': {'0': {'name': 'Actor1', 'index': 0}, '1': {'name': 'Actor1', 'index': 0}}
+'Sensors': {'0': {'name': 'Temp', 'index': '1'}, '1': {'name': 'Temp', 'index': 0}}
+'Params': {'tar_temp': '68', 'temp_tol': '1'}
+
+Smoker
+'Actors': {'0': {'name': 'Actor1', 'index': 0}}
+'Sensors': {'0': {'name': 'Temp', 'index': 0}, '1': {'name': 'Temp', 'index': 0}}
 'Params': {'tar_temp': 200, 'temp_tol': 2}
 

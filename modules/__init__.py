@@ -29,8 +29,6 @@ def update_system(s_dict):
 
 @socketio.on('vessel_update')
 def update_vessel(vessel, v_dict):
-    print('v_dict in: ')
-    print(v_dict)
     c.update_cache('VESSELS', vessel, v_dict)
 
 @socketio.on('add_rm_hardware')
@@ -38,20 +36,18 @@ def add_rm_hw(mod_type, vessel, hw_type):
     c.add_remove_hardware(mod_type, vessel, hw_type)
 
 
-# # LOG FUNCTIONS ############################
-# @socketio.on('fetch_log_state')
-# def send_log_state():
-#     l.send_fetched_log_state()
+# LOG FUNCTIONS ############################
+@socketio.on('set_log_state')
+def set_log_state(s_dict):
+    c.update_cache('SYSTEM', s_dict)
+    l.set_log_state()
 
-# @socketio.on('toggle_logState')
-# def change_logState(logState_in):
-#     l.toggle_logState(logState_in)
+@socketio.on('delete_log')
+def del_log():
+    l.delete_log()
 
-# @socketio.on('delete_log')
-# def del_log():
-#     l.delete_log()
 
-# # TIMER FUNCTIONS ############################
+# TIMER FUNCTIONS ############################
 # @socketio.on('fetch_timer')
 # def send_start_time():
 #     e.send_start_time()

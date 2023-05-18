@@ -44,7 +44,7 @@ cache = {
         },
         "SYSTEM": { 
             'Dynamic': {
-                'log_state': 'OFF',
+                'log_state': False,
                 'timer_start': None}
         }
     }
@@ -58,9 +58,9 @@ def get_config_params():
         print("Index file does not exist. Config file will be created.")
         with open(filename, 'w') as f:
             f.write("SYSTEM\n")
-            f.write("'Static': {'Mode': 'Brew'}\n\n")
-            a = {'Actors': {}, #{1: {'name': 'Actor1', 'index': 0}, 2: {'name': 'Actor2', 'index': 1}},
-                'Sensors': {}, #{1: {'name': 'Temp', 'index': 0}, 2: {'name': 'Temp', 'index': 1}, 3: {'name': 'Temp', 'index': 2}},
+            f.write("'Static': {'Mode': 'Brew', 'log_rate': 1}\n\n")
+            a = {'Actors': {},
+                'Sensors': {},
                 'Params': {'tar_temp': 200, 'temp_tol': 2}}
             for i in settings:
                 f.write(str(i) + '\n')
@@ -128,7 +128,7 @@ class CacheAPI:
         socketio.emit('cache', cache_emit)
 
     def update_cache(self, dir, *args):
-        print(*args)
+        # print(*args)
         update_config(dir, *args)
         if dir == 'SYSTEM':          
             self.cache[dir] = args[0]

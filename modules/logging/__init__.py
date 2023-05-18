@@ -1,51 +1,46 @@
 import time
 import os
-from modules.app_config import socketio
+from modules.app_config import socketio, cache
 
 
 class logAPI:
     def __init__(self, a):
         self.running = False
-        self.temps = a.temps
+        self.log_rate = cache['SYSTEM']['Static']['log_rate']
         self.filename = "./logs/Temps.csv"
 
-    def set_run_state(self, logState):
-        self.running = logState
+    def set_log_rate(self):
+        self.log_rate = cache['SYSTEM']['Static']['log_rate']
 
-    def save_to_file(self, sleep):
+    def set_log_state(self):
+        self.running = cache['SYSTEM']['Dynamic']['log_state']
+        print('log_state', self.running)
+        if self.running:
+            t = socketio.start_background_task(target=self.save_to_file)
+        else:
+            print("Stopping Logging Thread") 
+
+    def save_to_file(self):
         print("Starting Logging")
         while self.running: 
-            formatted_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-            msg = "%s, %.3f, %.3f, %.3f" % (formatted_time, self.temps[0], self.temps[1], self.temps[2])
+            log_rate = eval(self.log_rate) * 60
+            ft = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+            r = []
+            for i in cache['SENSORS']:
+                r.append(cache['SENSORS'][i]['cur_read'])
+            msg = "%s, %.3f, %.3f, %.3f" % (ft, eval(r[0]), eval(r[1]), eval(r[2]))
             print("Saving to File: %s" % msg)
             if os.path.exists(self.filename):
                 with open(self.filename, "a") as f:
                     f.write("%s\n" % msg)
-                socketio.sleep(sleep)
             else:
                 print("Temp.csv file does not exist. File will be created.")
                 header = "Time, Sensor 1, Sensor 2, Sensor 3\n"
                 with open(self.filename, 'a') as f:
                     f.write(header)
-                    f.write(msg)
+                    f.write("%s\n" % msg)
+            socketio.sleep(log_rate)
         print("Log Thread Terminated")
-
-    def send_log_state(self):
-        socketio.emit('logState', self.running)
-        print("LogState Sent: ", self.running)
-    
-    def send_fetched_log_state(self):
-        socketio.emit('fetched_logState', self.running)
-        print("Fetched LogState Sent: ", self.running)
-
-    def toggle_logState(self, logState_in):
-        logState = not logState_in
-        self.set_run_state(logState)
-        if logState == True:
-            thread2 = socketio.start_background_task(target=self.save_to_file, sleep = 15)
-        else:
-            print("Stopping Logging Thread") 
-        self.send_log_state()
 
     def delete_log(self):   
         if os.path.exists(self.filename):
