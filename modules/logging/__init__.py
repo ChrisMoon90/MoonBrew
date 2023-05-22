@@ -23,12 +23,16 @@ class logAPI:
     def save_to_file(self):
         print("Starting Logging")
         while self.running: 
+            self.set_log_rate()
             log_rate = eval(self.log_rate) * 60
             ft = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
             r = []
             for i in cache['SENSORS']:
                 r.append(cache['SENSORS'][i]['cur_read'])
-            msg = "%s, %.3f, %.3f, %.3f" % (ft, eval(r[0]), eval(r[1]), eval(r[2]))
+            msg = ft
+            for x in r:
+                val = "%.3f" % eval(x)
+                msg += ', ' + val
             print("Saving to File: %s" % msg)
             if os.path.exists(self.filename):
                 with open(self.filename, "a") as f:

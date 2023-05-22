@@ -36,11 +36,11 @@ cache = {
             2:{}
             },
         "VESSELS":{
-            'Boil_Kettle': {'auto_state': 'OFF'},
-            'Mash_Tun': {'auto_state': 'OFF'},
-            'Hot_Liquor_Tank': {'auto_state': 'OFF'},
-            'Fermenter': {'auto_state': 'OFF'},
-            'Smoker': {'auto_state': 'OFF'}
+            'Boil_Kettle': {},
+            'Mash_Tun': {},
+            'Hot_Liquor_Tank': {},
+            'Fermenter': {},
+            'Smoker': {}
         },
         "SYSTEM": { 
             'Dynamic': {
@@ -61,7 +61,7 @@ def get_config_params():
             f.write("'Static': {'Mode': 'Brew', 'log_rate': 1}\n\n")
             a = {'Actors': {},
                 'Sensors': {},
-                'Params': {'tar_temp': 200, 'temp_tol': 2}}
+                'Params': {'auto_state': False, 'tar_temp': 200, 'temp_tol': 2}}
             for i in settings:
                 f.write(str(i) + '\n')
                 for p in a:

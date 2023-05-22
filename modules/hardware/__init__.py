@@ -15,7 +15,7 @@ class hardwareAPI:
         for i in self.outputs:
             GPIO.setup(i, GPIO.OUT)
         for x in range(3):
-            cache['ACTORS'][x]['state'] = "OFF"
+            cache['ACTORS'][x]['state'] = False
             cache['ACTORS'][x]['dev_id'] = "Actor " + str(x + 1)
 
     def set_outputs(self):
