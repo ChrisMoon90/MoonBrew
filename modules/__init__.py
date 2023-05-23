@@ -35,6 +35,10 @@ def update_vessel(vessel, v_dict):
 def add_rm_hw(mod_type, vessel, hw_type):
     c.add_remove_hardware(mod_type, vessel, hw_type)
 
+@socketio.on('hw_update')
+def hw_update(key, a_dict):
+    c.update_cache('ACTORS', eval(key), a_dict)
+
 
 # LOG FUNCTIONS ############################
 @socketio.on('set_log_state')

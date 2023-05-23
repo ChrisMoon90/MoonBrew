@@ -129,11 +129,14 @@ class CacheAPI:
 
     def update_cache(self, dir, *args):
         # print(*args)
-        update_config(dir, *args)
-        if dir == 'SYSTEM':          
-            self.cache[dir] = args[0]
-        if dir == 'VESSELS':
+        if dir == "ACTORS":
             self.cache[dir][args[0]] = args[1]
+        else:
+            update_config(dir, *args)
+            if dir == 'SYSTEM':          
+                self.cache[dir] = args[0]
+            if dir == 'VESSELS':
+                self.cache[dir][args[0]] = args[1]
         self.send_cache()
         pprint.pprint(self.cache)
         # print('Parameter Update --> %s: %s' % (dir, args))

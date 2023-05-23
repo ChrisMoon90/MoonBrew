@@ -1,9 +1,9 @@
 SYSTEM
-'Static': {'Mode': 'Brew', 'log_rate': 1}
+'Static': {'Mode': 'Smoke', 'log_rate': 1}
 
 Boil_Kettle
-'Actors': {'0': {'name': 'Heat', 'index': 0}, '1': {'name': 'Pump', 'index': '1'}}
-'Sensors': {'0': {'name': 'Temp', 'index': 0}, '1': {'name': 'Temp2', 'index': '1'}}
+'Actors': {'0': {'name': 'Heat', 'index': 0}, '1': {'name': 'Pump', 'index': '1'}, '2': {'name': 'Actor1', 'index': '2'}}
+'Sensors': {'0': {'name': 'Temp', 'index': 0}, '1': {'name': 'Temp2', 'index': '1'}, '2': {'name': 'Temp', 'index': 0}}
 'Params': {'auto_state': False, 'tar_temp': 200, 'temp_tol': 2}
 
 Mash_Tun
@@ -12,17 +12,17 @@ Mash_Tun
 'Params': {'auto_state': False, 'tar_temp': 200, 'temp_tol': 2}
 
 Hot_Liquor_Tank
-'Actors': {'0': {'name': 'Actor1', 'index': 0}, '1': {'name': 'Actor1', 'index': 0}}
-'Sensors': {'0': {'name': 'Temp', 'index': 0}}
-'Params': {'auto_state': False, 'tar_temp': 200, 'temp_tol': 2}
+'Actors': {'0': {'name': 'Heat', 'index': 0}, '1': {'name': 'COld', 'index': '1'}, '2': {'name': 'Paddle', 'index': '2'}}
+'Sensors': {'0': {'name': 'Temp', 'index': 0}, '1': {'name': 'Temp', 'index': '1'}}
+'Params': {'auto_state': True, 'tar_temp': '160', 'temp_tol': '1'}
 
 Fermenter
-'Actors': {}
-'Sensors': {}
+'Actors': {'0': {'name': 'Heat', 'index': 0}, '1': {'name': 'Chill', 'index': '1'}}
+'Sensors': {'0': {'name': 'Internal', 'index': 0}, '1': {'name': 'SG', 'index': '1'}}
 'Params': {'auto_state': False, 'tar_temp': 200, 'temp_tol': 2}
 
 Smoker
-'Actors': {}
-'Sensors': {}
+'Actors': {'0': {'name': 'Actor1', 'index': 0}, '1': {'name': 'Actor1', 'index': 0}, '2': {'name': 'Actor1', 'index': 0}}
+'Sensors': {'0': {'name': 'Temp', 'index': 0}, '1': {'name': 'Temp', 'index': 0}}
 'Params': {'auto_state': False, 'tar_temp': 200, 'temp_tol': 2}
 
