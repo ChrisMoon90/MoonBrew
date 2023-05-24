@@ -2,7 +2,7 @@ import flask
 from flask_socketio import SocketIO
 import os
 import pprint
-import json
+# import json
 
 from modules.ui.endpoints import react
 import pprint
@@ -31,9 +31,9 @@ cache = {
         "INIT": [],
         "SENSORS":{},
         "ACTORS":{
-            0:{},
-            1:{},
-            2:{}
+            '0':{},
+            '1':{},
+            '2':{}
             },
         "VESSELS":{
             'Boil_Kettle': {},
@@ -58,7 +58,7 @@ def get_config_params():
         print("Index file does not exist. Config file will be created.")
         with open(filename, 'w') as f:
             f.write("SYSTEM\n")
-            f.write("'Static': {'Mode': 'Brew', 'log_rate': 1}\n\n")
+            f.write("'Static': {'Mode': 'Brew', 'log_rate': '1'}\n\n")
             a = {'Actors': {},
                 'Sensors': {},
                 'Params': {'auto_state': False, 'tar_temp': 200, 'temp_tol': 2}}
@@ -119,7 +119,6 @@ class CacheAPI:
         self.cache = cache
 
     def send_cache(self):
-        # self.cache_update()
         cache_emit = self.cache
         try: 
             del cache_emit['INIT']
@@ -128,9 +127,8 @@ class CacheAPI:
         socketio.emit('cache', cache_emit)
 
     def update_cache(self, dir, *args):
-        # print(*args)
         if dir == "ACTORS":
-            self.cache[dir][args[0]] = args[1]
+            self.cache[dir][str(args[0])] = args[1]
         else:
             update_config(dir, *args)
             if dir == 'SYSTEM':          
@@ -139,7 +137,6 @@ class CacheAPI:
                 self.cache[dir][args[0]] = args[1]
         self.send_cache()
         pprint.pprint(self.cache)
-        # print('Parameter Update --> %s: %s' % (dir, args))
 
     def add_remove_hardware(self, mod_type, vessel, hw_type):
         v_dict = self.cache['VESSELS'][vessel]

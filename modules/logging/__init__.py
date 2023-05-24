@@ -24,6 +24,7 @@ class logAPI:
         print("Starting Logging")
         while self.running: 
             self.set_log_rate()
+            print('log rate: ', self.log_rate)
             log_rate = eval(self.log_rate) * 60
             ft = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
             r = []

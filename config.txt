@@ -1,5 +1,5 @@
 SYSTEM
-'Static': {'Mode': 'Smoke', 'log_rate': 1}
+'Static': {'Mode': 'Smoke', 'log_rate': '0.5'}
 
 Boil_Kettle
 'Actors': {'0': {'name': 'Heat', 'index': 0}, '1': {'name': 'Pump', 'index': '1'}, '2': {'name': 'Actor1', 'index': '2'}}
@@ -22,7 +22,7 @@ Fermenter
 'Params': {'auto_state': False, 'tar_temp': 200, 'temp_tol': 2}
 
 Smoker
-'Actors': {'0': {'name': 'Actor1', 'index': 0}, '1': {'name': 'Actor1', 'index': 0}, '2': {'name': 'Actor1', 'index': 0}}
-'Sensors': {'0': {'name': 'Temp', 'index': 0}, '1': {'name': 'Temp', 'index': 0}}
+'Actors': {'0': {'name': 'Internal', 'index': '1'}, '1': {'name': 'Meat 1', 'index': '0'}, '2': {'name': 'Meat 2', 'index': '2'}}
+'Sensors': {'0': {'name': 'Temp', 'index': 0}, '1': {'name': 'Temp', 'index': '2'}, '2': {'name': 'Temp', 'index': '1'}}
 'Params': {'auto_state': False, 'tar_temp': 200, 'temp_tol': 2}
 

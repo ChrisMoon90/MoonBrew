@@ -7,7 +7,6 @@ from modules.app_config import socketio, cache
 
 
 class hardwareAPI:
-
     def __init__(self):
         self.set_outputs()
         GPIO.setwarnings(False)
@@ -15,8 +14,8 @@ class hardwareAPI:
         for i in self.outputs:
             GPIO.setup(i, GPIO.OUT)
         for x in range(3):
-            cache['ACTORS'][x]['state'] = False
-            cache['ACTORS'][x]['dev_id'] = "Actor " + str(x + 1)
+            cache['ACTORS'][str(x)]['state'] = False
+            cache['ACTORS'][str(x)]['dev_id'] = "Actor " + str(x + 1)
 
     def set_outputs(self):
         output1 = 26
@@ -24,47 +23,13 @@ class hardwareAPI:
         output3 = 21
         self.outputs = [output1, output2, output3]
 
-    # def send_fan_indexes(self):
-    #     socketio.emit('fan_indexes', self.fan_indexes)
-    #     print("Sent fan_indexes: ", self.fan_indexes)
-
-    # def get_fan_indexes(self):
-        # indexes = get_config_params()
-        # self.fan_indexes = indexes[1]
-
-    # def fan_index_change(self, fan_indexes_in):
-    #     self.fan_indexes = fan_indexes_in
-    #     filename = "./config.txt"
-    #     with open(filename, 'r') as f:
-    #         cur_line = 0
-    #         cfile = f.readlines()
-    #         for line in cfile:
-    #             cur_line +=1
-    #             if "Fan_Indexes" in line:
-    #                 cfile[cur_line] = str(self.fan_indexes) + '\n'
-    #     with open(filename, 'w') as f:
-    #         for i in range(0,len(cfile)):
-    #             f.write(str(cfile[i]))    
-    #     self.send_fan_indexes()     
-    #     print("Fan_Indexes Received from Client & Broadcasted: %s" % self.fan_indexes)
-    
-    # def set_fan_states(self, fan_states_in):
-    #     self.fan_states = fan_states_in
-
-    # def send_fan_states(self):
-    #     socketio.emit("fan_states", self.fan_states)
-    #     print("Sent fan_states: ", self.fan_states)
-
-    def toggle_fan_state(self, fanID, fan_state):
-        self.fan_states[int(fanID)] = fan_state
-        x = [0,1,2]
-        for y in x:
-            if self.fan_states[y] == "ON":
-                GPIO.output(self.outputs[y], GPIO.HIGH)
-            else: 
-                GPIO.output(self.outputs[y], GPIO.LOW)
-        print('fan_states updated: ', self.fan_states)
-        socketio.emit('fan_states', self.fan_states)
+    def toggle_actor_state(self, index):
+        state = cache['ACTORS'][index]['state']
+        if state == True:
+            GPIO.output(self.outputs[eval(index)], GPIO.HIGH)
+        else: 
+            GPIO.output(self.outputs[eval(index)], GPIO.LOW)
+        print('Actor State Updated: ', cache['ACTORS'])
 
     def cleanup():
         GPIO.cleanup()
