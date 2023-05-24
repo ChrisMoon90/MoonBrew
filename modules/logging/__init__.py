@@ -22,6 +22,8 @@ class logAPI:
 
     def save_to_file(self):
         print("Starting Logging")
+        a_msg = 'Logging Started'
+        socketio.emit('alert_success', a_msg)
         while self.running: 
             self.set_log_rate()
             print('log rate: ', self.log_rate)
@@ -45,13 +47,17 @@ class logAPI:
                     f.write(header)
                     f.write("%s\n" % msg)
             socketio.sleep(log_rate)
-        print("Log Thread Terminated")
+        a_msg = 'Logging Stopped'
+        print(a_msg)
+        socketio.emit('alert_warn', a_msg)
 
     def delete_log(self):   
         if os.path.exists(self.filename):
             os.remove(self.filename)
-            msg = "Temp Log File Successfully Deleted"
-            print(msg)
-            socketio.emit('log_deleted', msg)
+            a_msg = "Log File Successfully Deleted"
+            print(a_msg)
+            socketio.emit('alert_success', a_msg)
         else:
-            print("The file does not exist")
+            a_msg = "Log File not Deleted: file does not exist"
+            print(a_msg)
+            socketio.emit('alert_warn', a_msg)

@@ -23,6 +23,6 @@ Fermenter
 
 Smoker
 'Actors': {'0': {'name': 'Internal', 'index': '1'}, '1': {'name': 'Meat 1', 'index': '0'}, '2': {'name': 'Meat 2', 'index': '2'}}
-'Sensors': {'0': {'name': 'Temp', 'index': 0}, '1': {'name': 'Temp', 'index': '2'}, '2': {'name': 'Temp', 'index': '1'}}
+'Sensors': {'0': {'name': 'Temp', 'index': 0}, '1': {'name': 'Temp', 'index': '1'}, '2': {'name': 'Temp', 'index': '2'}}
 'Params': {'auto_state': False, 'tar_temp': 200, 'temp_tol': 2}
 
