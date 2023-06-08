@@ -73,7 +73,7 @@ c = CacheAPI()
 
 t = SensorAPI()
 
-# tftdi = ftdiAPI(t)
+tftdi = init_ftdi(t)
 
 ti2c = i2cAPI(t)
 

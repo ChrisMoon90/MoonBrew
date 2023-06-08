@@ -1,10 +1,11 @@
 from modules.app_config import socketio, cache
 from modules.sensors.i2c import *
+from modules.sensors.ftdi import *
 
 class SensorAPI:
     def __init__(self):
         cache["INIT"].append({"function": self.emit_reading, "sleep": 2})
-        self.s_count = {'Temp': 0, 'pH': 0, 'SG': 0}
+        self.s_count = {'Total': 0, 'Temp': 0, 'pH': 0, 'SG': 0}
 
     def log_error(self, msg):
         error_log = "./logs/TempError.log"
@@ -23,4 +24,6 @@ class SensorAPI:
     def update_sensor_count(self, type):
         cur_s_count = self.s_count[type]
         self.s_count[type] = cur_s_count + 1
+        cur_total = self.s_count['Total']
+        self.s_count['Total'] = cur_total + 1
         return self.s_count[type]
