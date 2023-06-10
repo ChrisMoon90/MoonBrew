@@ -11,82 +11,84 @@ def init_ftdi(t):
         temp = "{0:.3f}".format(0)
         last_reading = 0    
         dev = dev_list[i]
-        dev_class = ftdiAPI(t, dev)
-        dev_class.send_cmd('i')
+        dev = Atlasftdi(t, dev)
+        dev.send_cmd('i')
         socketio.sleep(1.5)
-        info = dev_class.read_lines()
-        print(info)
+        info = dev.read_lines()
+        # print(info)
         b = info[0].split(',')
         type = b[1]
-        print(type)
+        # print(type)
         if type == 'RTD':
             dev_id = 'Temp ' + str(t.update_sensor_count('Temp'))
-        elif type == 'pH':
-            dev_id = 'pH ' + str(t.update_sensor_count('pH'))
         else:
-            dev_id = 'SG ' + str(t.update_sensor_count('SG'))
-        sensor_num = t.s_count['Total']
-        cache['INIT'].append({'com_type': 'ftdi', 'function': execute_ftdi, 'sleep': 0.5, 'sensor_num': sensor_num, 'device': dev, 'dev_id': dev_class})
-        cache['SENSORS'][sensor_num] = {'com_type': 'ftdi', 'dev_id': dev_id, 'prev_read': last_reading, 'cur_read': temp}      
-    socketio.sleep(1)
+            dev_id = 'pH ' + str(t.update_sensor_count('pH'))
+        s_num = int(t.s_count['Total'] - 1)
+        cache['INIT'].append({'function': execute_ftdi, 'sleep': 0.5, 'dev': dev, 's_num': s_num})
+        cache['SENSORS'][s_num] = {'com_type': 'ftdi', 'dev_id': dev_id, 'prev_read': last_reading, 'cur_read': temp}      
+    # socketio.sleep(1)
 
-def execute_ftdi(self):
+# class ftdiAPI:
+def execute_ftdi(sleep, dev, s_num):
     print('Made it to ftdi execute!')
-    # self.index = self.sensorSelect
-    # self.devices = get_ftdi_device_list()
-    # self.dev = AtlasDevice(self.devices[int(self.index)])
-    # while self.is_running():
-    #     try:
-    #         self.dev.send_cmd("R")
-    #         self.sleep(1.5) #MADE THIS SOCKETIOSLEEP & FIXED LATENCY ISSUE
-    #         lines = self.dev.read_lines()
-    #         for i in range(len(lines)):
-    #             if lines[i][0] != '*':
-    #                 temp_raw = lines[i]
-    #     except: #except pylibftdi.FtdiError as e:
-    #         formatted_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-    #         msg = "%s, Error running get_temp @ dev: %s\n" % (formatted_time, self.dev)
-    #         print(msg)
-    #         log_error("%s\n" % (msg))
-    #         temp_raw = "ERR"
-    #         self.sleep(1.5)
-    #     try:
-    #         new_reading = float(temp_raw.strip())
-    #         temp_dif = abs(new_reading - self.last_reading)
-    #         if temp_dif > 10:                 
-    #             formatted_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-    #             msg = "%s, New Reading: %s, Old Reading: %s, dev_index: %s" % (formatted_time, new_reading, self.last_reading, self.index)
-    #             print(msg)
-    #             log_error("%s\n" % (msg))                  
-    #         else:
-    #             self.data_received(new_reading)
-    #             send_to_logging(self.index, new_reading)
-    #             print("Sensor Reading from index %s = %s" % (self.index, new_reading))
-    #         self.last_reading = new_reading
-    #     except:
-    #         formatted_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-    #         msg = "%s, Error converting temp_raw to float: %s, dev_index: %s" % (formatted_time, temp_raw, self.index)
-    #         print(msg)
-    #         log_error("%s\n" % (msg))
-    #     self.sleep(2)
+    while True:
+        f_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        prev_read = cache['SENSORS'][s_num]['cur_read']
+        try:
+            dev.send_cmd("R")
+            socketio.sleep(1.5)
+            lines = dev.read_lines()
+            for i in range(len(lines)):
+                if lines[i][0] != '*':
+                    temp_raw = lines[i]
+        except: #except pylibftdi.FtdiError as e:         
+            msg = "%s, Error running send_cmd @ sensor %s\n" % (f_time, s_num)
+            log_error("%s\n" % (msg))
+            temp_raw = "ERR"
+            socketio.sleep(sleep)
+        try:
+            if temp_raw == "ERR":
+                pass
+            else:
+                new_read = float(temp_raw.strip())
+                # cur_temp = float(split_temp[1].rstrip("\x00"))
+                temp_dif = abs(new_read - prev_read) 
+                if new_read <= 0 and prev_read <= 0:                        
+                    set_val = "{0:.3f}".format(0)
+                else:
+                    if temp_dif < 20 or temp_dif == new_read:
+                        set_val = "{0:.3f}".format(new_read)                    
+                    else:
+                        msg = "%s, Large Value Change Error: sensor %s, Current Temp: %s, Previous Temp: %s" % (f_time, s_num, new_read, prev_read)
+                        log_error(msg) 
+                        set_val = prev_read
+                cache["SENSORS"][s_num]['cur_read'] = set_val
+            #     cache["SENSORS"][s_num]['prev_read'] = prev_read
+            # self.last_reading[i] = cur_temp                             
+        except:
+            msg = "%s, Error Running Temp Loop Thread on Sensor %s" % (f_time, s_num)
+            log_error(msg)           
+        socketio.sleep(sleep)
+
+def log_error(msg):
+    print(msg)
+    error_log = "./logs/TempError.log"
+    with open(error_log, "a") as file:
+        file.write(msg)
 
 def get_ftdi_device_list():
     dev_list = []    
     for device in Driver().list_devices():
         dev_info = device        
         vendor, product, serial = dev_info   # device must always be this triple
-        print(dev_info)
+        # print(dev_info)
         dev_list.append(serial)
-    print('ftdi dev_list: ', str(dev_list))
+    # print('ftdi dev_list: ', str(dev_list))
     return dev_list
 
-def log_error(self, msg):
-    error_log = "./logs/TempError.log"
-    with open(error_log, "a") as file:
-        file.write(msg)
 
 
-class ftdiAPI(Device):
+class Atlasftdi(Device):
     def __init__(self, t, dev):
         Device.__init__(self, mode='t', device_id=dev)
 
@@ -110,7 +112,7 @@ class ftdiAPI(Device):
                 line = self.read_line()
                 if not line:
                     break
-                    self.flush_input()
+                    # self.flush_input()
                 lines.append(line)
             return lines       
         except FtdiError:

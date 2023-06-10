@@ -20,12 +20,13 @@ class i2cAPI:
                 dev_id = 'pH ' + str(t.update_sensor_count("pH"))
             else:
                 dev_id = 'SG ' + str(t.update_sensor_count("SG"))
-            thread = "sensor_thread_%s" % i
+            # thread = "sensor_thread_%s" % i
             self.temps[i] = "{0:.3f}".format(0)
             self.last_reading[i] = 0
-            cache["INIT"].append({"function": self.Atlas_I2C_Temp, "sleep": 0.5, "sensor_num": i, "device": self.device_list[i], "dev_id": self.active_i2c_devs[i]})
-            cache["SENSORS"][i] = {'com_type': "i2c", 'dev_id': dev_id, 'prev_read': self.last_reading[i], 'cur_read': self.temps[i]}      
-        socketio.sleep(1)
+            s_num = int(t.s_count['Total'] - 1)
+            cache["INIT"].append({"function": self.Atlas_I2C_Temp, "sleep": 0.5, "sensor_num": s_num, "device": self.device_list[i], "dev_id": self.active_i2c_devs[i]})
+            cache["SENSORS"][s_num] = {'com_type': "i2c", 'dev_id': dev_id, 'prev_read': self.last_reading[i], 'cur_read': self.temps[i]}      
+        # socketio.sleep(1)
    
     def get_devices(self):
         device = AtlasI2C()
