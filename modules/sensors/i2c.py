@@ -1,32 +1,24 @@
 import time
-from modules.app_config import socketio, cache
 from modules.sensors.AtlasI2C import (
     AtlasI2C
 )
+from modules.app_config import socketio, cache
 
 class i2cAPI:   
     def __init__(self, t):
         self.device_list = self.get_devices()
         self.active_i2c_devs = self.get_i2c_list(self.device_list)       
-        self.temps = {}
-        self.last_reading = {}
         for i in range(len(self.active_i2c_devs)):
             info = self.device_list[i].get_device_info().rstrip("\x00")
             b = info.split(" ")
             type = b[0]
             if type == "RTD":
                 dev_id = 'Temp ' + str(t.update_sensor_count("Temp"))
-            elif type == "pH":
-                dev_id = 'pH ' + str(t.update_sensor_count("pH"))
             else:
-                dev_id = 'SG ' + str(t.update_sensor_count("SG"))
-            # thread = "sensor_thread_%s" % i
-            self.temps[i] = "{0:.3f}".format(0)
-            self.last_reading[i] = 0
+                dev_id = 'pH ' + str(t.update_sensor_count("pH"))
             s_num = int(t.s_count['Total'] - 1)
-            cache["INIT"].append({"function": self.Atlas_I2C_Temp, "sleep": 0.5, "sensor_num": s_num, "device": self.device_list[i], "dev_id": self.active_i2c_devs[i]})
-            cache["SENSORS"][s_num] = {'com_type': "i2c", 'dev_id': dev_id, 'prev_read': self.last_reading[i], 'cur_read': self.temps[i]}      
-        # socketio.sleep(1)
+            cache["INIT"].append({'function': self.execute_I2C, 't': t, 'sleep': 0.5, 'dev': self.device_list[i], 's_num': s_num})
+            cache["SENSORS"][s_num] = {'com_type': "i2c", 'dev_id': dev_id, 'cur_read': "{0:.3f}".format(0)}      
    
     def get_devices(self):
         device = AtlasI2C()
@@ -49,35 +41,17 @@ class i2cAPI:
                 i2c_list.append(i2c_num)
         return i2c_list
 
-    def Atlas_I2C_Temp(self, sleep, sensor_num, device, dev_id):
-        i2c_addr = dev_id
-        i = sensor_num
-        print("Starting RTD Temp Background Process on I2C Dev %s" % i2c_addr)
+    def execute_I2C(self, t, sleep, dev, s_num):
+        print("Starting I2C Background Process on Sensor %s" % s_num)
         while True:
-            try:
-                temp_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())                    
-                temp_raw = device.query("r")
-                split_temp = temp_raw.split(":")
-                cur_temp = float(split_temp[1].rstrip("\x00"))
-                temp_dif = abs(cur_temp - self.last_reading[i]) 
-                if cur_temp == "ERR":
-                    msg = "%s, Error Running get_reading (float), sensor %s, temp_raw: %s" % (temp_time, i2c_addr, cur_temp)
-                    self.log_error(msg)
-                else:
-                    if cur_temp <= 0 and self.last_reading[i] <= 0:                        
-                        self.temps[i] = "{0:.3f}".format(0)
-                    else:
-                        if temp_dif < 20 or temp_dif == cur_temp:
-                            self.temps[i] = "{0:.3f}".format(cur_temp)                    
-                        else:
-                            msg = "%s, Large Temp Change Error: sensor %s, Current Temp: %s, Previous Temp: %s" % (temp_time, i2c_addr, cur_temp, self.last_reading[i])
-                            self.log_error(msg) 
-                cache["SENSORS"][i]['cur_read'] = self.temps[i]
-                cache["SENSORS"][i]['prev_read'] = self.last_reading[i]
-                self.last_reading[i] = cur_temp                             
-            except:
-                msg = "%s, Error Running Temp Loop Thread on Sensor %s" % (temp_time, i2c_addr)
-                self.log_error(msg)           
+            try:                                 
+                lines = dev.query("r")
+                split_read = lines.split(":")
+                read_raw = split_read[1].rstrip("\x00")
+                new_read = float(read_raw)
+            except: #except pylibftdi.FtdiError as e:         
+                new_read = "ERR"
+            t.Atlas_error_check(s_num, new_read)
             socketio.sleep(sleep)
 
 
