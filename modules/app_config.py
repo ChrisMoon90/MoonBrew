@@ -31,9 +31,9 @@ cache = {
         "INIT": [],
         "SENSORS":{},
         "ACTORS":{
-            '0':{},
-            '1':{},
-            '2':{}
+            0:{},
+            1:{},
+            2:{}
             },
         "VESSELS":{
             'Boil_Kettle': {},
@@ -128,7 +128,7 @@ class CacheAPI:
 
     def update_cache(self, dir, *args):
         if dir == "ACTORS":
-            self.cache[dir][str(args[0])] = args[1]
+            self.cache[dir][int(args[0])] = args[1]
         else:
             update_config(dir, *args)
             if dir == 'SYSTEM':          

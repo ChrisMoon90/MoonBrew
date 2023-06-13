@@ -8,20 +8,17 @@ from modules.app_config import socketio, cache
 def init_ftdi(t):
     dev_list = get_ftdi_device_list()
     for i in range(len(dev_list)):  
-        dev = dev_list[i]
-        dev = Atlasftdi(t, dev)
+        dev_id = dev_list[i]
+        dev = Atlasftdi(t, dev_id)
         dev.send_cmd('i')
         socketio.sleep(1.5)
         info = dev.read_lines()
         b = info[0].split(',')
         type = b[1]
-        if type == 'RTD':
-            dev_id = 'Temp ' + str(t.update_sensor_count('Temp'))
-        else:
-            dev_id = 'pH ' + str(t.update_sensor_count('pH'))
+        dev_name = t.Atlas_type(type) # UPDATES S_COUNT TYPE TOTALS
         s_num = int(t.s_count['Total'] - 1)
         cache['INIT'].append({'function': execute_ftdi, 't': t, 'sleep': 0.5, 'dev': dev, 's_num': s_num})
-        cache['SENSORS'][s_num] = {'com_type': 'ftdi', 'dev_id': dev_id, 'cur_read': "{0:.3f}".format(0)}      
+        cache['SENSORS'][s_num] = {'com_type': 'ftdi', 'dev_name': dev_name, 'cur_read': "{0:.3f}".format(0)}      
 
 # class ftdiAPI:
 def execute_ftdi(t, sleep, dev, s_num):

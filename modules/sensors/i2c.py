@@ -12,13 +12,10 @@ class i2cAPI:
             info = self.device_list[i].get_device_info().rstrip("\x00")
             b = info.split(" ")
             type = b[0]
-            if type == "RTD":
-                dev_id = 'Temp ' + str(t.update_sensor_count("Temp"))
-            else:
-                dev_id = 'pH ' + str(t.update_sensor_count("pH"))
+            dev_name = t.Atlas_type(type) # UPDATES S_COUNT TYPE TOTALS
             s_num = int(t.s_count['Total'] - 1)
             cache["INIT"].append({'function': self.execute_I2C, 't': t, 'sleep': 0.5, 'dev': self.device_list[i], 's_num': s_num})
-            cache["SENSORS"][s_num] = {'com_type': "i2c", 'dev_id': dev_id, 'cur_read': "{0:.3f}".format(0)}      
+            cache["SENSORS"][s_num] = {'com_type': "i2c", 'dev_name': dev_name, 'cur_read': "{0:.3f}".format(0)}      
    
     def get_devices(self):
         device = AtlasI2C()

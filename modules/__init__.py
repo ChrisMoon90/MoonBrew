@@ -1,5 +1,4 @@
 import pprint
-import json
 
 from modules.app_config import *
 from modules.sensors import *
@@ -37,8 +36,8 @@ def add_rm_hw(mod_type, vessel, hw_type):
 
 @socketio.on('hw_update')
 def hw_update(index, a_dict):
-    c.update_cache('ACTORS', eval(index), a_dict)
-    hw.toggle_actor_state(index)
+    c.update_cache('ACTORS', int(index), a_dict)
+    hw.toggle_actor_state(int(index))
 
 
 # LOG FUNCTIONS ############################

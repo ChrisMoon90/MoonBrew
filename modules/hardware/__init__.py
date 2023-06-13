@@ -14,8 +14,8 @@ class hardwareAPI:
         for i in self.outputs:
             GPIO.setup(i, GPIO.OUT)
         for x in range(3):
-            cache['ACTORS'][str(x)]['state'] = False
-            cache['ACTORS'][str(x)]['dev_id'] = "Actor " + str(x + 1)
+            cache['ACTORS'][x]['state'] = False
+            cache['ACTORS'][x]['dev_name'] = "Actor " + str(x + 1)
 
     def set_outputs(self):
         output1 = 26
@@ -26,9 +26,9 @@ class hardwareAPI:
     def toggle_actor_state(self, index):
         state = cache['ACTORS'][index]['state']
         if state == True:
-            GPIO.output(self.outputs[eval(index)], GPIO.HIGH)
+            GPIO.output(self.outputs[index], GPIO.HIGH)
         else: 
-            GPIO.output(self.outputs[eval(index)], GPIO.LOW)
+            GPIO.output(self.outputs[index], GPIO.LOW)
         print('Actor State Updated: ', cache['ACTORS'])
 
     def cleanup():
