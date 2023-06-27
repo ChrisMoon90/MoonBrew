@@ -1,4 +1,4 @@
-import pprint
+from pprint import pprint
 
 from modules.app_config import *
 from modules.sensors import *
@@ -25,13 +25,14 @@ def get_cache():
 @socketio.on('system_update')
 def update_system(s_dict):
     c.update_cache('SYSTEM', s_dict)
+    h.update_auto_states(hw)
 
 @socketio.on('vessel_update')
 def update_vessel(vessel, v_dict):
     c.update_cache('VESSELS', vessel, v_dict)
 
 @socketio.on('add_rm_hardware')
-def add_rm_hw(mod_type, vessel, hw_type):
+def add_rm_hw(mod_type, vessel,  hw_type):
     c.add_remove_hardware(mod_type, vessel, hw_type)
 
 @socketio.on('hw_update')
@@ -76,11 +77,11 @@ tftdi = init_ftdi(t)
 
 ti2c = i2cAPI(t)
 
-l = logAPI(ti2c)
+l = logAPI()
 
 hw = hardwareAPI()
 
-h = hysteresisAPI(ti2c, hw)
+h = hysteresisAPI()
 
 e = timerAPI()
 
@@ -102,4 +103,4 @@ print("Starting Background Tasks")
 initializer()
 
 print("Full Compiled Cache")
-pprint.pprint(cache)
+pprint(cache)

@@ -2,7 +2,6 @@ import flask
 from flask_socketio import SocketIO
 import os
 import pprint
-# import json
 
 from modules.ui.endpoints import react
 import pprint
@@ -45,7 +44,15 @@ cache = {
         "SYSTEM": { 
             'Dynamic': {
                 'log_state': False,
-                'timer_start': None}
+                'timer_start': None
+                },
+            'AutoStates': {
+                'Boil_Kettle': False,
+                'Mash_Tun': False,
+                'Hot_Liquor_Tank': False,
+                'Fermenter': False,
+                'Smoker': False
+            }
         }
     }
 
@@ -58,10 +65,10 @@ def get_config_params():
         print("Index file does not exist. Config file will be created.")
         with open(filename, 'w') as f:
             f.write("SYSTEM\n")
-            f.write("'Static': {'Mode': 'Brew', 'log_rate': '1'}\n\n")
+            f.write("'Static': {'Mode': 'Brew', 'log_rate': 1}\n\n")
             a = {'Actors': {},
                 'Sensors': {},
-                'Params': {'auto_state': False, 'tar_temp': 200, 'temp_tol': 2}}
+                'Params': {'tar_temp': 200, 'temp_tol': 2}}
             for i in settings:
                 f.write(str(i) + '\n')
                 for p in a:
@@ -100,7 +107,6 @@ def update_config(dir, *args):
             if dir == "VESSELS":
                 if args[0] in line:
                     dict = args[1]
-                    print('Dict: %s' % dict)
                     cfile[cur_line] = "'Actors': " + str(dict['Actors']) + '\n'
                     cfile[cur_line+1] = "'Sensors': " + str(dict['Sensors']) + '\n'
                     cfile[cur_line+2] = "'Params': " + str(dict['Params']) + '\n'
@@ -129,29 +135,58 @@ class CacheAPI:
     def update_cache(self, dir, *args):
         if dir == "ACTORS":
             self.cache[dir][int(args[0])] = args[1]
-        else:
-            update_config(dir, *args)
+        else:  
+            args = self.convert_strings(*args)        
             if dir == 'SYSTEM':          
                 self.cache[dir] = args[0]
             if dir == 'VESSELS':
                 self.cache[dir][args[0]] = args[1]
+        update_config(dir, *args)
         self.send_cache()
         pprint.pprint(self.cache)
 
     def add_remove_hardware(self, mod_type, vessel, hw_type):
         v_dict = self.cache['VESSELS'][vessel]
         count = len(v_dict[hw_type])
-        print(type(count))
-        print(v_dict)
         if mod_type == "add":
             if hw_type == "Actors":
-                print("Adding Actor")
-                v_dict[hw_type][str(count)] = {'name': 'Actor1', 'index': 0}
+                print("Adding Actor to ", vessel)
+                v_dict[hw_type][int(count)] = {'name': 'Actor1', 'index': 0}
             else:
-                print("Adding Sensor")
-                v_dict[hw_type][str(count)] = {'name': 'Temp', 'index': 0}
+                print("Adding Sensor to ", vessel)
+                v_dict[hw_type][int(count)] = {'name': 'Temp', 'index': 0}
         else:
-            print("Deleting " + hw_type)
-            del v_dict[hw_type][str(count - 1)]
-        print(v_dict)
+            print("Deleting " + hw_type + ' from ' + vessel)
+            del v_dict[hw_type][int(count - 1)]
         self.update_cache('VESSELS', vessel, v_dict)
+
+    def convert_strings(self, *args):
+        args_out = []
+        for r in args:
+            if type(r) is dict:
+                for x in self.dfilter(r):
+                    r = x
+            args_out.append(r)
+        return args_out
+
+    def dfilter(self, d):
+        for key, val in d.items():
+            try:
+                if type(key) is int:
+                    pass
+                else:
+                    d[int(key)] = val
+                    del d[key]
+            except:
+                pass
+            if type(val) is dict:
+                yield from self.dfilter(val)
+            else:
+                if val == True or val == False:
+                    pass
+                else:
+                    try:
+                        d[key] = int(val)
+                    except:
+                        d[key] = val
+        yield d

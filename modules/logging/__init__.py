@@ -4,7 +4,7 @@ from modules.app_config import socketio, cache
 
 
 class logAPI:
-    def __init__(self, a):
+    def __init__(self):
         self.running = False
         self.log_rate = cache['SYSTEM']['Static']['log_rate']
         self.filename = "./logs/Temps.csv"

@@ -42,13 +42,12 @@ class SensorAPI:
             else:   
                 prev_read = self.prev_read[s_num]
                 temp_dif = abs(new_read - prev_read) 
+                # set_val = "{0:.3f}".format(0)
                 if new_read <= 0 and prev_read <= 0:                        
-                    set_val = "{0:.3f}".format(0)
-                    cache['SENSORS'][s_num]['cur_read'] = set_val
+                    cache['SENSORS'][s_num]['cur_read'] = new_read
                 else:
                     if temp_dif < 20 or temp_dif == new_read:
-                        set_val = "{0:.3f}".format(new_read)
-                        cache['SENSORS'][s_num]['cur_read'] = set_val
+                        cache['SENSORS'][s_num]['cur_read'] = new_read
                     else:                     
                         msg = "Large Value Change Error: sensor %s, Current Temp: %s, Previous Temp: %s" % (s_num, new_read, prev_read)
                         self.log_error(msg)

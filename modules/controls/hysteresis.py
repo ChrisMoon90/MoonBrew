@@ -1,60 +1,54 @@
-#!/usr/bin/python3
-from modules.app_config import *
+from pprint import pprint
+
+from modules.app_config import socketio, cache
 
 
 class hysteresisAPI:
 
-    def __init__(self, ti2c, hw):
-        self.isRunning = False
-        self.tempAPI = ti2c
-        self.fanAPI = hw
-        # self.tar_temp = cache['VESSELS']['Tar_Temp']
-        # self.temp_tol = cache['SYSTEM']['Temp_Tol']
-        
-    def fetch_tar_temp(self):
-        socketio.emit("TarTemp", self.tar_temp)
-        print("Sent Target Temp: ", self.tar_temp)
+    def __init__(self):
+        for key, val in cache['SYSTEM']['AutoStates'].items():
+            setattr(self, key, val)
+        pprint(vars(self))
 
-    def set_tar_temp(self, tar_temp):
-        self.tar_temp = tar_temp
-        print("Target Temp Updated: ", self.tar_temp)
+    def update_auto_states(self, hw):
+        for key, val in cache['SYSTEM']['AutoStates'].items(): 
+            if val == True:
+                if getattr(self, key) == False:   
+                    setattr(self, key, val)                                 
+                    thread = socketio.start_background_task(target=self.hysteresis, hw = hw, vessel = key, sleep = 2)                  
+            setattr(self, key, val) 
 
-    def fetch_temp_tol(self):
-        socketio.emit("TempTol", self.temp_tol)
-        print("Sent Temp Tol: ", self.temp_tol)
-
-    def set_temp_tol(self, temp_tol):
-        self.temp_tol = temp_tol
-        print("Temp Tol Updated: ", self.temp_tol)
-
-    def update_temp_tol(self, new_temp_tol):
-        self.temp_tol = new_temp_tol
-
-    def send_auto_state(self):
-        socketio.emit('auto_state', self.isRunning)
-        print("AutoState Sent: ", self.isRunning)
-
-    def toggle_auto_state(self):
-        self.isRunning = not self.isRunning
-        if self.isRunning == True:
-            thread3 = socketio.start_background_task(target=self.hysteresis, sleep = 2)
-        else:
-            print("Stopping Hysteresis Thread") 
-        socketio.emit('auto_state', self.isRunning)
-
-    def hysteresis(self, sleep):
-        print("Starting Hysteresis Thread")
-        while self.isRunning:
-            self.active_sensor = self.tempAPI.temp_indexes['s0']
-            self.cur_temp = self.tempAPI.temps[self.active_sensor]
-            self.active_fan = self.fanAPI.fan_indexes['f0']
-            self.cur_fan_state = self.fanAPI.fan_states[self.active_fan]
-            if self.cur_temp < self.tar_temp - self.temp_tol:
-                if self.cur_fan_state == "OFF":
-                    self.fanAPI.toggle_fan_state(self.active_fan,"ON") 
-            elif self.cur_temp > self.tar_temp + self.temp_tol:
-                if self.cur_fan_state == "ON":
-                    self.fanAPI.toggle_fan_state(self.active_fan,"OFF") 
+    def hysteresis(self, hw, vessel, sleep):
+        a_msg = "Auto Control Started on " + vessel
+        print(a_msg)
+        socketio.emit('alert_success', a_msg)
+        v_dict = cache['VESSELS'][vessel]
+        a_indexes = []
+        print(getattr(self, vessel))
+        while getattr(self, vessel):
+            for key in v_dict['Actors']:
+                if key >= 2:
+                    pass
+                else:
+                    a_indexes.append(v_dict['Actors'][key]['index'])
+            cur_read = cache['SENSORS'][v_dict['Sensors'][0]['index']]['cur_read']
+            tar_temp = v_dict['Params']['tar_temp']
+            temp_tol = v_dict['Params']['temp_tol']
+            try:
+                if cur_read < tar_temp - temp_tol and cache['ACTORS'][a_indexes[0]]['state'] == False:
+                        hw.toggle_actor_state(a_indexes[0]) 
+                elif cur_read > tar_temp and cache['ACTORS'][a_indexes[0]]['state'] == True:
+                        hw.toggle_actor_state(a_indexes[0])
+                if cur_read > tar_temp + temp_tol and cache['ACTORS'][a_indexes[1]]['state'] == False:
+                        hw.toggle_actor_state(a_indexes[1]) 
+                elif cur_read < tar_temp and cache['ACTORS'][a_indexes[1]]['state'] == True:
+                        hw.toggle_actor_state(a_indexes[1])
+            except:
+                print('Error running hysteresis loop on ' + vessel)
             socketio.sleep(sleep)
-        self.fanAPI.toggle_fan_state(self.active_fan,"OFF")
-        print("Hysteresis Thread Terminated & Powered Off")
+        for i in a_indexes:
+            if cache['ACTORS'][i]['state'] == True:
+                hw.toggle_actor_state(a_indexes[i])
+        a_msg = "Auto Control Terminated on " + vessel
+        print(a_msg)
+        socketio.emit('alert_warn', a_msg)

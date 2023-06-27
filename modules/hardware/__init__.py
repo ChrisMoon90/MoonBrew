@@ -29,7 +29,7 @@ class hardwareAPI:
             GPIO.output(self.outputs[index], GPIO.HIGH)
         else: 
             GPIO.output(self.outputs[index], GPIO.LOW)
-        print('Actor State Updated: ', cache['ACTORS'])
+        print('Actor State Updated: ', cache['ACTORS'][index])
 
     def cleanup():
         GPIO.cleanup()
