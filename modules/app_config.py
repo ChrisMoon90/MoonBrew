@@ -4,7 +4,7 @@ import os
 import pprint
 
 from modules.ui.endpoints import react
-import pprint
+
 
 
 # SET UP FLASK SERVER ################
@@ -117,7 +117,8 @@ def update_config(dir, *args):
 get_config_params()
 
 
-class CacheAPI:
+from modules.controls.hysteresis import HysteresisAPI
+class CacheAPI(HysteresisAPI):
     def __init__(self):
         self.cache = cache
 
@@ -133,12 +134,14 @@ class CacheAPI:
         socketio.emit('cache', cache_emit)
 
     def update_cache(self, dir, *args):
+        args = self.convert_strings(*args) 
         if dir == "ACTORS":
             self.cache[dir][int(args[0])] = args[1]
-        else:  
-            args = self.convert_strings(*args)        
+            super().update_actors()
+        else:         
             if dir == 'SYSTEM':          
                 self.cache[dir] = args[0]
+                super().update_auto_states()
             if dir == 'VESSELS':
                 self.cache[dir][args[0]] = args[1]
         update_config(dir, *args)
@@ -186,7 +189,10 @@ class CacheAPI:
                     pass
                 else:
                     try:
-                        d[key] = int(val)
+                        if float(val) > int(float(val)):
+                            d[key] = float(val)
+                        else:
+                            d[key] = int(float(val))
                     except:
                         d[key] = val
         yield d

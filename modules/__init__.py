@@ -2,9 +2,11 @@ from pprint import pprint
 
 from modules.app_config import *
 from modules.sensors import *
-from modules.hardware import *
+from modules.actors import *
 from modules.logging import *
 from modules.controls import *
+from modules.sensors.i2c import *
+from modules.sensors.ftdi import *
 
 
 # CONNECTION FUNCTIONS ######################
@@ -25,7 +27,6 @@ def get_cache():
 @socketio.on('system_update')
 def update_system(s_dict):
     c.update_cache('SYSTEM', s_dict)
-    h.update_auto_states(hw)
 
 @socketio.on('vessel_update')
 def update_vessel(vessel, v_dict):
@@ -35,10 +36,9 @@ def update_vessel(vessel, v_dict):
 def add_rm_hw(mod_type, vessel,  hw_type):
     c.add_remove_hardware(mod_type, vessel, hw_type)
 
-@socketio.on('hw_update')
-def hw_update(index, a_dict):
+@socketio.on('actor_update')
+def actor_update(index, a_dict):
     c.update_cache('ACTORS', int(index), a_dict)
-    hw.toggle_actor_state(int(index))
 
 
 # LOG FUNCTIONS ############################
@@ -71,19 +71,19 @@ print("Creating API Classes")
 
 c = CacheAPI()
 
-t = SensorAPI()
+t = SensorBase()
 
-tftdi = init_ftdi(t)
+tftdi = ftdiAPI()
 
-ti2c = i2cAPI(t)
+ti2c = i2cAPI()
 
 l = logAPI()
 
-hw = hardwareAPI()
+a = ActorAPI()
 
-h = hysteresisAPI()
+h = HysteresisAPI()
 
-e = timerAPI()
+# e = timerAPI()
 
 
 # INITIALIZE BACKGROUND TASKS ###############

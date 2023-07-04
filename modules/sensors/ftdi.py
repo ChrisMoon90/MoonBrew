@@ -3,51 +3,53 @@ from pylibftdi.driver import FtdiError
 from pylibftdi import Driver
 import time
 
+from modules.sensors.__init__ import SensorBase
 from modules.app_config import socketio, cache
 
-def init_ftdi(t):
-    dev_list = get_ftdi_device_list()
-    for i in range(len(dev_list)):  
-        dev_id = dev_list[i]
-        dev = Atlasftdi(t, dev_id)
-        dev.send_cmd('i')
-        socketio.sleep(1.5)
-        info = dev.read_lines()
-        b = info[0].split(',')
-        type = b[1]
-        dev_name = t.Atlas_type(type) # UPDATES S_COUNT TYPE TOTALS
-        s_num = int(t.s_count['Total'] - 1)
-        cache['INIT'].append({'function': execute_ftdi, 't': t, 'sleep': 0.5, 'dev': dev, 's_num': s_num})
-        cache['SENSORS'][s_num] = {'com_type': 'ftdi', 'dev_name': dev_name, 'cur_read': "{0:.3f}".format(0)}      
 
-# class ftdiAPI:
-def execute_ftdi(t, sleep, dev, s_num):
-    print("Starting FTDI Background Process on Sensor %s" % s_num)
-    while True: 
-        try:
-            dev.send_cmd("R")
+class ftdiAPI(SensorBase):
+    def __init__(self):
+        dev_list = self.get_ftdi_device_list()
+        for i in range(len(dev_list)):  
+            dev_id = dev_list[i]
+            dev = Atlasftdi(dev_id)
+            dev.send_cmd('i')
             socketio.sleep(1.5)
-            lines = dev.read_lines()
-            for i in range(len(lines)):
-                if lines[i][0] != '*':
-                    read_raw = lines[i]
-            new_read = float(read_raw.strip())
-        except: #except pylibftdi.FtdiError as e:         
-            new_read = "ERR"
-        t.Atlas_error_check(s_num, new_read)
-        socketio.sleep(sleep)
+            info = dev.read_lines()
+            b = info[0].split(',')
+            type = b[1]
+            dev_name = super().Atlas_type(type) # UPDATES S_COUNT TYPE TOTALS
+            s_num = int(super().s_count['Total'] - 1)
+            cache['INIT'].append({'function': self.execute_ftdi, 'sleep': 0.5, 'dev': dev, 's_num': s_num})
+            cache['SENSORS'][s_num] = {'com_type': 'ftdi', 'dev_name': dev_name, 'cur_read': "{0:.3f}".format(0)}      
 
-def get_ftdi_device_list():
-    dev_list = []    
-    for device in Driver().list_devices():
-        dev_info = device        
-        vendor, product, serial = dev_info   # device must always be this triple
-        dev_list.append(serial)
-    return dev_list
+    def execute_ftdi(self, sleep, dev, s_num):
+        print("Starting FTDI Background Process on Sensor %s" % s_num)
+        while True: 
+            try:
+                dev.send_cmd("R")
+                socketio.sleep(1.5)
+                lines = dev.read_lines()
+                for i in range(len(lines)):
+                    if lines[i][0] != '*':
+                        read_raw = lines[i]
+                new_read = float(read_raw.strip())
+            except: #except pylibftdi.FtdiError as e:         
+                new_read = "ERR"
+            super().Atlas_error_check(s_num, new_read)
+            socketio.sleep(sleep)
+
+    def get_ftdi_device_list(self):
+        dev_list = []    
+        for device in Driver().list_devices():
+            dev_info = device        
+            vendor, product, serial = dev_info   # device must always be this triple
+            dev_list.append(serial)
+        return dev_list
 
 
 class Atlasftdi(Device):
-    def __init__(self, t, dev):
+    def __init__(self, dev):
         Device.__init__(self, mode='t', device_id=dev)
 
     def read_line(self, size=0):
@@ -89,7 +91,8 @@ class Atlasftdi(Device):
 
 #RUN FOR DEBUGGING PURPOSES                    
 if __name__ == '__main__': 
-    dev_list = get_ftdi_device_list()
+    f = ftdiAPI()
+    dev_list = f.get_ftdi_device_list()
     dev_class_list = []
     for i in range(len(dev_list)):
         dev_class_list.append(Atlasftdi(dev_list[i]))

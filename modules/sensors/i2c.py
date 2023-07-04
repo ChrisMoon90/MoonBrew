@@ -1,20 +1,22 @@
-import time
+# import time
 from modules.sensors.AtlasI2C import (
     AtlasI2C
 )
+
+from modules.sensors.__init__ import SensorBase
 from modules.app_config import socketio, cache
 
-class i2cAPI:   
-    def __init__(self, t):
+class i2cAPI(SensorBase):   
+    def __init__(self):
         self.device_list = self.get_devices()
         self.active_i2c_devs = self.get_i2c_list(self.device_list)       
         for i in range(len(self.active_i2c_devs)):
             info = self.device_list[i].get_device_info().rstrip("\x00")
             b = info.split(" ")
             type = b[0]
-            dev_name = t.Atlas_type(type) # UPDATES S_COUNT TYPE TOTALS
-            s_num = int(t.s_count['Total'] - 1)
-            cache["INIT"].append({'function': self.execute_I2C, 't': t, 'sleep': 0.5, 'dev': self.device_list[i], 's_num': s_num})
+            dev_name = super().Atlas_type(type) # UPDATES S_COUNT TYPE TOTALS
+            s_num = int(super().s_count['Total'] - 1)
+            cache["INIT"].append({'function': self.execute_I2C, 'sleep': 0.5, 'dev': self.device_list[i], 's_num': s_num})
             cache["SENSORS"][s_num] = {'com_type': "i2c", 'dev_name': dev_name, 'cur_read': "{0:.3f}".format(0)}      
    
     def get_devices(self):
@@ -38,7 +40,7 @@ class i2cAPI:
                 i2c_list.append(i2c_num)
         return i2c_list
 
-    def execute_I2C(self, t, sleep, dev, s_num):
+    def execute_I2C(self, sleep, dev, s_num):
         print("Starting I2C Background Process on Sensor %s" % s_num)
         while True:
             try:                                 
@@ -48,7 +50,7 @@ class i2cAPI:
                 new_read = float(read_raw)
             except: #except pylibftdi.FtdiError as e:         
                 new_read = "ERR"
-            t.Atlas_error_check(s_num, new_read)
+            super().Atlas_error_check(s_num, new_read)
             socketio.sleep(sleep)
 
 

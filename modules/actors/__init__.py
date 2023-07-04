@@ -1,12 +1,10 @@
-#!/usr/bin/python3
-
 import RPi.GPIO as GPIO
 import time
 
-from modules.app_config import socketio, cache
+from modules.app_config import cache
 
 
-class hardwareAPI:
+class ActorAPI():
     def __init__(self):
         self.set_outputs()
         GPIO.setwarnings(False)
@@ -23,21 +21,21 @@ class hardwareAPI:
         output3 = 21
         self.outputs = [output1, output2, output3]
 
-    def toggle_actor_state(self, index):
-        state = cache['ACTORS'][index]['state']
-        if state == True:
-            GPIO.output(self.outputs[index], GPIO.HIGH)
-        else: 
-            GPIO.output(self.outputs[index], GPIO.LOW)
-        print('Actor State Updated: ', cache['ACTORS'][index])
-
+    def update_actors(self):
+        for i in cache['ACTORS']:
+            if i['state'] == True:
+                GPIO.output(self.outputs[i], GPIO.HIGH)
+            else: 
+                GPIO.output(self.outputs[i], GPIO.LOW)
+            # print('Actor States Updated')
+        
     def cleanup():
         GPIO.cleanup()
 
 
 #FOR DEVELOPMENT PURPOSES
 if __name__ == '__main__': 
-    a = hardwareAPI()
+    a = ActorAPI()
     for f in a.outputs:
         print('Starting new fan: pin ', f)
         GPIO.output(f, GPIO.HIGH)
