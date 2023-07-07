@@ -154,7 +154,7 @@ class CacheAPI(HysteresisAPI):
         if mod_type == "add":
             if hw_type == "Actors":
                 print("Adding Actor to ", vessel)
-                v_dict[hw_type][int(count)] = {'name': 'Actor1', 'index': 0}
+                v_dict[hw_type][int(count)] = {'name': 'Actor1', 'index': 0, 'type': 'Pump'}
             else:
                 print("Adding Sensor to ", vessel)
                 v_dict[hw_type][int(count)] = {'name': 'Temp', 'index': 0}

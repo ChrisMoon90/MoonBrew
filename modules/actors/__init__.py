@@ -19,14 +19,14 @@ class ActorAPI():
         output1 = 26
         output2 = 20
         output3 = 21
-        self.outputs = [output1, output2, output3]
+        ActorAPI.outputs = [output1, output2, output3]
 
     def update_actors(self):
-        for i in cache['ACTORS']:
-            if i['state'] == True:
-                GPIO.output(self.outputs[i], GPIO.HIGH)
+        for key, val in cache['ACTORS'].items():
+            if val['state'] == True:
+                GPIO.output(ActorAPI.outputs[key], GPIO.HIGH)
             else: 
-                GPIO.output(self.outputs[i], GPIO.LOW)
+                GPIO.output(ActorAPI.outputs[key], GPIO.LOW)
             # print('Actor States Updated')
         
     def cleanup():
