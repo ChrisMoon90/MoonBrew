@@ -37,8 +37,8 @@ def add_rm_hw(mod_type, vessel,  hw_type):
     c.add_remove_hardware(mod_type, vessel, hw_type)
 
 @socketio.on('actor_update')
-def actor_update(index, a_dict):
-    c.update_cache('ACTORS', int(index), a_dict)
+def actor_update(a_dict):
+    c.update_cache('ACTORS', a_dict)
 
 
 # LOG FUNCTIONS ############################
@@ -71,11 +71,11 @@ print("Creating API Classes")
 
 c = CacheAPI()
 
-t = SensorBase()
+s = SensorBase()
 
-tftdi = ftdiAPI()
+f = ftdiAPI()
 
-ti2c = i2cAPI()
+i = i2cAPI()
 
 l = logAPI()
 

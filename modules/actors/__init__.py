@@ -1,7 +1,7 @@
 import RPi.GPIO as GPIO
 import time
 
-from modules.app_config import cache
+from modules.app_config import cache, socketio
 
 
 class ActorAPI():
@@ -27,7 +27,8 @@ class ActorAPI():
                 GPIO.output(ActorAPI.outputs[key], GPIO.HIGH)
             else: 
                 GPIO.output(ActorAPI.outputs[key], GPIO.LOW)
-            # print('Actor States Updated')
+            socketio.emit('cache', cache)
+        print('Actor States Updated: ', cache['ACTORS'])
         
     def cleanup():
         GPIO.cleanup()

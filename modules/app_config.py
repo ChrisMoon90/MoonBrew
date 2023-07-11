@@ -6,7 +6,6 @@ import pprint
 from modules.ui.endpoints import react
 
 
-
 # SET UP FLASK SERVER ################
 app = flask.Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -136,7 +135,7 @@ class CacheAPI(HysteresisAPI):
     def update_cache(self, dir, *args):
         args = self.convert_strings(*args) 
         if dir == "ACTORS":
-            self.cache[dir][int(args[0])] = args[1]
+            self.cache[dir] = args[0]
             super().update_actors()
         else:         
             if dir == 'SYSTEM':          
@@ -144,8 +143,8 @@ class CacheAPI(HysteresisAPI):
                 super().update_auto_states()
             if dir == 'VESSELS':
                 self.cache[dir][args[0]] = args[1]
-        update_config(dir, *args)
-        self.send_cache()
+                self.send_cache()
+        update_config(dir, *args)       
         pprint.pprint(self.cache)
 
     def add_remove_hardware(self, mod_type, vessel, hw_type):

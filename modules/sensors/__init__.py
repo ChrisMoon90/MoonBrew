@@ -23,7 +23,6 @@ class SensorBase():
         cur_total = SensorBase.s_count['Total']
         SensorBase.s_count['Total'] = cur_total + 1
         SensorBase.prev_read[int(SensorBase.s_count['Total'] - 1)] = 0
-        print(SensorBase.s_count)
         return SensorBase.s_count[type]
         
     def Atlas_error_check(self, s_num, new_read):
