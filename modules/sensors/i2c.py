@@ -14,7 +14,7 @@ class i2cAPI(SensorBase):
             info = self.device_list[i].get_device_info().rstrip("\x00")
             b = info.split(" ")
             type = b[0]
-            dev_name = super().Atlas_type(type) # UPDATES S_COUNT TYPE TOTALS
+            dev_name = super().sensor_type(type) # UPDATES S_COUNT TYPE TOTALS
             s_num = int(super().s_count['Total'] - 1)
             cache["INIT"].append({'function': self.execute_I2C, 'sleep': 0.5, 'dev': self.device_list[i], 's_num': s_num})
             cache["SENSORS"][s_num] = {'com_type': "i2c", 'dev_name': dev_name, 'cur_read': "{0:.3f}".format(0)}      

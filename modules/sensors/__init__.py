@@ -47,11 +47,13 @@ class SensorBase():
             msg = ("Error Running Temp Loop Thread on Sensor ", s_num)
             SensorBase.log_error(msg)           
         
-    def Atlas_type(self, type):
+    def sensor_type(self, type):
         if type == 'RTD':
             dev_name = 'Temp ' + str(self.update_sensor_count('Temp'))
-        else:
+        elif type == 'pH':
             dev_name = 'pH ' + str(self.update_sensor_count('pH'))
+        else:
+            dev_name = 'SG ' + str(self.update_sensor_count('SG'))
         return dev_name
         
     def log_error(self, msg):

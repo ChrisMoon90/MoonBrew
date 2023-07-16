@@ -18,7 +18,7 @@ class ftdiAPI(SensorBase):
             info = dev.read_lines()
             b = info[0].split(',')
             type = b[1]
-            dev_name = super().Atlas_type(type) # UPDATES S_COUNT TYPE TOTALS
+            dev_name = super().sensor_type(type) # UPDATES S_COUNT TYPE TOTALS
             s_num = int(super().s_count['Total'] - 1)
             cache['INIT'].append({'function': self.execute_ftdi, 'sleep': 0.5, 'dev': dev, 's_num': s_num})
             cache['SENSORS'][s_num] = {'com_type': 'ftdi', 'dev_name': dev_name, 'cur_read': "{0:.3f}".format(0)}      
