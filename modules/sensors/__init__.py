@@ -1,18 +1,26 @@
+print('Loading Sensors Module...')
+
 import pprint
 import time
 
 from modules.app_config import socketio, cache
 
 class SensorBase():
+    s_count = {'Total': 0, 'Temp': 0, 'pH': 0, 'SG': 0}
+    prev_read = {}  
+
     def __init__(self):
-        cache["INIT"].append({"function": self.emit_reading, "sleep": 5})
-        SensorBase.s_count = {'Total': 0, 'Temp': 0, 'pH': 0, 'SG': 0}
-        SensorBase.prev_read = {}        
+        # cache["INIT"].append({"function": self.emit_reading, "sleep": 5})
+        # SensorBase.s_count = {'Total': 0, 'Temp': 0, 'pH': 0, 'SG': 0}
+        # SensorBase.prev_read = {}   
+        pass     
                         
     def emit_reading(self, sleep):
         print("Starting Emit Temp Thread")
         while True:
             f_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) 
+            print(80 * "-")
+            print(f_time)
             pprint.pprint(cache['SENSORS'])
             socketio.emit('cache', cache)
             socketio.sleep(sleep)
@@ -49,11 +57,11 @@ class SensorBase():
         
     def sensor_type(self, type):
         if type == 'RTD':
-            dev_name = 'Temp ' + str(self.update_sensor_count('Temp'))
+            dev_name = 'Temp ' + str(SensorBase.update_sensor_count(SensorBase, 'Temp'))
         elif type == 'pH':
-            dev_name = 'pH ' + str(self.update_sensor_count('pH'))
+            dev_name = 'pH ' + str(SensorBase.update_sensor_count(SensorBase, 'pH'))
         else:
-            dev_name = 'SG ' + str(self.update_sensor_count('SG'))
+            dev_name = 'SG ' + str(SensorBase.update_sensor_count(SensorBase, 'SG'))
         return dev_name
         
     def log_error(self, msg):
@@ -63,3 +71,6 @@ class SensorBase():
         error_log = "./logs/TempError.log"
         with open(error_log, "a") as file:
             file.write("%s\n" % (n_msg)) 
+
+
+cache["INIT"].append({"function": SensorBase.emit_reading, 'cls': SensorBase, "sleep": 5})

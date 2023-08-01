@@ -2,19 +2,29 @@ Welcome to MoonBrew by Moon Brew Co.
 
 Backend Python3 server providing autonomous control for all grain brewing, fermentation & smokers. Compatible with Atlas Controls devices (temp, pH, etc.), Tilt hydrometers & up to 3ea solid state relays.
 
-Auto installation instructions to come.
 
-Required Python3 libraries:
+Required installation commands:
 
+
+sudo apt update && sudo apt upgrade
+
+
+CONFIRM HOW TO ADD PYTHON3 BLUEZ:
 sudo apt-get install python3-bluez
-or
-sudo apt install pkg-config libboost-python-dev libboost-thread-dev libbluetooth-dev libglib2.0-dev python-dev
-pip3 install gattlib
-pip3 install pybluez[ble]
-or
-pip3 install pybluez
 
+
+NEED THIS TO ADD dbus_fast PATH TO SUPER USER:
+sudo nano ~/.bashrc
+ADD LINE: export PYTHONPATH=$PYTHONPATH:/usr/lib/python3.7/site-packages
+source ~/.bashrc 
+sudo visudo
+ADD LINE: Defaults    env_keep += PYTHONPATH
+
+
+NOT SURE IF I NEED THIS (ADDS PERMISSIONS TO P3.7 TO ACCESS fping?)
 sudo setcap cap_net_raw+eip /usr/bin/python3.7
+
+sudo pip3 install construct
 
 
 --  Chris Moon, PE

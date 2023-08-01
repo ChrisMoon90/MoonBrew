@@ -7,6 +7,7 @@ from modules.logging import *
 from modules.controls import *
 from modules.sensors.i2c import *
 from modules.sensors.ftdi import *
+from modules.sensors.tilt import *
 
 
 # CONNECTION FUNCTIONS ######################
@@ -71,7 +72,7 @@ print("Creating API Classes")
 
 c = CacheAPI()
 
-s = SensorBase()
+# s = SensorBase()
 
 f = ftdiAPI()
 

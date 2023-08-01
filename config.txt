@@ -1,5 +1,5 @@
 SYSTEM
-'Static': {'Mode': 'Brew', 'log_rate': 0.5}
+'Static': {'Mode': 'Ferment', 'log_rate': 0.5}
 
 Boil_Kettle
 'Actors': {0: {'name': 'Heat', 'index': 0, 'type': 'Heater'}, 1: {'name': 'Pump 1', 'index': 1, 'type': 'Pump'}}
@@ -18,7 +18,7 @@ Hot_Liquor_Tank
 
 Fermenter
 'Actors': {0: {'name': 'Heater', 'index': 0, 'type': 'Heater'}, 1: {'name': 'Chiller', 'index': 1, 'type': 'Chiller'}}
-'Sensors': {0: {'name': 'Internal Temp', 'index': 2}}
+'Sensors': {0: {'name': 'Internal Temp', 'index': 2}, 1: {'name': 'Temp', 'index': 0}}
 'Params': {'tar_temp': 75, 'temp_tol': 1}
 
 Smoker
