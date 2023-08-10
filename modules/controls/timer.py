@@ -1,9 +1,9 @@
-#!/usr/bin/python3
+print('Loading Timer module...')
+
 import time
 from modules.app_config import socketio
 
-
-class timerAPI:
+class TimerAPI:
 
     def __init__(self):
         self.start_time= 0
@@ -19,3 +19,17 @@ class timerAPI:
     def send_start_time(self):
         socketio.emit("start_time", self.start_time)
         print("Sending start time: ", self.start_time)
+
+
+# TIMER FUNCTIONS ############################
+@socketio.on('fetch_timer')
+def send_start_time():
+    TimerAPI.send_start_time()
+
+@socketio.on('start_timer')
+def start_timer():
+    TimerAPI.start_timer()
+
+@socketio.on('reset_timer')
+def reset_timer():
+    TimerAPI.reset_timer()

@@ -1,12 +1,14 @@
-# import time
+print('Loading i2c module...')
+
 from modules.sensors.AtlasI2C import (
     AtlasI2C
 )
 
-from modules.sensors.__init__ import SensorBase
+from modules.sensors.SensorBase import SensorBase
 from modules.app_config import socketio, cache
 
 class i2cAPI(SensorBase):   
+
     def __init__(self):
         self.device_list = self.get_devices()
         self.active_i2c_devs = self.get_i2c_list(self.device_list)       
@@ -16,7 +18,7 @@ class i2cAPI(SensorBase):
             type = b[0]
             dev_name = super().sensor_type(type) # UPDATES S_COUNT TYPE TOTALS
             s_num = int(super().s_count['Total'] - 1)
-            cache["INIT"].append({'function': self.execute_I2C, 'sleep': 0.5, 'dev': self.device_list[i], 's_num': s_num})
+            cache["INIT"].append({'l_type': 'passive', 'function': self.execute_I2C, 'sleep': 0.5, 'dev': self.device_list[i], 's_num': s_num})
             cache["SENSORS"][s_num] = {'com_type': "i2c", 'dev_name': dev_name, 'cur_read': "{0:.3f}".format(0)}      
    
     def get_devices(self):

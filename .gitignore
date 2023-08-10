@@ -2,3 +2,4 @@ modules/ui/node_modules/*
 logs/
 *.pyc
 certs/*
+**/__pycache__

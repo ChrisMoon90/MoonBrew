@@ -1,8 +1,9 @@
+print('Loading Actors module...')
+
 import RPi.GPIO as GPIO
 import time
 
 from modules.app_config import cache, socketio
-
 
 class ActorAPI():
     def __init__(self):

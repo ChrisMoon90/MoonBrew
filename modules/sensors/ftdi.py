@@ -1,11 +1,12 @@
+print('Loading ftdi module...')
+
 from pylibftdi.device import Device
 from pylibftdi.driver import FtdiError
 from pylibftdi import Driver
 import time
 
-from modules.sensors.__init__ import SensorBase
+from modules.sensors.SensorBase import SensorBase
 from modules.app_config import socketio, cache
-
 
 class ftdiAPI(SensorBase):
     def __init__(self):
@@ -20,7 +21,7 @@ class ftdiAPI(SensorBase):
             type = b[1]
             dev_name = super().sensor_type(type) # UPDATES S_COUNT TYPE TOTALS
             s_num = int(super().s_count['Total'] - 1)
-            cache['INIT'].append({'function': self.execute_ftdi, 'sleep': 0.5, 'dev': dev, 's_num': s_num})
+            cache['INIT'].append({'l_type': 'passive', 'function': self.execute_ftdi, 'sleep': 0.5, 'dev': dev, 's_num': s_num})
             cache['SENSORS'][s_num] = {'com_type': 'ftdi', 'dev_name': dev_name, 'cur_read': "{0:.3f}".format(0)}      
 
     def execute_ftdi(self, sleep, dev, s_num):

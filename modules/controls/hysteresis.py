@@ -1,15 +1,13 @@
-from pprint import pprint
+print('Loading Hysteresis module...')
 
-from modules.actors.__init__ import ActorAPI
+from .actors import ActorAPI
 from modules.app_config import socketio, cache
 
+class HysteresisAPI(ActorAPI):  
 
-class HysteresisAPI(ActorAPI):
-    
     def __init__(self):
         for key, val in cache['SYSTEM']['AutoStates'].items():
             setattr(HysteresisAPI, key, val)     
-        # pprint(vars(self))
 
     def update_auto_states(self):
         for key, val in cache['SYSTEM']['AutoStates'].items(): 
