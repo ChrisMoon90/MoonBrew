@@ -24,18 +24,8 @@ def send_csv_data():
     return csv_data
 
 
-# CONNECTION FUNCTIONS ######################
-@socketio.on('connected')
-def connected():
-    print('Client Connected!')
-   
-@socketio.on('disconnect')
-def MBC_disconnect():
-    print('Client Disconnected')
-
-
 # SET UP CACHE & CONFIG PARAMETERS ###################
-global cache
+# global cache
 cache = {           
         "INIT": [],
         "SENSORS":{},
@@ -84,8 +74,7 @@ def get_config_params():
                 for p in a:
                     f.write("'" + str(p) + "': " + str(a[p]) + '\n')
                 f.write('\n')
-    # ADD TO CACHE
-    with open(filename, 'r+') as f:
+    with open(filename, 'r+') as f:  # ADD TO CACHE
         x = 0
         cfile = f.readlines()          
         for line in cfile:
@@ -124,3 +113,13 @@ def update_config(dir, *args):
             f.write(str(cfile[i]))
 
 get_config_params()
+
+
+# CONNECTION FUNCTIONS ######################
+@socketio.on('connected')
+def connected():
+    print('Client Connected!')
+   
+@socketio.on('disconnect')
+def MBC_disconnect():
+    print('Client Disconnected')

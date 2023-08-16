@@ -1,9 +1,9 @@
 print('Loading Hysteresis module...')
 
-from .actors import ActorAPI
 from modules.app_config import socketio, cache
+from modules.controls.actors import update_actors
 
-class HysteresisAPI(ActorAPI):  
+class HysteresisAPI():  
 
     def __init__(self):
         for key, val in cache['SYSTEM']['AutoStates'].items():
@@ -23,7 +23,7 @@ class HysteresisAPI(ActorAPI):
             if key == "Heater" or key == "Chiller":
                 if cache['ACTORS'][val]['state'] == True:
                     cache['ACTORS'][val]['state'] = False
-        super().update_actors()
+        update_actors()
 
     def hysteresis(self, vessel, sleep):
         a_msg = "Auto Control Started on " + vessel       
@@ -51,7 +51,7 @@ class HysteresisAPI(ActorAPI):
                         cache['ACTORS'][a_indexes['Chiller']]['state'] = True
                     elif cur_read < tar_temp and cache['ACTORS'][a_indexes['Chiller']]['state'] == True:
                         cache['ACTORS'][a_indexes['Chiller']]['state'] = False
-                super().update_actors()            
+                update_actors()            
             except:
                 print('Error running hysteresis loop on ' + vessel)
             socketio.sleep(sleep)

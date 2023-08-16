@@ -102,10 +102,9 @@ a_tilts = []
 def unique(uuid):
     if uuid not in a_tilts:
         a_tilts.append(uuid)
-        # print('Tilt Added: ', uuid)
         return True
     else:
         return False
 
 
-asyncio.run(tilt_init())
+# asyncio.run(tilt_init())

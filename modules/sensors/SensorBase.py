@@ -7,13 +7,7 @@ from modules.app_config import socketio, cache
 
 class SensorBase():
     s_count = {'Total': 0, 'Temp': 0, 'pH': 0, 'SG': 0}
-    prev_read = {}  
-
-    def __init__(self):
-        # cache["INIT"].append({"function": self.emit_reading, "sleep": 5})
-        # SensorBase.s_count = {'Total': 0, 'Temp': 0, 'pH': 0, 'SG': 0}
-        # SensorBase.prev_read = {}   
-        pass     
+    prev_read = {}    
                         
     def emit_reading(sleep):
         print("Starting Emit Reading Thread")

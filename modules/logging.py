@@ -2,19 +2,16 @@ print('Loading Logging module...')
 
 import time
 import os
+
 from modules.app_config import socketio, cache
-from modules.cache import CacheAPI
+from modules.cache import update_cache
 
 
 class logAPI:
+
     run_state = False
     log_rate = cache['SYSTEM']['Static']['log_rate']
     filename = "./logs/Temps.csv"
-
-    # def __init__(self):
-    #     self.running = False
-    #     self.log_rate = cache['SYSTEM']['Static']['log_rate']
-    #     self.filename = "./logs/Temps.csv"
 
     def set_log_rate(self):
         logAPI.log_rate = cache['SYSTEM']['Static']['log_rate']
@@ -73,7 +70,7 @@ class logAPI:
 # LOG SOCKETIO FUNCTIONS ############################
 @socketio.on('set_log_state')
 def set_log_state(s_dict):
-    CacheAPI.update_cache('SYSTEM', s_dict)
+    update_cache('SYSTEM', s_dict)
     logAPI.set_log_state()
 
 @socketio.on('delete_log')
