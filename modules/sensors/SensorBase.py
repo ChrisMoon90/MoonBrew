@@ -44,7 +44,7 @@ class SensorBase():
                         cache['SENSORS'][s_num]['cur_read'] = new_read
                     else:                     
                         msg = "Large Value Change Error: sensor %s, Current Temp: %s, Previous Temp: %s" % (s_num, new_read, prev_read)
-                        SensorBase.log_error(msg)
+                        SensorBase.log_error(SensorBase, msg)
                 SensorBase.prev_read[s_num] = new_read 
         except:
             msg = ("Error Running Temp Loop Thread on Sensor ", s_num)

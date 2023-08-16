@@ -1,9 +1,10 @@
 print('Loading Cache Module...')
 
 from pprint import pprint
+
 from modules.controls.hysteresis import HysteresisAPI
+from modules.controls.actors import ActorAPI
 from modules.app_config import socketio, cache, update_config
-from modules.controls.actors import update_actors
 
 
 def send_cache():
@@ -18,7 +19,7 @@ def update_cache(dir, *args):
     args = convert_strings(*args) 
     if dir == "ACTORS":
         cache[dir] = args[0]
-        update_actors()
+        ActorAPI.update_actors()
     else:         
         if dir == 'SYSTEM':          
             cache[dir] = args[0]
@@ -27,10 +28,10 @@ def update_cache(dir, *args):
             cache[dir][args[0]] = args[1]
             send_cache()
     update_config(dir, *args)       
-    pprint.pprint(cache)
+    pprint(cache)
 
-def add_remove_hardware(self, mod_type, vessel, hw_type):
-    v_dict = self.cache['VESSELS'][vessel]
+def add_remove_hardware(mod_type, vessel, hw_type):
+    v_dict = cache['VESSELS'][vessel]
     count = len(v_dict[hw_type])
     if mod_type == "add":
         if hw_type == "Actors":
@@ -42,7 +43,7 @@ def add_remove_hardware(self, mod_type, vessel, hw_type):
     else:
         print("Deleting " + hw_type + ' from ' + vessel)
         del v_dict[hw_type][int(count - 1)]
-    self.update_cache('VESSELS', vessel, v_dict)
+    update_cache('VESSELS', vessel, v_dict)
 
 def convert_strings(*args):
     args_out = []
@@ -77,6 +78,17 @@ def dfilter(d):
                 except:
                     d[key] = val
     yield d
+
+
+# CONNECTION FUNCTIONS ######################
+@socketio.on('connected')
+def connected():
+    print('Client Connected!')
+    send_cache()
+   
+@socketio.on('disconnect')
+def MBC_disconnect():
+    print('Client Disconnected')
 
 
 # CACHE FUNCTIONS ##############################

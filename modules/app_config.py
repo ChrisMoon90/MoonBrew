@@ -113,13 +113,3 @@ def update_config(dir, *args):
             f.write(str(cfile[i]))
 
 get_config_params()
-
-
-# CONNECTION FUNCTIONS ######################
-@socketio.on('connected')
-def connected():
-    print('Client Connected!')
-   
-@socketio.on('disconnect')
-def MBC_disconnect():
-    print('Client Disconnected')
