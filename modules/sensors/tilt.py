@@ -17,7 +17,7 @@ class Tilt(SensorBase):
         self.t_cache = {'temp': 0, 'sg': 0, 'txpower': 0, 'rssi': 0}
         self.dev_name = SensorBase.sensor_type(SensorBase, 'SG')
         self.s_num = SensorBase.s_count['Total'] - 1
-        cache['INIT'].append({'l_type': 'active', 'function': self.tilt_thread, 'sleep': 2})
+        cache['INIT'].append({'function': self.run_tilt, 'sleep': 0.5})
         cache['SENSORS'][self.s_num] = {'com_type': 'ble', 'dev_name': self.dev_name, 'cur_read': "{0:.3f}".format(0)} # 'dev_id': self.uuid, 
 
     def get_t_cache(self):
@@ -26,6 +26,7 @@ class Tilt(SensorBase):
     async def run_tilt(self, sleep):
         print("Starting Tilt Thread as Sensor %s" % self.s_num)  
         while True: 
+            print('running tilt')
             try:
                 t = await BleakScanner.find_device_by_address(self.addr, 5)
                 ad_data = t.details['props']['ManufacturerData'][0x004C]
@@ -40,10 +41,7 @@ class Tilt(SensorBase):
                 pass
             except:
                 print('Other run_tilt Error')
-            socketio.sleep(sleep)
-
-    def tilt_thread(self, sleep):
-        asyncio.run(self.run_tilt(sleep))
+            await socketio.sleep(sleep)
 
 
 tilts = {
@@ -78,17 +76,17 @@ ibeacon_format = Struct(
 async def tilt_init():
     scanner = BleakScanner(device_found)
     await scanner.start()
-    await asyncio.sleep(3)
+    await socketio.sleep(3)
     await scanner.stop()
     
-def device_found(device, advertisement_data):
+async def device_found(device, advertisement_data):
     try:
         ad_data = advertisement_data.manufacturer_data[0x004C]
         ibeacon = ibeacon_format.parse(ad_data)
         uuid = str(UUID(bytes=bytes(ibeacon.uuid)))
         for key in tilts: 
             if uuid == key:
-                if unique(uuid):
+                if await unique(uuid):
                     addr = device.address
                     dev = Tilt(addr, uuid) 
     except KeyError:
@@ -99,12 +97,15 @@ def device_found(device, advertisement_data):
         print('Other device_found Error')
 
 a_tilts = []
-def unique(uuid):
+async def unique(uuid):
     if uuid not in a_tilts:
         a_tilts.append(uuid)
         return True
     else:
         return False
 
-
-# asyncio.run(tilt_init())
+tloop = asyncio.get_event_loop()
+# try:
+tloop.run_until_complete(tilt_init())
+# finally:
+#     tloop.close()

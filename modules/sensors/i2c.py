@@ -1,5 +1,6 @@
 print('Loading i2c module...')
 
+import asyncio
 from modules.sensors.AtlasI2C import (
     AtlasI2C
 )
@@ -16,49 +17,46 @@ class i2cAPI(SensorBase):
         type = b[0]
         self.dev_name = super().sensor_type(type)
         self.s_num = int(super().s_count['Total'] - 1)
-        cache["INIT"].append({'l_type': 'passive', 'function': self.execute_I2C, 'sleep': 0.5})
+        cache["INIT"].append({'function': self.execute_I2C, 'sleep': 0.5})
         cache["SENSORS"][self.s_num] = {'com_type': "i2c", 'dev_name': self.dev_name, 'cur_read': "{0:.3f}".format(0)}      
 
-    def execute_I2C(self, sleep):
+    async def execute_I2C(self, sleep):
         print("Starting I2C Thread on Sensor %s" % self.s_num)
         while True:
             try:                                 
-                lines = self.dev.query("r")
+                lines = await self.dev.query("r")
                 split_read = lines.split(":")
                 read_raw = split_read[1].rstrip("\x00")
                 new_read = float(read_raw)
             except: #except pylibftdi.FtdiError as e:         
                 new_read = "ERR"
             super().Atlas_error_check(self.s_num, new_read)
-            socketio.sleep(sleep)
+            await socketio.sleep(sleep)
 
 
-def get_devices():
+async def get_devices():
     device = AtlasI2C()
     device_address_list = device.list_i2c_devices()
     device_list = []   
     for i in device_address_list:
         device.set_i2c_address(i)
-        response = device.query("I")
+        response = await device.query("I")
         moduletype = response.split(",")[1] 
-        response = device.query("name,?").split(",")[1]
+        resp = await device.query("name,?")
+        response = resp.split(",")[1]
         device_list.append(AtlasI2C(address = i, moduletype = moduletype, name = response))
     return device_list 
 
-def get_i2c_list(device_list):
-    i2c_list = []
+async def i2c_init():
+    device_list = await get_devices()
     for i in device_list:
-            full = str(i.get_device_info())
-            i2c_num2 = full.split(" ")
-            i2c_num = int(i2c_num2[1])
-            i2c_list.append(i2c_num)
-    return i2c_list
+        dev = i2cAPI(i)
 
-
-device_list = get_devices()
-for i in device_list:
-    dev = i2cAPI(i)
-    # active_i2c_devs = get_i2c_list(device_list)  
+loop = asyncio.get_event_loop()
+try:
+    loop.run_until_complete(i2c_init())
+except:
+    print('i2c init error')
 
 
 #RUN FOR DEBUGGING PURPOSES                    

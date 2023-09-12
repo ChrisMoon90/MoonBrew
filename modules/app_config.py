@@ -1,21 +1,63 @@
 print('Loading Config module...')
 
-import flask
-from flask_socketio import SocketIO
+from aiohttp import web
+import aiohttp_cors
+import socketio as sio
 import os
 
-from modules.ui.endpoints import react
+
+socketio = sio.AsyncServer(async_mode='aiohttp', cors_allowed_origins='*')
+app = web.Application()
+socketio.attach(app)
 
 
-# SET UP FLASK SERVER ################
-app = flask.Flask(__name__)
-app.config['SECRET_KEY'] = 'secret!'
-socketio = SocketIO(app, cors_allowed_origins='*')
+# routes = web.RouteTableDef()
 
-app.register_blueprint(react, url_prefix='/') # was '/ui'
-#print(app.url_map)
+# @routes.get('/')
+async def index(request):
+    """Serve the client-side application."""
+    with open('index.html') as f:
+        return web.Response(text=f.read(), content_type='text/html')
 
-@app.route('/data')
+
+# cors = aiohttp_cors.setup(app)
+# resource = cors.add(app.router.add_resource("/"))
+# route = app.router.add_post("/", index)
+# cors.add(
+#     route,
+#     {
+#         "*": aiohttp_cors.ResourceOptions(
+#             allow_credentials=True,
+#             expose_headers=("X-Custom-Server-Header",),
+#             allow_methods=["POST", "PUT"],
+#             allow_headers=("X-Requested-With", "Content-Type"),
+#         )
+#     },
+# )
+
+# app.router.add_post("/", index)
+# cors = aiohttp_cors.setup(app, defaults={
+#    "*": aiohttp_cors.ResourceOptions(
+#         allow_credentials=True,
+#         expose_headers="*",
+#         allow_headers="*"
+#     )
+#   })
+
+# for route in list(app.router.routes()):
+#     cors.add(route)
+    
+# route = cors.add(
+#     resource.add_route("GET", index), {
+#         "*": aiohttp_cors.ResourceOptions(allow_credentials=True)
+#     })
+
+# app.add_routes([route])
+
+# app.router.add_static('/modules/ui/build/static', 'modules/ui/build/static')
+
+# @app.route('/data')
+# @routes.get('/data')
 def send_csv_data():
     filename = "./logs/Temps.csv"
     with open(filename, "r") as file:
@@ -25,7 +67,7 @@ def send_csv_data():
 
 
 # SET UP CACHE & CONFIG PARAMETERS ###################
-# global cache
+global cache
 cache = {           
         "INIT": [],
         "SENSORS":{},
@@ -91,7 +133,7 @@ def get_config_params():
                     cache['VESSELS'][i] = set
             x += 1
 
-def update_config(dir, *args):
+async def update_config(dir, *args):
     filename = "./config.txt"
     with open(filename, 'r') as f:
         cur_line = 0

@@ -4,30 +4,26 @@ from pylibftdi.device import Device
 from pylibftdi.driver import FtdiError
 from pylibftdi import Driver
 import time
+import asyncio
 
 from modules.sensors.SensorBase import SensorBase
 from modules.app_config import socketio, cache
 
 class ftdiAPI(SensorBase):
-
-    def __init__(self, dev):       
-        self.dev = Atlasftdi(dev)
-        self.dev.send_cmd('i')
-        socketio.sleep(1.5)
-        info = self.dev.read_lines()
-        b = info[0].split(',')
-        type = b[1]
-        self.dev_name = super().sensor_type(type)
+    
+    def __init__(self, dev, type):
+        self.dev = dev        
+        self.dev_name = SensorBase.sensor_type(SensorBase, type)
         self.s_num = int(super().s_count['Total'] - 1)
-        cache['INIT'].append({'l_type': 'passive', 'function': self.execute_ftdi, 'sleep': 0.5})
-        cache['SENSORS'][self.s_num] = {'com_type': 'ftdi', 'dev_name': self.dev_name, 'cur_read': "{0:.3f}".format(0)}      
+        cache['INIT'].append({'function': self.execute_ftdi, 'sleep': 0.5})
+        cache['SENSORS'][self.s_num] = {'com_type': 'ftdi', 'dev_name': self.dev_name, 'cur_read': "{0:.3f}".format(0)}     
 
-    def execute_ftdi(self, sleep):
+    async def execute_ftdi(self, sleep):
         print("Starting FTDI Background Process on Sensor %s" % self.s_num)
         while True: 
             try:
                 self.dev.send_cmd("R")
-                socketio.sleep(1.5)
+                await socketio.sleep(1.5)
                 lines = self.dev.read_lines()
                 for i in range(len(lines)):
                     if lines[i][0] != '*':
@@ -36,7 +32,7 @@ class ftdiAPI(SensorBase):
             except: #except pylibftdi.FtdiError as e:         
                 new_read = "ERR"
             super().Atlas_error_check(self.s_num, new_read)
-            socketio.sleep(sleep)
+            await socketio.sleep(sleep)
 
 
 class Atlasftdi(Device):
@@ -89,9 +85,29 @@ def get_ftdi_device_list():
         dev_list.append(serial)
     return dev_list
 
-dev_list = get_ftdi_device_list()
-for i in dev_list: 
-    dev = ftdiAPI(i)
+async def get_type(dev):
+    dev.send_cmd('i')
+    await socketio.sleep(1.5)
+    info = dev.read_lines()
+    b = info[0].split(',')
+    type = b[1]
+    return type
+
+async def run():
+    dev_list = get_ftdi_device_list()
+    for i in dev_list: 
+        dev = Atlasftdi(i)
+        type = await get_type(dev)
+        d = ftdiAPI(dev, type)
+
+loop = asyncio.get_event_loop()
+try:
+    loop.run_until_complete(run())
+except:
+    print('ftdi init error')
+# finally:
+#     loop.close()
+
 
 
 #RUN FOR DEBUGGING PURPOSES                    

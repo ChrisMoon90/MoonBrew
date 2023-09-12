@@ -1,9 +1,11 @@
 import io
 import sys
 import fcntl
-import time
+# import time
 import copy
-import string
+# import string
+
+from modules.app_config import socketio
 
 
 class AtlasI2C:
@@ -134,14 +136,12 @@ class AtlasI2C:
         response = self.get_response(raw_data=raw_data)
         #print(response)
         is_valid, error_code = self.response_valid(response=response)
-
         if is_valid:
             char_list = self.handle_raspi_glitch(response[1:])
             result = "Success " + self.get_device_info() + ": " +  str(''.join(char_list))
             #result = "Success: " +  str(''.join(char_list))
         else:
             result = "Error " + self.get_device_info() + ": " + error_code
-
         return result
 
     def get_command_timeout(self, command):
@@ -153,7 +153,7 @@ class AtlasI2C:
 
         return timeout
 
-    def query(self, command):
+    async def query(self, command):
         '''
         write a command to the board, wait the correct timeout, 
         and read the response
@@ -163,7 +163,8 @@ class AtlasI2C:
         if not current_timeout:
             return "sleep mode"
         else:
-            time.sleep(current_timeout)
+            # time.sleep(current_timeout)
+            await socketio.sleep(current_timeout)
             return self.read()
 
     def close(self):

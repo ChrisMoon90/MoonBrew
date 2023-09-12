@@ -12,14 +12,15 @@ class HysteresisAPI():
     #     for key, val in cache['SYSTEM']['AutoStates'].items():
     #         setattr(HysteresisAPI, key, val)     
 
-    def update_auto_states():
+    async def update_auto_states():
         for key, val in cache['SYSTEM']['AutoStates'].items(): 
             if val == True:
                 if getattr(HysteresisAPI, key) == False:   
                     setattr(HysteresisAPI, key, val)                                 
                     thread = socketio.start_background_task(target=HysteresisAPI.hysteresis, vessel = key, sleep = 2)                  
             setattr(HysteresisAPI, key, val) 
-            socketio.emit('cache', cache)
+            print('AutoStates Updated')
+            # await socketio.emit('cache', cache)
 
     def heat_chill_off(a_indexes):
         for key, val in a_indexes.items():

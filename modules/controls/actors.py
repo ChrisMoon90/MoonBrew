@@ -16,18 +16,13 @@ class ActorAPI():
         cache['ACTORS'][x]['state'] = False
         cache['ACTORS'][x]['dev_name'] = "Actor " + str(x + 1)
 
-    # def __init__(self, a_num, output):
-    #     self.a_num = a_num
-    #     self.output = output
-    #     self.state = False
-
-    def update_actors():
+    async def update_actors():
         for k, v in cache['ACTORS'].items():
             if v['state'] == True:
                 GPIO.output(ActorAPI.outputs[k], GPIO.HIGH)
             else: 
                 GPIO.output(ActorAPI.outputs[k], GPIO.LOW)
-        socketio.emit('cache', cache)
+        # socketio.emit('cache', cache)
         print('Actor States Updated: ', cache['ACTORS'])
         
     def cleanup():

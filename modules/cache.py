@@ -7,30 +7,30 @@ from modules.controls.actors import ActorAPI
 from modules.app_config import socketio, cache, update_config
 
 
-def send_cache():
+async def send_cache():
     cache_emit = cache
     try: 
         del cache_emit['INIT']
     except:
         pass
-    socketio.emit('cache', cache_emit)
+    await socketio.emit('cache', cache_emit)
 
-def update_cache(dir, *args):
-    args = convert_strings(*args) 
+async def update_cache(dir, *args):
+    args = await convert_strings(*args) 
     if dir == "ACTORS":
         cache[dir] = args[0]
-        ActorAPI.update_actors()
+        await ActorAPI.update_actors()
     else:         
         if dir == 'SYSTEM':          
             cache[dir] = args[0]
-            HysteresisAPI.update_auto_states()
+            await HysteresisAPI.update_auto_states()
         if dir == 'VESSELS':
             cache[dir][args[0]] = args[1]
-            send_cache()
-    update_config(dir, *args)       
+    await send_cache()
+    await update_config(dir, *args)       
     pprint(cache)
 
-def add_remove_hardware(mod_type, vessel, hw_type):
+async def add_remove_hardware(mod_type, vessel, hw_type):
     v_dict = cache['VESSELS'][vessel]
     count = len(v_dict[hw_type])
     if mod_type == "add":
@@ -43,9 +43,9 @@ def add_remove_hardware(mod_type, vessel, hw_type):
     else:
         print("Deleting " + hw_type + ' from ' + vessel)
         del v_dict[hw_type][int(count - 1)]
-    update_cache('VESSELS', vessel, v_dict)
+    await update_cache('VESSELS', vessel, v_dict)
 
-def convert_strings(*args):
+async def convert_strings(*args):
     args_out = []
     for r in args:
         if type(r) is dict:
@@ -82,32 +82,32 @@ def dfilter(d):
 
 # CONNECTION FUNCTIONS ######################
 @socketio.on('connected')
-def connected():
-    print('Client Connected!')
-    send_cache()
+async def connected(sid):
+    print('Client Connected at SID: ', sid)
+    await send_cache()
    
 @socketio.on('disconnect')
-def MBC_disconnect():
-    print('Client Disconnected')
+async def MBC_disconnect(sid):
+    print('Client Disconnected SID: ', sid)
 
 
 # CACHE FUNCTIONS ##############################
 @socketio.on('get_cache')
-def get_cache():
-    send_cache()
+async def get_cache(sid):
+    await send_cache()
 
 @socketio.on('system_update')
-def update_system(s_dict):
-    update_cache('SYSTEM', s_dict)
+async def update_system(sid, s_dict):
+    await update_cache('SYSTEM', s_dict)
 
 @socketio.on('vessel_update')
-def update_vessel(vessel, v_dict):
-    update_cache('VESSELS', vessel, v_dict)
+async def update_vessel(sid, vessel, v_dict):
+    await update_cache('VESSELS', vessel, v_dict)
 
 @socketio.on('add_rm_hardware')
-def add_rm_hw(mod_type, vessel,  hw_type):
-    add_remove_hardware(mod_type, vessel, hw_type)
+async def add_rm_hw(sid, mod_type, vessel,  hw_type):
+    await add_remove_hardware(mod_type, vessel, hw_type)
 
 @socketio.on('actor_update')
-def actor_update(a_dict):
-    update_cache('ACTORS', a_dict)
+async def actor_update(sid, a_dict):
+    await update_cache('ACTORS', a_dict)

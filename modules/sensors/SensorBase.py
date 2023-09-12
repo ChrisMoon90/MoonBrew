@@ -1,5 +1,6 @@
 print('Loading SensorBase Module...')
 
+import asyncio
 import pprint
 import time
 
@@ -9,16 +10,16 @@ class SensorBase():
     s_count = {'Total': 0, 'Temp': 0, 'pH': 0, 'SG': 0}
     prev_read = {}    
                         
-    def emit_reading(sleep):
+    async def emit_reading(sleep):
         print("Starting Emit Reading Thread")
-        socketio.sleep(3)
+        await socketio.sleep(3)
         while True:
             f_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) 
             print(70 * "-")
             print(f_time)
             pprint.pprint(cache['SENSORS'])
-            socketio.emit('cache', cache)
-            socketio.sleep(sleep)
+            await socketio.emit('cache', cache)
+            await socketio.sleep(sleep)
 
     def update_sensor_count(self, type):
         cur_s_count = SensorBase.s_count[type]
@@ -68,4 +69,4 @@ class SensorBase():
             file.write("%s\n" % (n_msg)) 
 
 
-cache['INIT'].append({'l_type': 'passive','function': SensorBase.emit_reading, 'sleep': 5})
+cache['INIT'].append({'function': SensorBase.emit_reading, 'sleep': 5})

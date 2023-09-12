@@ -27,5 +27,9 @@ sudo setcap cap_net_raw+eip /usr/bin/python3.7
 sudo pip3 install construct
 
 
+pip install aiohttp[speedups]
+pip install aiohttp_cors
+
+
 --  Chris Moon, PE
     Moon Brew Co.
