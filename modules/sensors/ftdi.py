@@ -15,7 +15,7 @@ class ftdiAPI(SensorBase):
         self.dev = dev        
         self.dev_name = SensorBase.sensor_type(SensorBase, type)
         self.s_num = int(super().s_count['Total'] - 1)
-        cache['INIT'].append({'function': self.execute_ftdi, 'sleep': 0.5})
+        cache['INIT'].append({'function': self.execute_ftdi, 'sleep': 2})
         cache['SENSORS'][self.s_num] = {'com_type': 'ftdi', 'dev_name': self.dev_name, 'cur_read': "{0:.3f}".format(0)}     
 
     async def execute_ftdi(self, sleep):

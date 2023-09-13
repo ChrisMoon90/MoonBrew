@@ -19,20 +19,20 @@ class HysteresisAPI():
                     setattr(HysteresisAPI, key, val)                                 
                     thread = socketio.start_background_task(target=HysteresisAPI.hysteresis, vessel = key, sleep = 2)                  
             setattr(HysteresisAPI, key, val) 
-            print('AutoStates Updated')
-            # await socketio.emit('cache', cache)
+        print('AutoStates Updated')
+        # await socketio.emit('cache', cache)
 
-    def heat_chill_off(a_indexes):
+    async def heat_chill_off(a_indexes):
         for key, val in a_indexes.items():
             if key == "Heater" or key == "Chiller":
                 if cache['ACTORS'][val]['state'] == True:
                     cache['ACTORS'][val]['state'] = False
-        ActorAPI.update_actors()
+        await ActorAPI.update_actors()
 
-    def hysteresis(vessel, sleep):
+    async def hysteresis(vessel, sleep):
         a_msg = "Auto Control Started on " + vessel       
         print(a_msg)
-        socketio.emit('alert_success', a_msg)
+        await socketio.emit('alert_success', a_msg)
         while getattr(HysteresisAPI, vessel):
             a_indexes = {}
             v_dict = cache['VESSELS'][vessel]
@@ -55,11 +55,11 @@ class HysteresisAPI():
                         cache['ACTORS'][a_indexes['Chiller']]['state'] = True
                     elif cur_read < tar_temp and cache['ACTORS'][a_indexes['Chiller']]['state'] == True:
                         cache['ACTORS'][a_indexes['Chiller']]['state'] = False
-                ActorAPI.update_actors()            
+                await ActorAPI.update_actors()            
             except:
                 print('Error running hysteresis loop on ' + vessel)
-            socketio.sleep(sleep)
-        HysteresisAPI.heat_chill_off(a_indexes)
+            await socketio.sleep(sleep)
+        await HysteresisAPI.heat_chill_off(a_indexes)
         a_msg = "Auto Control Terminated on " + vessel
         print(a_msg)
-        socketio.emit('alert_warn', a_msg)
+        await socketio.emit('alert_warn', a_msg)

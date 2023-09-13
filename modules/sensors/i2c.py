@@ -17,7 +17,7 @@ class i2cAPI(SensorBase):
         type = b[0]
         self.dev_name = super().sensor_type(type)
         self.s_num = int(super().s_count['Total'] - 1)
-        cache["INIT"].append({'function': self.execute_I2C, 'sleep': 0.5})
+        cache["INIT"].append({'function': self.execute_I2C, 'sleep': 2})
         cache["SENSORS"][self.s_num] = {'com_type': "i2c", 'dev_name': self.dev_name, 'cur_read': "{0:.3f}".format(0)}      
 
     async def execute_I2C(self, sleep):

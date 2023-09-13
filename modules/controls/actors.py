@@ -22,8 +22,6 @@ class ActorAPI():
                 GPIO.output(ActorAPI.outputs[k], GPIO.HIGH)
             else: 
                 GPIO.output(ActorAPI.outputs[k], GPIO.LOW)
-        # socketio.emit('cache', cache)
-        print('Actor States Updated: ', cache['ACTORS'])
         
     def cleanup():
         GPIO.cleanup()

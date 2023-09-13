@@ -17,7 +17,7 @@ class Tilt(SensorBase):
         self.t_cache = {'temp': 0, 'sg': 0, 'txpower': 0, 'rssi': 0}
         self.dev_name = SensorBase.sensor_type(SensorBase, 'SG')
         self.s_num = SensorBase.s_count['Total'] - 1
-        cache['INIT'].append({'function': self.run_tilt, 'sleep': 0.5})
+        cache['INIT'].append({'function': self.run_tilt, 'sleep': 2})
         cache['SENSORS'][self.s_num] = {'com_type': 'ble', 'dev_name': self.dev_name, 'cur_read': "{0:.3f}".format(0)} # 'dev_id': self.uuid, 
 
     def get_t_cache(self):
@@ -26,7 +26,6 @@ class Tilt(SensorBase):
     async def run_tilt(self, sleep):
         print("Starting Tilt Thread as Sensor %s" % self.s_num)  
         while True: 
-            print('running tilt')
             try:
                 t = await BleakScanner.find_device_by_address(self.addr, 5)
                 ad_data = t.details['props']['ManufacturerData'][0x004C]
