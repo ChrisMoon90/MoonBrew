@@ -81,8 +81,8 @@ def dfilter(d):
 
 
 # CONNECTION FUNCTIONS ######################
-@socketio.on('connected')
-async def connected(sid):
+@socketio.on('connect')
+async def connect(sid, environ, auth):
     print('Client Connected at SID: ', sid)
     await send_cache()
    

@@ -1,9 +1,9 @@
 SYSTEM
-'Static': {'Mode': 'Brew', 'log_rate': 3}
+'Static': {'Mode': 'Brew', 'log_rate': 0.5}
 
 Boil_Kettle
-'Actors': {0: {'name': 'Heat', 'index': 0, 'type': 'Heater'}, 1: {'name': 'Pump 1', 'index': 2, 'type': 'Pump'}}
-'Sensors': {0: {'name': 'BK Temp', 'index': 3}, 1: {'name': 'Other', 'index': 0}}
+'Actors': {0: {'name': 'Heat', 'index': 0, 'type': 'Heater'}, 1: {'name': 'Actor1', 'index': 0, 'type': 'Pump'}}
+'Sensors': {0: {'name': 'BK Temp', 'index': 1}}
 'Params': {'tar_temp': 212, 'temp_tol': 2}
 
 Mash_Tun

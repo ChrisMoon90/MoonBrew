@@ -15,7 +15,7 @@ class Tilt(SensorBase):
         self.addr = addr
         self.uuid = uuid
         self.t_cache = {'temp': 0, 'sg': 0, 'txpower': 0, 'rssi': 0}
-        self.dev_name = SensorBase.sensor_type(SensorBase, 'SG')
+        self.dev_name = SensorBase.sensor_type('SG')
         self.s_num = SensorBase.s_count['Total'] - 1
         cache['INIT'].append({'function': self.run_tilt, 'sleep': 2})
         cache['SENSORS'][self.s_num] = {'com_type': 'ble', 'dev_name': self.dev_name, 'cur_read': "{0:.3f}".format(0)} # 'dev_id': self.uuid, 

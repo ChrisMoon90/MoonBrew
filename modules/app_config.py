@@ -1,7 +1,6 @@
 print('Loading Config module...')
 
 from aiohttp import web
-import aiohttp_cors
 import socketio as sio
 import os
 
@@ -10,61 +9,25 @@ socketio = sio.AsyncServer(async_mode='aiohttp', cors_allowed_origins='*')
 app = web.Application()
 socketio.attach(app)
 
+routes = web.RouteTableDef()
 
-# routes = web.RouteTableDef()
-
-# @routes.get('/')
-async def index(request):
+@routes.get('/')
+def index(request):
     """Serve the client-side application."""
     with open('index.html') as f:
         return web.Response(text=f.read(), content_type='text/html')
 
-
-# cors = aiohttp_cors.setup(app)
-# resource = cors.add(app.router.add_resource("/"))
-# route = app.router.add_post("/", index)
-# cors.add(
-#     route,
-#     {
-#         "*": aiohttp_cors.ResourceOptions(
-#             allow_credentials=True,
-#             expose_headers=("X-Custom-Server-Header",),
-#             allow_methods=["POST", "PUT"],
-#             allow_headers=("X-Requested-With", "Content-Type"),
-#         )
-#     },
-# )
-
-# app.router.add_post("/", index)
-# cors = aiohttp_cors.setup(app, defaults={
-#    "*": aiohttp_cors.ResourceOptions(
-#         allow_credentials=True,
-#         expose_headers="*",
-#         allow_headers="*"
-#     )
-#   })
-
-# for route in list(app.router.routes()):
-#     cors.add(route)
-    
-# route = cors.add(
-#     resource.add_route("GET", index), {
-#         "*": aiohttp_cors.ResourceOptions(allow_credentials=True)
-#     })
-
-# app.add_routes([route])
-
-# app.router.add_static('/modules/ui/build/static', 'modules/ui/build/static')
-
-# @app.route('/data')
-# @routes.get('/data')
-def send_csv_data():
-    filename = "./logs/Temps.csv"
+@routes.get('/data')
+def send_csv_data(request):
+    filename = "./logs/Sensors.csv"
     with open(filename, "r") as file:
         file.seek(0)
         csv_data = file.read()
-    return csv_data
+    return web.Response(text=csv_data)
 
+app.add_routes(routes)
+
+# app.router.add_static('/modules/ui/build/static', 'modules/ui/build/static')
 
 # SET UP CACHE & CONFIG PARAMETERS ###################
 global cache

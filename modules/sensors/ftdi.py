@@ -13,8 +13,8 @@ class ftdiAPI(SensorBase):
     
     def __init__(self, dev, type):
         self.dev = dev        
-        self.dev_name = SensorBase.sensor_type(SensorBase, type)
-        self.s_num = int(super().s_count['Total'] - 1)
+        self.dev_name = SensorBase.sensor_type(type)
+        self.s_num = int(SensorBase.s_count['Total'] - 1)
         cache['INIT'].append({'function': self.execute_ftdi, 'sleep': 2})
         cache['SENSORS'][self.s_num] = {'com_type': 'ftdi', 'dev_name': self.dev_name, 'cur_read': "{0:.3f}".format(0)}     
 
@@ -31,7 +31,7 @@ class ftdiAPI(SensorBase):
                 new_read = float(read_raw.strip())
             except: #except pylibftdi.FtdiError as e:         
                 new_read = "ERR"
-            super().Atlas_error_check(self.s_num, new_read)
+            await SensorBase.Atlas_error_check(self.s_num, new_read)
             await socketio.sleep(sleep)
 
 
@@ -77,7 +77,7 @@ class Atlasftdi(Device):
             return False
 
 
-def get_ftdi_device_list():
+async def get_ftdi_device_list():
     dev_list = []    
     for device in Driver().list_devices():
         dev_info = device        
@@ -94,17 +94,17 @@ async def get_type(dev):
     return type
 
 async def run():
-    dev_list = get_ftdi_device_list()
+    dev_list = await get_ftdi_device_list()
     for i in dev_list: 
         dev = Atlasftdi(i)
         type = await get_type(dev)
         d = ftdiAPI(dev, type)
 
 loop = asyncio.get_event_loop()
-try:
-    loop.run_until_complete(run())
-except:
-    print('ftdi init error')
+# try:
+loop.run_until_complete(run())
+# except:
+#     print('ftdi init error')
 # finally:
 #     loop.close()
 
