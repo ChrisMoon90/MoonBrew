@@ -6,19 +6,19 @@ from modules.controls.actors import ActorAPI
 class HysteresisAPI(): 
 
     for k, v in cache['SYSTEM']['AutoStates'].items():
-        vars()[k] = v
-
-    # def __init__(self):
-    #     for key, val in cache['SYSTEM']['AutoStates'].items():
-    #         setattr(HysteresisAPI, key, val)     
+        vars()[k] = v  
 
     async def update_auto_states():
         for key, val in cache['SYSTEM']['AutoStates'].items(): 
             if val == True:
                 if getattr(HysteresisAPI, key) == False:   
                     setattr(HysteresisAPI, key, val)                                 
-                    thread = socketio.start_background_task(target=HysteresisAPI.hysteresis, vessel = key, sleep = 2)                  
-            setattr(HysteresisAPI, key, val) 
+                    thread = socketio.start_background_task(target=HysteresisAPI.hysteresis, vessel = key, sleep = 1)  
+            else:
+                if getattr(HysteresisAPI, key) == True: 
+                    setattr(HysteresisAPI, key, val) 
+                    a_indexes = await HysteresisAPI.get_a_indexes(cache['VESSELS'][key])
+                    await HysteresisAPI.heat_chill_off(a_indexes)
         print('AutoStates Updated')
         # await socketio.emit('cache', cache)
 
@@ -29,18 +29,23 @@ class HysteresisAPI():
                     cache['ACTORS'][val]['state'] = False
         await ActorAPI.update_actors()
 
+    async def get_a_indexes(v_dict):
+        a_indexes = {}
+        for key, val in v_dict['Actors'].items():
+            if val['type'] == 'Heater':
+                a_indexes['Heater'] = v_dict['Actors'][key]['index']
+            elif val['type'] == 'Chiller':
+                a_indexes['Chiller'] = v_dict['Actors'][key]['index']
+        return a_indexes
+
     async def hysteresis(vessel, sleep):
-        a_msg = "Auto Control Started on " + vessel       
+        v_out = vessel.replace('_', ' ')
+        a_msg = "Auto Control Started on " + v_out       
         print(a_msg)
         await socketio.emit('alert_success', a_msg)
-        while getattr(HysteresisAPI, vessel):
-            a_indexes = {}
+        while getattr(HysteresisAPI, vessel):           
             v_dict = cache['VESSELS'][vessel]
-            for key, val in v_dict['Actors'].items():
-                if val['type'] == 'Heater':
-                    a_indexes['Heater'] = v_dict['Actors'][key]['index']
-                elif val['type'] == 'Chiller':
-                    a_indexes['Chiller'] = v_dict['Actors'][key]['index']
+            a_indexes = await HysteresisAPI.get_a_indexes(v_dict)
             cur_read = cache['SENSORS'][v_dict['Sensors'][0]['index']]['cur_read']
             tar_temp = v_dict['Params']['tar_temp']
             temp_tol = v_dict['Params']['temp_tol']
@@ -59,7 +64,6 @@ class HysteresisAPI():
             except:
                 print('Error running hysteresis loop on ' + vessel)
             await socketio.sleep(sleep)
-        await HysteresisAPI.heat_chill_off(a_indexes)
-        a_msg = "Auto Control Terminated on " + vessel
+        a_msg = "Auto Control Stopped on " + v_out
         print(a_msg)
         await socketio.emit('alert_warn', a_msg)

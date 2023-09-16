@@ -1,8 +1,8 @@
 SYSTEM
-'Static': {'Mode': 'Brew', 'log_rate': 0.5}
+'Static': {'Mode': 'Brew', 'log_rate': 10}
 
 Boil_Kettle
-'Actors': {0: {'name': 'Heat', 'index': 0, 'type': 'Heater'}, 1: {'name': 'Actor1', 'index': 0, 'type': 'Pump'}}
+'Actors': {0: {'name': 'Heat', 'index': 0, 'type': 'Heater'}, 1: {'name': 'Actor1', 'index': 1, 'type': 'Pump'}}
 'Sensors': {0: {'name': 'BK Temp', 'index': 1}}
 'Params': {'tar_temp': 212, 'temp_tol': 2}
 
@@ -14,12 +14,12 @@ Mash_Tun
 Hot_Liquor_Tank
 'Actors': {0: {'name': 'HLT Heat', 'index': 0, 'type': 'Heater'}, 1: {'name': 'Pump 2', 'index': 2, 'type': 'Pump'}}
 'Sensors': {0: {'name': 'HLT Temp', 'index': 2}}
-'Params': {'tar_temp': 60, 'temp_tol': 0.5}
+'Params': {'tar_temp': 160, 'temp_tol': 0.5}
 
 Fermenter
 'Actors': {0: {'name': 'Heater', 'index': 0, 'type': 'Heater'}, 1: {'name': 'Chiller', 'index': 1, 'type': 'Chiller'}}
 'Sensors': {0: {'name': 'Temp', 'index': 2}, 1: {'name': 'pH', 'index': 0}, 2: {'name': 'SG', 'index': 5}}
-'Params': {'tar_temp': 78, 'temp_tol': 1}
+'Params': {'tar_temp': 90, 'temp_tol': 0.5}
 
 Smoker
 'Actors': {0: {'name': 'HEat', 'index': 1, 'type': 'Pump'}}

@@ -26,7 +26,7 @@ class logAPI:
             await socketio.emit('alert_warn', a_msg)
 
     async def save_to_file():
-        a_msg = 'Logging Corountine Started...'
+        a_msg = 'Logging Started'
         print(a_msg)
         await socketio.emit('alert_success', a_msg)
         while logAPI.run_state: 
