@@ -3,3 +3,4 @@ modules/ui/node_modules/*
 *.pyc
 certs/*
 **/__pycache__
+env/*

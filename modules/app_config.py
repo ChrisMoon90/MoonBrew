@@ -20,10 +20,13 @@ def index(request):
 @routes.get('/data')
 def send_csv_data(request):
     filename = "./logs/Sensors.csv"
-    with open(filename, "r") as file:
-        file.seek(0)
-        csv_data = file.read()
-    return web.Response(text=csv_data)
+    if os.path.isfile(filename) == True:
+        with open(filename, "r") as file:
+            file.seek(0)
+            csv_data = file.read()
+        return web.Response(text=csv_data)
+    else:
+        print('Send_csv_data Error: no csv file exists')
 
 app.add_routes(routes)
 

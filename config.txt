@@ -1,5 +1,5 @@
 SYSTEM
-'Static': {'Mode': 'Brew', 'log_rate': 10}
+'Static': {'Mode': 'Brew', 'log_rate': 0.5}
 
 Boil_Kettle
 'Actors': {0: {'name': 'Heat', 'index': 0, 'type': 'Heater'}, 1: {'name': 'Actor1', 'index': 1, 'type': 'Pump'}}
