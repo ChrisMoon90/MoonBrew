@@ -6,7 +6,6 @@ import os
 
 from modules.app_config import socketio, cache
 from modules.cache import update_cache
-from modules.controls.timer import TimerAPI
 
 
 class logAPI:
@@ -23,9 +22,7 @@ class logAPI:
         logAPI.run_state = cache['SYSTEM']['Dynamic']['log_state']
         if logAPI.run_state:
             t = socketio.start_background_task(target = logAPI.save_to_file)
-            TimerAPI.set_start_time()
         else:
-            TimerAPI.reset_timer()
             a_msg = 'Logging Stopped'
             print(a_msg)
             await socketio.emit('alert_warn', a_msg)

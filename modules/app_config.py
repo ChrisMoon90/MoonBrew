@@ -9,28 +9,6 @@ socketio = sio.AsyncServer(async_mode='aiohttp', cors_allowed_origins='*')
 app = web.Application()
 socketio.attach(app)
 
-routes = web.RouteTableDef()
-
-@routes.get('/')
-def index(request):
-    """Serve the client-side application."""
-    with open('index.html') as f:
-        return web.Response(text=f.read(), content_type='text/html')
-
-@routes.get('/data')
-def send_csv_data(request):
-    filename = "./logs/Sensors.csv"
-    if os.path.isfile(filename) == True:
-        with open(filename, "r") as file:
-            file.seek(0)
-            csv_data = file.read()
-        return web.Response(text=csv_data)
-    else:
-        print('Send_csv_data Error: no csv file exists')
-
-app.add_routes(routes)
-
-# app.router.add_static('/modules/ui/build/static', 'modules/ui/build/static')
 
 # SET UP CACHE & CONFIG PARAMETERS ###################
 global cache
@@ -52,7 +30,7 @@ cache = {
         "SYSTEM": { 
             'Dynamic': {
                 'log_state': False,
-                'timer_start': None
+                'timer_start': 0
                 },
             'AutoStates': {
                 'Boil_Kettle': False,

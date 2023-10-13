@@ -1,6 +1,6 @@
-modules/ui/node_modules/*
-# logs/
+logs/
 *.pyc
 certs/*
 **/__pycache__
-env/*
+env/
+.vscode/git add 

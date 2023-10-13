@@ -8,9 +8,21 @@ Required installation commands:
 
 sudo apt update && sudo apt upgrade
 
+NEED THIS TO ADD pylibftdi TO SUPER USER:
+sudo touch /etc/udev/rules.d/99-libftdi.rules
+cd /etc/udev/rules.d
+sudo nano 99-libftdi.rules
+ADD:
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", GROUP="dialout", MODE="0660"
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6010", GROUP="dialout", MODE="0660"
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6011", GROUP="dialout", MODE="0660"
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6014", GROUP="dialout", MODE="0660"
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6015", GROUP="dialout", MODE="0660"
 
-CONFIRM HOW TO ADD PYTHON3 BLUEZ:
-sudo apt-get install python3-bluez
+May also need to do the following:
+sudo usermod -aG dialout $USER
+sudo reboot
+
 
 
 NEED THIS TO ADD dbus_fast PATH TO SUPER USER:
