@@ -3,4 +3,4 @@ logs/
 certs/*
 **/__pycache__
 env/
-.vscode/git add 
+.vscode/
