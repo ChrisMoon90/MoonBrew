@@ -5,27 +5,12 @@ from aiohttp import web
 from modules.app_config import app
 
 
-async def index():
+async def index(request):
     print('Serving the client-side application...')
     with open('./modules/ui/static/index.html') as f:
         return web.Response(text=f.read(), content_type='text/html')
 
-routes = web.RouteTableDef()
-
-@routes.get('/')
-async def get_main(request):
-    return await index()
-
-@routes.get('/chart')
-async def get_chart(request):
-    return await index()
-
-@routes.get('/settings')
-async def get_settings(request):
-    return await index()
-
-@routes.get('/data')
-def send_csv_data(request):
+async def send_csv_data(request):
     filename = "./logs/Sensors.csv"
     if os.path.isfile(filename) == True:
         with open(filename, "r") as file:
@@ -35,6 +20,13 @@ def send_csv_data(request):
     else:
         print('Send_csv_data Error: no csv file exists') 
 
-app.router.add_static('/modules/ui/static', 'modules/ui/static')
+async def redirect(request):
+    raise web.HTTPFound('/')
+    
+app.add_routes([web.get('/', index),
+                web.get('/chart', index),
+                web.get('/settings', index),
+                web.get('/data', send_csv_data),
+                web.get('/static', redirect)])
 
-app.add_routes(routes)
+app.router.add_static('/', 'modules/ui/static/')
