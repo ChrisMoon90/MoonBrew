@@ -9,6 +9,8 @@ import asyncio
 from modules.sensors.SensorBase import SensorBase
 from modules.app_config import socketio, cache
 
+
+
 class ftdiAPI(SensorBase):
     
     def __init__(self, dev, type):

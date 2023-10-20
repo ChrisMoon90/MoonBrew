@@ -73,11 +73,14 @@ ibeacon_format = Struct(
 )
 
 async def tilt_init():
-    scanner = BleakScanner(device_found)
-    await scanner.start()
-    await socketio.sleep(3)
-    await scanner.stop()
-    
+    try:
+        scanner = BleakScanner(device_found) #DBUS_FAST ERROR IS HERE
+        await scanner.start()
+        await socketio.sleep(3)
+        await scanner.stop()
+    except Exception as e:
+        print(str(e))
+            
 async def device_found(device, advertisement_data):
     try:
         ad_data = advertisement_data.manufacturer_data[0x004C]
@@ -103,8 +106,8 @@ async def unique(uuid):
     else:
         return False
 
+
 tloop = asyncio.get_event_loop()
-# try:
 tloop.run_until_complete(tilt_init())
-# finally:
+# finally: 
 #     tloop.close()

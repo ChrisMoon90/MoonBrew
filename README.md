@@ -1,12 +1,9 @@
-Welcome to MoonBrew by Moon Brew Co. 
+# Welcome to MoonBrew by Moon Brew Co. 
 
 Backend Python3 server providing autonomous control for all grain brewing, fermentation & smokers. Compatible with Atlas Controls devices (temp, pH, etc.), Tilt hydrometers & up to 3ea solid state relays.
 
 
 Required installation commands:
-
-
-sudo apt update && sudo apt upgrade
 
 NEED THIS TO ADD pylibftdi TO SUPER USER:
 sudo touch /etc/udev/rules.d/99-libftdi.rules
@@ -23,8 +20,6 @@ May also need to do the following:
 sudo usermod -aG dialout $USER
 sudo reboot
 
-
-
 NEED THIS TO ADD dbus_fast PATH TO SUPER USER:
 sudo nano ~/.bashrc
 ADD LINE: export PYTHONPATH=$PYTHONPATH:/usr/lib/python3.7/site-packages
@@ -32,17 +27,18 @@ source ~/.bashrc
 sudo visudo
 ADD LINE: Defaults    env_keep += PYTHONPATH
 
-
 NOT SURE IF I NEED THIS (ADDS PERMISSIONS TO P3.7 TO ACCESS fping?)
 sudo setcap cap_net_raw+eip /usr/bin/python3.7
 
-sudo pip3 install construct
-
-
-pip3 install aiohttp[speedups]
-
-pip3 install aiofiles (may not be needed)
-pip install aiohttp_cors (may not be needed)
+mkdir /home/pi/noip
+cd /home/pi/noip
+wget https://www.noip.com/client/linux/noip-duc-linux.tar.gz
+tar vzxf noip-duc-linux.tar.gz
+cd noip-2.1.9-1
+sudo make
+sudo make install
+sudo /usr/local/bin/noip2
+sudo noip2 ­-S
 
 
 --  Chris Moon, PE

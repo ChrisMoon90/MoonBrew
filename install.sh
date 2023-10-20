@@ -11,8 +11,8 @@ show_menu () {
    OPTION=$(whiptail --title "MoonBrew 1.0" --menu "Choose your option:" 15 56 7 \
    "1" "Install MoonBrew" \
    "2" "Install No-IP" \
-   "3" "Add To Autostart" \
-   "4" "Remove From Autostart" \
+   "3" "Add MoonBrew to Autostart" \
+   "4" "Remove MoonBrew from Autostart" \
    "5" "Start MoonBrew" \
    "6" "Stop MoonBrew" \
    "7" "Delete Configuration" 3>&1 1>&2 2>&3)
@@ -33,6 +33,8 @@ show_menu () {
            echo "''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''"
            echo "Installing required Python3 modules..."
            pip3 install -r requirements.txt
+           sudo cp -R /usr/lib/python3.7/site-packages/dbus_fast /usr/lib/python3.7
+           sudo cp -R /usr/lib/python3.7/site-packages/dbus_fast-1.86.0-py3.7.egg-info /usr/lib/python3.7
 
            whiptail --title "Installition Finished" --msgbox "MoonBrew installation finished! You must hit OK to continue." 8 78
            show_menu
