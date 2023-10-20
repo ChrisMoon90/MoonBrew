@@ -1,9 +1,21 @@
-# Welcome to MoonBrew by Moon Brew Co. 
+# Welcome to MoonBrew by Moon Brew Co. (V1.0)
 
 Backend Python3 server providing autonomous control for all grain brewing, fermentation & smokers. Compatible with Atlas Controls devices (temp, pH, etc.), Tilt hydrometers & up to 3ea solid state relays.
 
 
-Required installation commands:
+## Installation
+Open a terminal window on Raspberry Pi and type:
+
+ <code>git clone https://github.com/Manuel83/craftbeerpi3</code>
+
+This will download (clone) the software to your local Raspberry Pi.
+
+Type <code>cd MoonBrew</code> to navigate into the MoonBrew folder.
+
+Type <code>sudo ./install.sh</code>
+
+
+## Misc Notes for Future Dev:
 
 NEED THIS TO ADD pylibftdi TO SUPER USER:
 sudo touch /etc/udev/rules.d/99-libftdi.rules
