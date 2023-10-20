@@ -16,6 +16,7 @@ MBC_log('Starting MoonBrew...')
 
 from aiohttp import web
 from pprint import pprint
+import socket
 
 import modules
 from modules.app_config import app, socketio, cache
@@ -42,4 +43,15 @@ async def run_init():
 
 MBC_log('Finished Startup')
 
-web.run_app(run_init(), host = '192.168.0.31', port = 5000)
+def get_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        s.connect(('10.255.255.255', 1)) # doesn't even have to be reachable
+        IP = s.getsockname()[0]
+    except:
+        IP = '192.168.0.30'
+    finally:
+        s.close()
+    return IP
+
+web.run_app(run_init(), host = get_ip(), port = 5000)
