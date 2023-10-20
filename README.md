@@ -6,7 +6,7 @@ Backend Python3 server providing autonomous control for all grain brewing, ferme
 ## Installation
 Open a terminal window on Raspberry Pi and type:
 
- <code>git clone https://github.com/Manuel83/craftbeerpi3</code>
+ <code>git clone https://github.com/ChrisMoon90/MoonBrew.git</code>
 
 This will download (clone) the software to your local Raspberry Pi.
 
