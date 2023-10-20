@@ -1,18 +1,23 @@
-# Welcome to MoonBrew by Moon Brew Co. (V1.0)
+# Welcome to MoonBrew by Moon Brew Co.
 
-Backend Python3 server providing autonomous control for all grain brewing, fermentation & smokers. Compatible with Atlas Controls devices (temp, pH, etc.), Tilt hydrometers & up to 3ea solid state relays.
+Beta version 1.0
+
+Python3 server providing autonomous control for all grain brewing, fermentation & smokers. Compatible with Atlas Controls devices (temp, pH, etc.), Tilt hydrometers & up to 3ea solid state relays.
 
 
 ## Installation
-Open a terminal window on Raspberry Pi and type:
+Open a terminal on Raspberry Pi and navigate to <code>/home/pi</code>
 
- <code>git clone https://github.com/ChrisMoon90/MoonBrew.git</code>
+Type <code>git clone https://github.com/ChrisMoon90/MoonBrew.git</code>
 
 This will download (clone) the software to your local Raspberry Pi.
 
 Type <code>cd MoonBrew</code> to navigate into the MoonBrew folder.
 
 Type <code>sudo ./install.sh</code>
+
+
+
 
 
 ## Misc Notes for Future Dev:
