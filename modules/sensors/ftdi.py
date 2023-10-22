@@ -88,12 +88,15 @@ async def get_ftdi_device_list():
     return dev_list
 
 async def get_type(dev):
-    dev.send_cmd('i')
-    await socketio.sleep(1.5)
-    info = dev.read_lines()
-    b = info[0].split(',')
-    type = b[1]
-    return type
+    try:
+        dev.send_cmd('i')
+        await socketio.sleep(1.5)
+        info = dev.read_lines()
+        b = info[0].split(',')
+        type = b[1]
+        return type
+    except:
+        print('FTDI comms error.Confirm chip is set to FTDI.')
 
 async def run():
     dev_list = await get_ftdi_device_list()
