@@ -6,6 +6,7 @@ Python3 server providing autonomous control for all grain brewing, fermentation 
 
 
 ## Installation
+
 Open a terminal on Raspberry Pi and navigate to <code>/home/pi</code>
 
 Type <code>git clone https://github.com/ChrisMoon90/MoonBrew.git</code>
@@ -14,10 +15,9 @@ This will download (clone) the software to your local Raspberry Pi.
 
 Type <code>cd MoonBrew</code> to navigate into the MoonBrew folder.
 
-Type <code>sudo ./install.sh</code>
+Type <code>sudo bash ./install.sh</code>
 
-
-
+Follow the prompts to install MoonBrew dependencies.
 
 
 ## Misc Notes for Future Dev:
