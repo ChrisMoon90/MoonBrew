@@ -1,9 +1,12 @@
 print('Loading Config module...')
 
 from aiohttp import web
+# import ssl
 import socketio as sio
 import os
 
+# ssl_context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+# ssl_context.load_cert_chain('./certs/certificate.pem', './certs/key.pem')
 
 socketio = sio.AsyncServer(async_mode='aiohttp', cors_allowed_origins='*')
 app = web.Application()

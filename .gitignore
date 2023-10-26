@@ -1,6 +1,8 @@
 logs/
 *.pyc
-certs/*
+certs/
+.certs/
 **/__pycache__
 env/
+vscode/
 .vscode/

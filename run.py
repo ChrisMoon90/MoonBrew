@@ -19,7 +19,7 @@ from pprint import pprint
 import socket
 
 import modules
-from modules.app_config import app, socketio, cache
+from modules.app_config import app, socketio, cache #, ssl_context
 
 async def initializer():
     for i in cache["INIT"]:
@@ -54,4 +54,4 @@ def get_ip():
         s.close()
     return IP
 
-web.run_app(run_init(), host = get_ip(), port = 5000)
+web.run_app(run_init(), host = get_ip(), port = 5000) #, ssl_context = ssl_context)
