@@ -20,7 +20,7 @@ Type <code>sudo bash ./install.sh</code>
 Follow the prompts to install MoonBrew dependencies.
 
 
-## Misc Notes for Future Dev:
+<!-- ## Misc Notes for Future Dev:
 
 NEED THIS TO ADD pylibftdi TO SUPER USER:
 sudo touch /etc/udev/rules.d/99-libftdi.rules
@@ -55,8 +55,7 @@ cd noip-2.1.9-1
 sudo make
 sudo make install
 sudo /usr/local/bin/noip2
-sudo noip2 ­-S
-
+sudo noip2 ­-S -->
 
 --  Chris Moon, PE
     Moon Brew Co.
