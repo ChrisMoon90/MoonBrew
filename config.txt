@@ -1,8 +1,8 @@
 SYSTEM
-'Static': {'Mode': 'Ferment', 'log_rate': 0.5}
+'Static': {'Mode': 'Brew', 'log_rate': 5}
 
 Boil_Kettle
-'Actors': {0: {'name': 'Heat', 'index': 0, 'type': 'Heater'}, 1: {'name': 'Test', 'index': 1, 'type': 'Pump'}}
+'Actors': {0: {'name': 'Heat', 'index': 0, 'type': 'Heater'}, 1: {'name': 'Pump 1', 'index': 1, 'type': 'Pump'}}
 'Sensors': {0: {'name': 'BK Temp', 'index': 0}}
 'Params': {'tar_temp': 212, 'temp_tol': 2}
 
@@ -18,8 +18,8 @@ Hot_Liquor_Tank
 
 Fermenter
 'Actors': {0: {'name': 'Heater', 'index': 0, 'type': 'Heater'}, 1: {'name': 'Chiller', 'index': 1, 'type': 'Chiller'}}
-'Sensors': {0: {'name': 'Internal Temp', 'index': 0}, 1: {'name': 'SG', 'index': 2}}
-'Params': {'tar_temp': 70, 'temp_tol': 0.25}
+'Sensors': {0: {'name': 'Int Temp', 'index': 0}, 1: {'name': 'Amb 1', 'index': 1}, 2: {'name': 'Amb 2', 'index': 2}}
+'Params': {'tar_temp': 80, 'temp_tol': 0.25}
 
 Smoker
 'Actors': {0: {'name': 'Heater', 'index': 0, 'type': 'Heater'}, 1: {'name': 'Fan', 'index': 1, 'type': 'Pump'}}
