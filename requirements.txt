@@ -1,4 +1,4 @@
-aiohttp==3.8.5
+aiohttp==3.8.6
 bleak==0.20.2
 construct==2.10.68
 pylibftdi==0.21.0
