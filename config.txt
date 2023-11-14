@@ -1,5 +1,5 @@
 SYSTEM
-'Static': {'Mode': 'Brew', 'log_rate': 5}
+'Static': {'Mode': 'Ferment', 'log_rate': 15}
 
 Boil_Kettle
 'Actors': {0: {'name': 'Heat', 'index': 0, 'type': 'Heater'}, 1: {'name': 'Pump 1', 'index': 1, 'type': 'Pump'}}
@@ -12,14 +12,14 @@ Mash_Tun
 'Params': {'tar_temp': 152, 'temp_tol': 0.5}
 
 Hot_Liquor_Tank
-'Actors': {0: {'name': 'HLT Heat', 'index': 0, 'type': 'Heater'}, 1: {'name': 'Pump 2', 'index': 2, 'type': 'Pump'}}
+'Actors': {0: {'name': 'Heat', 'index': 0, 'type': 'Heater'}, 1: {'name': 'Pump 2', 'index': 2, 'type': 'Pump'}}
 'Sensors': {0: {'name': 'HLT Temp', 'index': 2}}
 'Params': {'tar_temp': 162, 'temp_tol': 0.5}
 
 Fermenter
 'Actors': {0: {'name': 'Heater', 'index': 0, 'type': 'Heater'}, 1: {'name': 'Chiller', 'index': 1, 'type': 'Chiller'}}
-'Sensors': {0: {'name': 'Int Temp', 'index': 0}, 1: {'name': 'Amb 1', 'index': 1}, 2: {'name': 'Amb 2', 'index': 2}}
-'Params': {'tar_temp': 80, 'temp_tol': 0.25}
+'Sensors': {0: {'name': 'Internal Temp', 'index': 0}, 1: {'name': 'Ambient Temp', 'index': 1}, 2: {'name': 'Specific Gravity', 'index': 3}}
+'Params': {'tar_temp': 73, 'temp_tol': 0.65}
 
 Smoker
 'Actors': {0: {'name': 'Heater', 'index': 0, 'type': 'Heater'}, 1: {'name': 'Fan', 'index': 1, 'type': 'Pump'}}

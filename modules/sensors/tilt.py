@@ -31,7 +31,7 @@ class Tilt(SensorBase):
                 ad_data = t.details['props']['ManufacturerData'][0x004C]
                 ibeacon = ibeacon_format.parse(ad_data)
                 rssi = t.details['props']['RSSI']
-                self.t_cache = {'temp': ibeacon.major, 'sg': float(ibeacon.minor)/1000, 'txpower': ibeacon.power, 'rssi': rssi}
+                self.t_cache = {'temp': ibeacon.major, 'sg': float(ibeacon.minor)/10000, 'txpower': ibeacon.power, 'rssi': rssi}
                 cache['SENSORS'][self.s_num]['cur_read'] = self.t_cache['sg']
                 # print(self.uuid, self.t_cache)
             except KeyError:
