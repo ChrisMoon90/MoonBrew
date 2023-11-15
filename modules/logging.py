@@ -33,8 +33,7 @@ class logAPI:
             r.append(cache['SENSORS'][i]['cur_read'])
         msg = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         for x in r:
-            val = "%.3f" % x
-            msg += ', ' + val
+            msg += ', ' + str(x)
         return msg
 
     async def save_to_file():
