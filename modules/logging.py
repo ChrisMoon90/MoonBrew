@@ -3,6 +3,7 @@ print('Loading Logging module...')
 import time
 from datetime import datetime
 import os
+from aiohttp import web
 
 from modules.app_config import socketio, cache
 from modules.cache import update_cache
@@ -63,7 +64,6 @@ class logAPI:
             await socketio.sleep(1)
         print('Logging Coroutine Exited')
 
-
     async def delete_log():   
         if os.path.exists(logAPI.filename):
             os.remove(logAPI.filename)
@@ -74,6 +74,12 @@ class logAPI:
             a_msg = "Log File not Deleted: file does not exist"
             print(a_msg)
             await socketio.emit('alert_warn', a_msg)
+
+    async def download_log(log):
+        print('Sending file for download ', log)
+        with open('./logs/Sensors.csv') as f:
+            return web.Response(text=f.read(), content_type='text/csv')
+        # return log
 
 
 # LOG SOCKETIO FUNCTIONS ############################
@@ -86,3 +92,7 @@ async def set_log_state(sid, s_dict):
 @socketio.on('delete_log')
 async def del_log(sid):
     await logAPI.delete_log()
+
+@socketio.on('download')
+async def download(sid, log):
+    await logAPI.download_log(log)
