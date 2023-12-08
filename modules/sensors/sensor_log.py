@@ -1,9 +1,8 @@
-print('Loading Logging module...')
+print('Loading Sensor Logging module...')
 
 import time
 from datetime import datetime
 import os
-from aiohttp import web
 
 from modules.app_config import socketio, cache
 from modules.cache import update_cache
@@ -14,7 +13,7 @@ class logAPI:
     run_state = False
     log_rate = cache['SYSTEM']['Static']['log_rate']
     last_send = datetime.now()
-    filename = "./logs/Sensors.csv"
+    filename = "./logs/sensors.csv"
 
     async def set_log_rate():
         logAPI.log_rate = cache['SYSTEM']['Static']['log_rate']
@@ -24,7 +23,7 @@ class logAPI:
         if logAPI.run_state:
             t = socketio.start_background_task(target = logAPI.save_to_file)
         else:
-            a_msg = 'Logging Stopped'
+            a_msg = 'Sensor Logging Stopped'
             print(a_msg)
             await socketio.emit('alert_warn', a_msg)
 
@@ -38,7 +37,7 @@ class logAPI:
         return msg
 
     async def save_to_file():
-        a_msg = 'Logging Started'
+        a_msg = 'Sensor Logging Started'
         print(a_msg)
         await socketio.emit('alert_success', a_msg)
         while logAPI.run_state: 
@@ -53,7 +52,7 @@ class logAPI:
                         with open(logAPI.filename, "a") as f:
                             f.write("%s\n" % msg)
                     else:
-                        print("Temp.csv file does not exist. File will be created.")
+                        print("sensors.csv file does not exist. File will be created.")
                         header = "Time, Sensor 1, Sensor 2, Sensor 3, Sensor 4, Sensor 5, Sensor 6\n"
                         with open(logAPI.filename, 'a') as f:
                             f.write(header)
@@ -64,35 +63,9 @@ class logAPI:
             await socketio.sleep(1)
         print('Logging Coroutine Exited')
 
-    async def delete_log():   
-        if os.path.exists(logAPI.filename):
-            os.remove(logAPI.filename)
-            a_msg = "Log File Successfully Deleted"
-            print(a_msg)
-            await socketio.emit('alert_success', a_msg)
-        else:
-            a_msg = "Log File not Deleted: file does not exist"
-            print(a_msg)
-            await socketio.emit('alert_warn', a_msg)
 
-    async def download_log(log):
-        print('Sending file for download ', log)
-        with open('./logs/Sensors.csv') as f:
-            return web.Response(text=f.read(), content_type='text/csv')
-        # return log
-
-
-# LOG SOCKETIO FUNCTIONS ############################
+# SENSOR LOG SOCKETIO FUNCTIONS ############################
 @socketio.on('set_log_state')
 async def set_log_state(sid, s_dict):
     await update_cache('SYSTEM', s_dict)
     await logAPI.set_log_state()
-    # await TimerAPI
-
-@socketio.on('delete_log')
-async def del_log(sid):
-    await logAPI.delete_log()
-
-@socketio.on('download')
-async def download(sid, log):
-    await logAPI.download_log(log)

@@ -2,6 +2,7 @@ print('Loading Hysteresis module...')
 
 from modules.app_config import socketio, cache
 from modules.controls.actors import ActorAPI
+from modules.sys_log import sys_log
 
 class HysteresisAPI(): 
 
@@ -20,7 +21,6 @@ class HysteresisAPI():
                     a_indexes = await HysteresisAPI.get_a_indexes(cache['VESSELS'][key])
                     await HysteresisAPI.heat_chill_off(a_indexes)
         print('AutoStates Updated')
-        # await socketio.emit('cache', cache)
 
     async def heat_chill_off(a_indexes):
         for key, val in a_indexes.items():
@@ -40,30 +40,43 @@ class HysteresisAPI():
 
     async def hysteresis(vessel, sleep):
         v_out = vessel.replace('_', ' ')
-        a_msg = "Auto Control Started on " + v_out       
+        a_msg = "Auto Control Started on " + v_out 
+        sys_log('Hysteresis started on ' + v_out)      
         print(a_msg)
         await socketio.emit('alert_success', a_msg)
-        while getattr(HysteresisAPI, vessel):           
+        while getattr(HysteresisAPI, vessel): 
+            update = False           
             v_dict = cache['VESSELS'][vessel]
             a_indexes = await HysteresisAPI.get_a_indexes(v_dict)
+            print(a_indexes)
             cur_read = cache['SENSORS'][v_dict['Sensors'][0]['index']]['cur_read']
             tar_temp = v_dict['Params']['tar_temp']
             temp_tol = v_dict['Params']['temp_tol']
             try:
-                if 'Heater' in a_indexes:
-                    if cur_read < tar_temp - temp_tol and cache['ACTORS'][a_indexes['Heater']]['state'] == False:
-                        cache['ACTORS'][a_indexes['Heater']]['state'] = True
-                    elif cur_read > tar_temp and cache['ACTORS'][a_indexes['Heater']]['state'] == True:
-                        cache['ACTORS'][a_indexes['Heater']]['state'] = False
-                if 'Chiller' in a_indexes:
-                    if cur_read > tar_temp + temp_tol and cache['ACTORS'][a_indexes['Chiller']]['state'] == False:
-                        cache['ACTORS'][a_indexes['Chiller']]['state'] = True
-                    elif cur_read < tar_temp and cache['ACTORS'][a_indexes['Chiller']]['state'] == True:
-                        cache['ACTORS'][a_indexes['Chiller']]['state'] = False
-                await ActorAPI.update_actors()            
+                if cur_read < 0:
+                    cache['SYSTEM']['AutoStates'][vessel] = False
+                    await HysteresisAPI.update_auto_states()
+                else:
+                    if 'Heater' in a_indexes:
+                        if cur_read < tar_temp - temp_tol and cache['ACTORS'][a_indexes['Heater']]['state'] == False:
+                            cache['ACTORS'][a_indexes['Heater']]['state'] = True
+                            update = True
+                        elif cur_read > tar_temp and cache['ACTORS'][a_indexes['Heater']]['state'] == True:
+                            cache['ACTORS'][a_indexes['Heater']]['state'] = False
+                            update = True
+                    if 'Chiller' in a_indexes:
+                        if cur_read > tar_temp + temp_tol and cache['ACTORS'][a_indexes['Chiller']]['state'] == False:
+                            cache['ACTORS'][a_indexes['Chiller']]['state'] = True
+                            update = True
+                        elif cur_read < tar_temp and cache['ACTORS'][a_indexes['Chiller']]['state'] == True:
+                            cache['ACTORS'][a_indexes['Chiller']]['state'] = False
+                            update = True
+                    if update == True:
+                        await ActorAPI.update_actors()            
             except:
                 print('Error running hysteresis loop on ' + vessel)
             await socketio.sleep(sleep)
         a_msg = "Auto Control Stopped on " + v_out
         print(a_msg)
+        sys_log('Hysteresis terminated on ' + v_out) 
         await socketio.emit('alert_warn', a_msg)

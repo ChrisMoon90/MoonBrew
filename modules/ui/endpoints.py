@@ -10,15 +10,25 @@ async def index(request):
     with open('./modules/ui/static/index.html') as f:
         return web.Response(text=f.read(), content_type='text/html')
 
-async def send_csv_data(request):
-    filename = "./logs/Sensors.csv"
-    if os.path.isfile(filename) == True:
-        with open(filename, "r") as file:
+async def send_system_data(request):
+    print('System data requested')
+    path = "./logs/system.txt"
+    if os.path.isfile(path) == True:
+        with open(path, "r") as file:
             file.seek(0)
-            csv_data = file.read()
-        return web.Response(text=csv_data)
+            return web.Response(text=file.read())
     else:
-        print('Send_csv_data Error: no csv file exists') 
+        print('Send system data Error: no file exists') 
+ 
+async def send_sensor_data(request):
+    print('Sensor data requested')
+    path = "./logs/sensors.csv"
+    if os.path.isfile(path) == True:
+        with open(path, "r") as file:
+            file.seek(0)
+            return web.Response(text=file.read())
+    else:
+        print('Send sensor data Error: no file exists') 
 
 async def redirect(request):
     raise web.HTTPFound('/')
@@ -26,7 +36,8 @@ async def redirect(request):
 app.add_routes([web.get('/', index),
                 web.get('/chart', index),
                 web.get('/settings', index),
-                web.get('/data', send_csv_data),
+                web.get('/api/sensors', send_sensor_data),
+                web.get('/api/system', send_system_data),
                 web.get('/static', redirect)])
 
 app.router.add_static('/', 'modules/ui/static/')
