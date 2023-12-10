@@ -1,14 +1,6 @@
 SYSTEM LOG
-2023-12-08 13:39:47: Hysteresis started on Fermenter
-2023-12-08 13:39:47: Actor states updated: {0: False, 1: False, 2: False}
-2023-12-08 13:39:48: Hysteresis terminated on Fermenter
-2023-12-08 13:39:49: Hysteresis started on Fermenter
-2023-12-08 13:39:49: Actor states updated: {0: False, 1: False, 2: False}
-2023-12-08 13:39:50: Hysteresis terminated on Fermenter
-2023-12-08 13:44:59: Starting MoonBrew...
-2023-12-08 13:45:00: Finished Startup
-2023-12-08 13:46:34: Starting MoonBrew...
-2023-12-08 13:46:35: Finished Startup
-2023-12-08 13:47:30: Hysteresis started on Fermenter
-2023-12-08 13:47:30: Actor states updated: {0: False, 1: False, 2: False}
-2023-12-08 13:47:31: Hysteresis terminated on Fermenter
+2023-12-08 15:14:05.587303: Auto Control Started on Fermenter
+2023-12-08 15:14:05.610834: Actor states updated: {0: False, 1: False, 2: False}
+2023-12-08 15:14:06.614345: Auto Control Stopped on Fermenter
+2023-12-09 21:38:26.467204: Starting MoonBrew...
+2023-12-09 21:38:27.471570: Finished Startup

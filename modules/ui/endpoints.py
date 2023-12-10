@@ -1,6 +1,7 @@
 print('Loading UI module...')
 
 import os
+from datetime import datetime
 from aiohttp import web
 from modules.app_config import app
 
@@ -21,7 +22,7 @@ async def send_system_data(request):
         print('Send system data Error: no file exists') 
  
 async def send_sensor_data(request):
-    print('Sensor data requested')
+    print('Sensor data requested', datetime.now())
     path = "./logs/sensors.csv"
     if os.path.isfile(path) == True:
         with open(path, "r") as file:

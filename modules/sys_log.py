@@ -1,4 +1,4 @@
-import time
+from datetime import datetime
 import os
 
 def sys_log(msg):
@@ -10,9 +10,10 @@ def sys_log(msg):
             print("System Log file does not exist. One will be created.")
             with open(fn, 'w') as f:
                 f.write("SYSTEM LOG\n")
-        c_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        fmsg = str(datetime.now()) + ': ' + msg
+        print(fmsg)
         with open(fn, "a") as f:
-            f.write(str(c_time) + ': ' + msg + '\n')
+            f.write(fmsg + '\n')
     except Exception as e:
-        print('MBC_log error: ' + str(e))
+        print('sys_log error: ' + str(e))
 

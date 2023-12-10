@@ -25,7 +25,6 @@ class ActorAPI():
                 GPIO.output(ActorAPI.outputs[k], GPIO.HIGH)
             else: 
                 GPIO.output(ActorAPI.outputs[k], GPIO.LOW)
-        print(msg)
         sys_log('Actor states updated: ' + str(msg))
         
     def cleanup():

@@ -41,8 +41,7 @@ class HysteresisAPI():
     async def hysteresis(vessel, sleep):
         v_out = vessel.replace('_', ' ')
         a_msg = "Auto Control Started on " + v_out 
-        sys_log('Hysteresis started on ' + v_out)      
-        print(a_msg)
+        sys_log(a_msg)      
         await socketio.emit('alert_success', a_msg)
         while getattr(HysteresisAPI, vessel): 
             update = False           
@@ -77,6 +76,5 @@ class HysteresisAPI():
                 print('Error running hysteresis loop on ' + vessel)
             await socketio.sleep(sleep)
         a_msg = "Auto Control Stopped on " + v_out
-        print(a_msg)
-        sys_log('Hysteresis terminated on ' + v_out) 
+        sys_log(a_msg) 
         await socketio.emit('alert_warn', a_msg)

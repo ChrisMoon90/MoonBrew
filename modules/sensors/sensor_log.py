@@ -1,6 +1,5 @@
 print('Loading Sensor Logging module...')
 
-import time
 from datetime import datetime
 import os
 
@@ -31,9 +30,8 @@ class logAPI:
         r = []
         for i in cache['SENSORS']:
             r.append(cache['SENSORS'][i]['cur_read'])
-        msg = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         for x in r:
-            msg += ', ' + str(x)
+            msg = str(datetime.now()) + ', ' + str(x)
         return msg
 
     async def save_to_file():

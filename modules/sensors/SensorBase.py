@@ -5,6 +5,7 @@ import pprint
 import time
 
 from modules.app_config import socketio, cache
+from modules.sys_log import sys_log
 
 class SensorBase():
 
@@ -59,15 +60,11 @@ class SensorBase():
                 SensorBase.prev_read[s_num] = new_read 
         except:
             msg = ("Error Running Temp Loop Thread on Sensor ", s_num)
-            await SensorBase.log_error(msg)           
+            print(msg)
+            sys_log(msg)         
         
-    async def log_error(self, msg):
-        f_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-        n_msg = '%s, %s' % (f_time, msg)
-        print(n_msg)
-        error_log = "./logs/TempError.log"
-        with open(error_log, "a") as file:
-            file.write("%s\n" % (n_msg)) 
+
+
 
 
 cache['INIT'].append({'function': SensorBase.emit_reading, 'sleep': 5})
