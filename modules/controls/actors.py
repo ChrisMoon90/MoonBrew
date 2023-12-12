@@ -3,12 +3,12 @@ print('Loading Actors module...')
 import RPi.GPIO as GPIO
 import time
 
-from modules.app_config import cache, socketio
+from modules.app_config import cache
 from modules.sys_log import sys_log
 
 class ActorAPI():
 
-    outputs = [26, 20, 21]
+    outputs = [26, 20, 23] #23 was 21
     GPIO.setwarnings(False)
     GPIO.setmode(GPIO.BCM)
     for i in outputs:

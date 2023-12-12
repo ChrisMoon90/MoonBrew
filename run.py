@@ -41,7 +41,7 @@ def get_ip():
         s.connect(('10.255.255.255', 1)) # doesn't even have to be reachable
         IP = s.getsockname()[0]
     except:
-        IP = '192.168.0.31'
+        IP = '192.168.0.30'
     finally:
         s.close()
     return IP

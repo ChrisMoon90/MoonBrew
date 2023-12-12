@@ -4,3 +4,210 @@ SYSTEM LOG
 2023-12-08 15:14:06.614345: Auto Control Stopped on Fermenter
 2023-12-09 21:38:26.467204: Starting MoonBrew...
 2023-12-09 21:38:27.471570: Finished Startup
+2023-12-09 22:04:01.424757: Starting MoonBrew...
+2023-12-09 22:04:02.429576: Finished Startup
+2023-12-09 22:07:15.418751: Starting MoonBrew...
+2023-12-09 22:07:16.423759: Finished Startup
+2023-12-09 22:10:11.420099: Starting MoonBrew...
+2023-12-09 22:10:12.424519: Finished Startup
+2023-12-09 22:12:54.646261: Starting MoonBrew...
+2023-12-09 22:12:55.650394: Finished Startup
+2023-12-09 22:37:36.412836: Starting MoonBrew...
+2023-12-09 22:37:37.417746: Finished Startup
+2023-12-09 22:45:26.414027: Starting MoonBrew...
+2023-12-09 22:45:27.418243: Finished Startup
+2023-12-09 22:49:28.418000: Starting MoonBrew...
+2023-12-09 22:49:29.422309: Finished Startup
+2023-12-10 06:46:53.564730: Starting MoonBrew...
+2023-12-10 06:46:54.573193: Finished Startup
+2023-12-10 07:02:15.648551: Actor states updated: {0: False, 1: True, 2: False}
+2023-12-10 07:02:19.007356: Actor states updated: {0: False, 1: True, 2: True}
+2023-12-10 07:02:40.069857: Actor states updated: {0: False, 1: False, 2: True}
+2023-12-10 07:02:46.526727: Actor states updated: {0: False, 1: False, 2: False}
+2023-12-10 07:02:48.633389: Actor states updated: {0: False, 1: False, 2: True}
+2023-12-10 07:02:50.863973: Actor states updated: {0: False, 1: False, 2: False}
+2023-12-10 07:03:41.770410: Actor states updated: {0: False, 1: False, 2: True}
+2023-12-10 07:03:43.723928: Actor states updated: {0: False, 1: False, 2: False}
+2023-12-10 07:03:47.899558: Actor states updated: {0: True, 1: False, 2: False}
+2023-12-10 07:04:01.607401: Actor states updated: {0: False, 1: False, 2: False}
+2023-12-10 07:04:30.202871: Actor states updated: {0: True, 1: False, 2: False}
+2023-12-10 07:04:38.656809: Actor states updated: {0: True, 1: True, 2: False}
+2023-12-10 07:04:59.051007: Actor states updated: {0: False, 1: True, 2: False}
+2023-12-10 07:05:06.454544: Actor states updated: {0: True, 1: True, 2: False}
+2023-12-10 07:05:54.509653: Auto Control Started on Hot Liquor Tank
+2023-12-10 07:05:54.537818: Actor states updated: {0: True, 1: True, 2: True}
+2023-12-10 07:06:08.074561: Actor states updated: {0: True, 1: True, 2: False}
+2023-12-10 07:06:08.556782: Auto Control Stopped on Hot Liquor Tank
+2023-12-10 07:07:00.849495: Auto Control Started on Hot Liquor Tank
+2023-12-10 07:07:00.877081: Actor states updated: {0: True, 1: True, 2: True}
+2023-12-10 07:14:41.419434: Starting MoonBrew...
+2023-12-10 07:14:42.428439: Finished Startup
+2023-12-10 07:15:38.533899: Actor states updated: {0: True, 1: False, 2: False}
+2023-12-10 07:15:39.751127: Actor states updated: {0: True, 1: True, 2: False}
+2023-12-10 07:15:42.066498: Auto Control Started on Hot Liquor Tank
+2023-12-10 07:15:42.095586: Actor states updated: {0: True, 1: True, 2: True}
+2023-12-10 08:17:33.326422: Starting MoonBrew...
+2023-12-10 08:17:34.330514: Finished Startup
+2023-12-10 08:35:18.927289: Actor states updated: {0: True, 1: False, 2: False}
+2023-12-10 08:35:21.410352: Actor states updated: {0: True, 1: True, 2: False}
+2023-12-10 08:36:21.618240: Actor states updated: {0: True, 1: True, 2: True}
+2023-12-10 08:36:24.491846: Actor states updated: {0: True, 1: True, 2: False}
+2023-12-10 08:36:28.207917: Actor states updated: {0: True, 1: True, 2: True}
+2023-12-10 08:44:07.889559: Starting MoonBrew...
+2023-12-10 08:44:08.893400: Finished Startup
+2023-12-10 08:47:56.789488: Actor states updated: {0: False, 1: False, 2: True}
+2023-12-10 08:47:57.850844: Actor states updated: {0: False, 1: False, 2: False}
+2023-12-10 08:48:00.070672: Actor states updated: {0: False, 1: False, 2: True}
+2023-12-10 08:48:00.815138: Actor states updated: {0: False, 1: False, 2: False}
+2023-12-10 08:51:51.319368: Actor states updated: {0: True, 1: False, 2: False}
+2023-12-10 08:51:52.908801: Actor states updated: {0: True, 1: True, 2: False}
+2023-12-10 08:52:50.154683: Auto Control Started on Hot Liquor Tank
+2023-12-10 08:54:40.289571: Actor states updated: {0: True, 1: True, 2: True}
+2023-12-10 08:57:18.472919: Actor states updated: {0: True, 1: True, 2: False}
+2023-12-10 09:00:59.736324: Actor states updated: {0: True, 1: True, 2: True}
+2023-12-10 09:03:01.873257: Actor states updated: {0: True, 1: True, 2: False}
+2023-12-10 09:06:29.122337: Actor states updated: {0: True, 1: True, 2: True}
+2023-12-10 09:09:45.354783: Actor states updated: {0: True, 1: True, 2: False}
+2023-12-10 09:10:27.425505: Actor states updated: {0: True, 1: True, 2: True}
+2023-12-10 09:14:50.759885: Actor states updated: {0: True, 1: True, 2: False}
+2023-12-10 09:19:22.113128: Actor states updated: {0: True, 1: True, 2: True}
+2023-12-10 09:21:07.248350: Actor states updated: {0: True, 1: True, 2: False}
+2023-12-10 09:25:36.594683: Actor states updated: {0: True, 1: True, 2: True}
+2023-12-10 09:28:13.818739: Actor states updated: {0: True, 1: True, 2: False}
+2023-12-10 09:31:44.090071: Actor states updated: {0: True, 1: True, 2: True}
+2023-12-10 09:33:33.228627: Actor states updated: {0: True, 1: True, 2: False}
+2023-12-10 09:48:16.446722: Actor states updated: {0: True, 1: True, 2: True}
+2023-12-10 09:48:36.476866: Actor states updated: {0: True, 1: True, 2: False}
+2023-12-10 09:51:18.684226: Actor states updated: {0: True, 1: True, 2: True}
+2023-12-10 09:52:35.775159: Actor states updated: {0: True, 1: True, 2: False}
+2023-12-10 09:56:35.071952: Actor states updated: {0: True, 1: True, 2: True}
+2023-12-10 10:00:05.310724: Actor states updated: {0: True, 1: True, 2: False}
+2023-12-10 10:03:28.599646: Actor states updated: {0: True, 1: True, 2: True}
+2023-12-10 10:05:10.748062: Actor states updated: {0: True, 1: True, 2: False}
+2023-12-10 10:08:48.024522: Actor states updated: {0: True, 1: True, 2: True}
+2023-12-10 10:10:22.132415: Actor states updated: {0: True, 1: True, 2: False}
+2023-12-10 10:14:14.422919: Actor states updated: {0: True, 1: True, 2: True}
+2023-12-10 10:15:41.534007: Actor states updated: {0: True, 1: True, 2: False}
+2023-12-10 10:18:02.714909: Actor states updated: {0: True, 1: True, 2: True}
+2023-12-10 10:21:57.029559: Actor states updated: {0: True, 1: True, 2: False}
+2023-12-10 10:25:10.326457: Actor states updated: {0: True, 1: True, 2: True}
+2023-12-10 10:27:05.497143: Actor states updated: {0: True, 1: True, 2: False}
+2023-12-10 10:30:21.785905: Actor states updated: {0: True, 1: True, 2: True}
+2023-12-10 10:32:10.955309: Actor states updated: {0: True, 1: True, 2: False}
+2023-12-10 10:35:34.245324: Actor states updated: {0: True, 1: True, 2: True}
+2023-12-10 10:37:01.366510: Actor states updated: {0: True, 1: True, 2: False}
+2023-12-10 10:40:28.645445: Actor states updated: {0: True, 1: True, 2: True}
+2023-12-10 10:42:10.783679: Actor states updated: {0: True, 1: True, 2: False}
+2023-12-10 10:44:33.006982: Actor states updated: {0: True, 1: True, 2: True}
+2023-12-10 10:45:03.547135: Actor states updated: {0: False, 1: True, 2: True}
+2023-12-10 10:47:34.078211: Actor states updated: {0: False, 1: True, 2: False}
+2023-12-10 10:47:34.233614: Auto Control Stopped on Hot Liquor Tank
+2023-12-10 10:47:36.076456: Actor states updated: {0: False, 1: False, 2: False}
+2023-12-10 10:50:10.088895: Actor states updated: {0: True, 1: False, 2: False}
+2023-12-10 10:50:11.328548: Actor states updated: {0: True, 1: True, 2: False}
+2023-12-10 10:56:19.344077: Auto Control Started on Boil Kettle
+2023-12-10 10:56:19.357011: Actor states updated: {0: True, 1: True, 2: True}
+2023-12-10 11:03:16.804324: Starting MoonBrew...
+2023-12-10 11:03:17.809530: Finished Startup
+2023-12-10 11:05:26.838379: Starting MoonBrew...
+2023-12-10 11:05:27.843746: Finished Startup
+2023-12-10 11:09:59.557468: Starting MoonBrew...
+2023-12-10 11:10:00.560836: Finished Startup
+2023-12-10 11:10:10.189754: Actor states updated: {0: True, 1: False, 2: False}
+2023-12-10 11:10:11.334730: Actor states updated: {0: True, 1: True, 2: False}
+2023-12-10 11:10:12.930242: Auto Control Started on Boil Kettle
+2023-12-10 11:10:12.943069: Actor states updated: {0: True, 1: True, 2: True}
+2023-12-10 11:16:33.546341: Actor states updated: {0: True, 1: False, 2: True}
+2023-12-10 11:22:21.735169: Actor states updated: {0: True, 1: True, 2: True}
+2023-12-10 11:22:53.658596: Actor states updated: {0: True, 1: False, 2: True}
+2023-12-10 11:24:32.541015: Actor states updated: {0: False, 1: False, 2: True}
+2023-12-10 11:38:25.499141: Actor states updated: {0: False, 1: False, 2: False}
+2023-12-10 11:38:26.032025: Auto Control Stopped on Boil Kettle
+2023-12-10 11:38:26.436682: Actor states updated: {0: False, 1: False, 2: True}
+2023-12-10 11:50:56.955822: Actor states updated: {0: False, 1: False, 2: False}
+2023-12-10 11:55:33.216325: Actor states updated: {0: False, 1: False, 2: True}
+2023-12-10 12:00:39.732363: Actor states updated: {0: False, 1: False, 2: False}
+2023-12-10 12:03:55.367245: Actor states updated: {0: False, 1: True, 2: False}
+2023-12-10 12:04:09.555079: Actor states updated: {0: False, 1: False, 2: False}
+2023-12-10 12:09:01.805756: Actor states updated: {0: False, 1: True, 2: False}
+2023-12-10 12:09:03.594597: Actor states updated: {0: False, 1: False, 2: False}
+2023-12-10 12:09:06.703897: Actor states updated: {0: True, 1: False, 2: False}
+2023-12-10 12:09:22.255150: Actor states updated: {0: False, 1: False, 2: False}
+2023-12-10 12:10:23.438429: Actor states updated: {0: True, 1: False, 2: False}
+2023-12-10 12:11:56.550231: Actor states updated: {0: True, 1: False, 2: True}
+2023-12-10 12:16:28.188985: Actor states updated: {0: True, 1: False, 2: False}
+2023-12-10 12:24:48.127120: Actor states updated: {0: False, 1: False, 2: False}
+2023-12-10 12:24:49.675791: Actor states updated: {0: False, 1: False, 2: True}
+2023-12-10 12:28:00.513292: Actor states updated: {0: False, 1: False, 2: False}
+2023-12-10 12:31:51.179134: Actor states updated: {0: True, 1: False, 2: False}
+2023-12-10 12:45:41.337342: Actor states updated: {0: False, 1: False, 2: False}
+2023-12-10 12:48:01.780098: Actor states updated: {0: True, 1: False, 2: False}
+2023-12-10 13:01:07.792708: Actor states updated: {0: False, 1: False, 2: False}
+2023-12-10 13:05:30.580316: Starting MoonBrew...
+2023-12-10 13:05:31.585578: Finished Startup
+2023-12-10 13:41:36.172125: Auto Control Started on Fermenter
+2023-12-10 13:41:36.188302: Actor states updated: {0: False, 1: True, 2: False}
+2023-12-10 13:51:35.616870: Starting MoonBrew...
+2023-12-10 13:51:36.621169: Finished Startup
+2023-12-10 13:52:13.921150: Auto Control Started on Fermenter
+2023-12-10 13:52:13.944688: Actor states updated: {0: False, 1: True, 2: False}
+2023-12-10 13:54:57.623951: Starting MoonBrew...
+2023-12-10 13:54:58.626730: Finished Startup
+2023-12-10 13:55:34.960872: Auto Control Started on Fermenter
+2023-12-10 13:55:34.980184: Actor states updated: {0: False, 1: True, 2: False}
+2023-12-10 14:21:35.662012: Actor states updated: {0: False, 1: False, 2: False}
+2023-12-10 14:23:09.762007: Actor states updated: {0: True, 1: False, 2: False}
+2023-12-10 14:54:50.790661: Actor states updated: {0: False, 1: False, 2: False}
+2023-12-10 18:09:22.753821: Actor states updated: {0: True, 1: False, 2: False}
+2023-12-10 18:36:13.685602: Actor states updated: {0: False, 1: False, 2: False}
+2023-12-10 20:00:52.823427: Actor states updated: {0: True, 1: False, 2: False}
+2023-12-10 20:22:55.433878: Actor states updated: {0: False, 1: False, 2: False}
+2023-12-10 21:30:23.403696: Actor states updated: {0: True, 1: False, 2: False}
+2023-12-10 21:53:39.166028: Actor states updated: {0: False, 1: False, 2: False}
+2023-12-10 23:01:35.979353: Actor states updated: {0: True, 1: False, 2: False}
+2023-12-10 23:25:59.076421: Actor states updated: {0: False, 1: False, 2: False}
+2023-12-11 00:27:15.329837: Actor states updated: {0: True, 1: False, 2: False}
+2023-12-11 00:50:20.182365: Actor states updated: {0: False, 1: False, 2: False}
+2023-12-11 01:49:12.255551: Actor states updated: {0: True, 1: False, 2: False}
+2023-12-11 02:11:26.168051: Actor states updated: {0: False, 1: False, 2: False}
+2023-12-11 06:52:11.792715: Starting MoonBrew...
+2023-12-11 06:52:12.795270: Finished Startup
+2023-12-11 06:53:19.936623: Auto Control Started on Fermenter
+2023-12-11 06:53:19.955965: Actor states updated: {0: True, 1: False, 2: False}
+2023-12-11 08:24:07.067679: Starting MoonBrew...
+2023-12-11 08:24:08.071555: Finished Startup
+2023-12-11 08:26:41.998099: Starting MoonBrew...
+2023-12-11 08:26:43.002203: Finished Startup
+2023-12-11 08:36:27.979665: Auto Control Started on Fermenter
+2023-12-11 09:51:13.009800: Starting MoonBrew...
+2023-12-11 09:51:14.017704: Finished Startup
+2023-12-11 09:53:59.689855: Auto Control Started on Fermenter
+2023-12-11 09:53:59.712141: Actor states updated: {0: False, 1: True, 2: False}
+2023-12-11 10:03:38.440949: Actor states updated: {0: False, 1: False, 2: False}
+2023-12-11 10:05:27.573675: Actor states updated: {0: True, 1: False, 2: False}
+2023-12-11 10:26:29.201231: Actor states updated: {0: False, 1: False, 2: False}
+2023-12-11 10:43:47.009898: Starting MoonBrew...
+2023-12-11 10:43:48.014088: Finished Startup
+2023-12-11 10:44:19.826337: Auto Control Started on Fermenter
+2023-12-11 11:20:17.306717: Actor states updated: {0: True, 1: False, 2: False}
+2023-12-11 11:36:04.378155: Actor states updated: {0: False, 1: False, 2: False}
+2023-12-11 13:05:15.528301: Actor states updated: {0: True, 1: False, 2: False}
+2023-12-11 13:21:16.622813: Actor states updated: {0: False, 1: False, 2: False}
+2023-12-11 15:00:36.552311: Actor states updated: {0: True, 1: False, 2: False}
+2023-12-11 15:15:47.829335: Actor states updated: {0: False, 1: False, 2: False}
+2023-12-11 17:29:52.590272: Actor states updated: {0: True, 1: False, 2: False}
+2023-12-11 17:44:15.823049: Actor states updated: {0: False, 1: False, 2: False}
+2023-12-11 19:40:00.956064: Actor states updated: {0: True, 1: False, 2: False}
+2023-12-11 19:54:14.278456: Actor states updated: {0: False, 1: False, 2: False}
+2023-12-11 21:42:26.665221: Actor states updated: {0: True, 1: False, 2: False}
+2023-12-11 21:56:34.115385: Actor states updated: {0: False, 1: False, 2: False}
+2023-12-11 22:10:27.303898: Starting MoonBrew...
+2023-12-11 22:10:28.308621: Finished Startup
+2023-12-11 22:19:05.559335: Starting MoonBrew...
+2023-12-11 22:19:06.563992: Finished Startup
+2023-12-11 22:19:30.360347: Auto Control Started on Fermenter
+2023-12-11 23:03:11.259819: Sensor Read Error @ Sensor 0
+2023-12-11 23:03:11.260732: Sensor Read Error @ Sensor 1
+2023-12-11 23:03:11.261427: Sensor Read Error @ Sensor 2
+2023-12-11 23:08:24.513452: Starting MoonBrew...
+2023-12-11 23:08:25.517304: Finished Startup

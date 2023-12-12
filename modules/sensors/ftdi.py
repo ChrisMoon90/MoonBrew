@@ -96,7 +96,7 @@ async def get_type(dev):
         type = b[1]
         return type
     except:
-        print('FTDI comms error.Confirm chip is set to FTDI.')
+        print('FTDI comms error. Confirm chip is set to FTDI.')
 
 async def run():
     dev_list = await get_ftdi_device_list()

@@ -30,8 +30,9 @@ class logAPI:
         r = []
         for i in cache['SENSORS']:
             r.append(cache['SENSORS'][i]['cur_read'])
+        msg = str(datetime.now())
         for x in r:
-            msg = str(datetime.now()) + ', ' + str(x)
+            msg += ', ' + str(x)
         return msg
 
     async def save_to_file():

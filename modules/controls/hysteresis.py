@@ -47,7 +47,6 @@ class HysteresisAPI():
             update = False           
             v_dict = cache['VESSELS'][vessel]
             a_indexes = await HysteresisAPI.get_a_indexes(v_dict)
-            print(a_indexes)
             cur_read = cache['SENSORS'][v_dict['Sensors'][0]['index']]['cur_read']
             tar_temp = v_dict['Params']['tar_temp']
             temp_tol = v_dict['Params']['temp_tol']
