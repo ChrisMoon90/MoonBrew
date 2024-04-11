@@ -18,6 +18,7 @@ async def send_cache():
 async def update_cache(dir, *args):
     args = await convert_strings(*args) 
     if dir == "ACTORS":
+        print(args)
         cache[dir] = args[0]
         await ActorAPI.update_actors()
     else:         
@@ -49,35 +50,35 @@ async def convert_strings(*args):
     args_out = []
     for r in args:
         if type(r) is dict:
-            for x in dfilter(r):
-                r = x
-        args_out.append(r)
+            f = dfilter(r)
+        else:
+            f = r
+        args_out.append(f)
     return args_out
 
 def dfilter(d):
+    d_new = {}
     for key, val in d.items():
         try:
-            if type(key) is int:
-                pass
-            else:
-                d[int(key)] = val
-                del d[key]
+            i_key = int(key)
         except:
-            pass
+            i_key = key
+        d_new[i_key] = val
+    for key, val in d_new.items():
         if type(val) is dict:
-            yield from dfilter(val)
+            d_new[key] = dfilter(val)
         else:
             if val == True or val == False:
                 pass
             else:
                 try:
                     if float(val) > int(float(val)):
-                        d[key] = float(val)
+                        d_new[key] = float(val)
                     else:
-                        d[key] = int(float(val))
+                        d_new[key] = int(float(val))
                 except:
-                    d[key] = val
-    yield d
+                    pass
+    return d_new
 
 
 # CONNECTION FUNCTIONS ######################

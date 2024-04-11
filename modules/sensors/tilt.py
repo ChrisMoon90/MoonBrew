@@ -8,6 +8,7 @@ from bleak import BleakScanner
 
 from modules.sensors.SensorBase import SensorBase
 from modules.app_config import socketio, cache
+from modules.sys_log import sys_log
 
 class Tilt(SensorBase):
     
@@ -33,13 +34,12 @@ class Tilt(SensorBase):
                 rssi = t.details['props']['RSSI']
                 self.t_cache = {'temp': ibeacon.major, 'sg': float(ibeacon.minor)/10000, 'txpower': ibeacon.power, 'rssi': rssi}
                 cache['SENSORS'][self.s_num]['cur_read'] = self.t_cache['sg']
-                # print(self.uuid, self.t_cache)
             except KeyError:
                 pass
             except ConstError:
                 pass
             except:
-                print('Other run_tilt Error')
+                sys_log('Run_tilt error')
             await socketio.sleep(sleep)
 
 

@@ -8,23 +8,25 @@ from modules.sys_log import sys_log
 
 class ActorAPI():
 
-    outputs = [26, 20, 23] #23 was 21
+    outputs = [26, 20, 23, 21]
     GPIO.setwarnings(False)
     GPIO.setmode(GPIO.BCM)
     for i in outputs:
         GPIO.setup(i, GPIO.OUT)
-    for x in range(3):
+        GPIO.output(i, GPIO.LOW)
+    for x in range(4):
         cache['ACTORS'][x]['state'] = False
         cache['ACTORS'][x]['dev_name'] = "Actor " + str(x + 1)
+        cache['ACTORS'][x]['pin'] = outputs[x]
 
     async def update_actors():
         msg = {}
         for k, v in cache['ACTORS'].items():
             msg[k] = v['state']
             if v['state'] == True:
-                GPIO.output(ActorAPI.outputs[k], GPIO.HIGH)
+                GPIO.output(v['pin'], GPIO.HIGH)
             else: 
-                GPIO.output(ActorAPI.outputs[k], GPIO.LOW)
+                GPIO.output(v['pin'], GPIO.LOW)
         sys_log('Actor states updated: ' + str(msg))
         
     def cleanup():

@@ -8,6 +8,7 @@ import asyncio
 
 from modules.sensors.SensorBase import SensorBase
 from modules.app_config import socketio, cache
+from modules.sys_log import sys_log
 
 
 
@@ -65,8 +66,8 @@ class Atlasftdi(Device):
                     # self.flush_input()
                 lines.append(line)
             return lines       
-        except FtdiError:
-            print("Failed to read from the sensor.")
+        except FtdiError as e:
+            sys_log("FTDI read_lines error: " + str(e))
             return ''       
 
     def send_cmd(self, cmd):
@@ -74,8 +75,8 @@ class Atlasftdi(Device):
         try:
             self.write(buf)
             return True
-        except FtdiError:
-            print("Error: send_cmd failed.")
+        except FtdiError as e:
+            sys_log("FTDI send_cmd error: " + str(e))
             return False
 
 

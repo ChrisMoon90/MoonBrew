@@ -1,9 +1,10 @@
 # Welcome to MoonBrew by Moon Brew Co.
 
-Beta version 1.0
-
 Python3 server providing autonomous control for all grain brewing, fermentation & smokers. Compatible with Atlas Controls devices (temp, pH, etc.), Tilt hydrometers & up to 3ea solid state relays.
 
+## Version 2.2
+Updates to number of actors, actor config with pin numbers
+Bug fixes for sensor value freezing
 
 ## Installation
 
