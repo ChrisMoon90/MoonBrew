@@ -6,5 +6,6 @@ certs/
 .certs/
 **/__pycache__
 env/
+MBC-venv/
 vscode/
 .vscode/

@@ -2,13 +2,17 @@
 
 Python3 server providing autonomous control for all grain brewing, fermentation & smokers. Compatible with Atlas Controls devices (temp, pH, etc.), Tilt hydrometers & up to 3ea solid state relays.
 
+## Version 2.3
+Updates to installer to fix RPi5 username issues and adds Python virtual environment for libraries.
+Updates to Actors module to replace RPi.GPIO with gpiod to resolve GPIO compatability with RPi5.
+
 ## Version 2.2
 Updates to number of actors, actor config with pin numbers
 Bug fixes for sensor value freezing
 
 ## Installation
 
-Open a terminal on Raspberry Pi and navigate to <code>/home/pi</code>
+Open a terminal on Raspberry Pi and navigate to <code>/home/'username'</code>
 
 Type <code>git clone https://github.com/ChrisMoon90/MoonBrew.git</code>
 

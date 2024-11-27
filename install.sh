@@ -34,9 +34,12 @@ show_menu () {
           if [ $? = 0 ]; then
             echo "''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''"
             echo "Installing required Python3 modules..."
+            python3 -m venv MBC-venv
+            source MBC-venv/bin/activate
             pip3 install -r requirements.txt
-            sudo cp -R /usr/lib/python3.7/site-packages/dbus_fast /usr/lib/python3.7
-            sudo cp -R /usr/lib/python3.7/site-packages/dbus_fast-1.86.0-py3.7.egg-info /usr/lib/python3.7
+            # sudo pip3 install -r requirements.txt
+            # sudo cp -R /usr/lib/python3.7/site-packages/dbus_fast /usr/lib/python3.7
+            # sudo cp -R /usr/lib/python3.7/site-packages/dbus_fast-1.86.0-py3.7.egg-info /usr/lib/python3.7
           fi
 
           confirmAnswer "Do you want to add MoonBrew to autostart?"
@@ -53,8 +56,10 @@ show_menu () {
       2)
           confirmAnswer "Are you sure you want to install the No-IP DUC?"
           if [ $? = 0 ]; then
-            mkdir /home/pi/noip
-            cd /home/pi/noip
+            uname="$(whoami)"
+            echo $uname
+            mkdir /home/$uname/noip
+            cd /home/$uname/noip
             wget https://www.noip.com/client/linux/noip-duc-linux.tar.gz
             tar vzxf noip-duc-linux.tar.gz
             cd noip-2.1.9-1
