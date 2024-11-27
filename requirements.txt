@@ -4,5 +4,4 @@ construct==2.10.68
 pylibftdi==0.21.0
 python-engineio==4.7.1
 python-socketio==5.9.0
-# RPi.GPIO==0.7.1
 gpiod==2.2.2

@@ -37,29 +37,26 @@ show_menu () {
             python3 -m venv MBC-venv
             source MBC-venv/bin/activate
             pip3 install -r requirements.txt
-            # sudo pip3 install -r requirements.txt
-            # sudo cp -R /usr/lib/python3.7/site-packages/dbus_fast /usr/lib/python3.7
-            # sudo cp -R /usr/lib/python3.7/site-packages/dbus_fast-1.86.0-py3.7.egg-info /usr/lib/python3.7
           fi
 
           confirmAnswer "Do you want to add MoonBrew to autostart?"
           if [ $? = 0 ]; then
-            sed "s@#DIR#@${PWD}@g" MBC_boot > /etc/init.d/MBC_boot
-            chmod 755 /etc/init.d/MBC_boot;
-            update-rc.d MBC_boot defaults;
+            sudo sed "s@#DIR#@${PWD}@g" MBC_boot > /etc/init.d/MBC_boot
+            sudo chmod 755 /etc/init.d/MBC_boot;
+            sudo update-rc.d MBC_boot defaults;
           fi
 
           whiptail --title "Installition Finished" --msgbox "MoonBrew installation finished! You must hit OK to continue." 8 78
+          uname="$(whoami)"
+          echo $uname
           show_menu
           ;;
 
       2)
           confirmAnswer "Are you sure you want to install the No-IP DUC?"
           if [ $? = 0 ]; then
-            uname="$(whoami)"
-            echo $uname
-            mkdir /home/$uname/noip
-            cd /home/$uname/noip
+            mkdir ${PWD}/noip
+            cd ${PWD}/noip
             wget https://www.noip.com/client/linux/noip-duc-linux.tar.gz
             tar vzxf noip-duc-linux.tar.gz
             cd noip-2.1.9-1
@@ -83,9 +80,9 @@ show_menu () {
       3)
           confirmAnswer "Are you sure you want to add MoonBrew to autostart?"
           if [ $? = 0 ]; then
-            sed "s@#DIR#@${PWD}@g" MBC_boot > /etc/init.d/MBC_boot
-            chmod 755 /etc/init.d/MBC_boot;
-            update-rc.d MBC_boot defaults;
+            sudo sed "s@#DIR#@${PWD}@g" MBC_boot > /etc/init.d/MBC_boot
+            sudo chmod 755 /etc/init.d/MBC_boot;
+            sudo update-rc.d MBC_boot defaults;
             whiptail --title "MoonBrew added to autostart" --msgbox "MoonBrew was added to autostart succesfully. You must hit OK to continue." 8 78
           fi
           show_menu
@@ -94,7 +91,7 @@ show_menu () {
       4)
           confirmAnswer "Are you sure you want to remove MoonBrew from autostart?"
           if [ $? = 0 ]; then
-            update-rc.d -f MBC_boot remove
+            sudo update-rc.d -f MBC_boot remove
           fi
           show_menu
           ;;
