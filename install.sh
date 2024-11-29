@@ -41,18 +41,48 @@ show_menu () {
 
           confirmAnswer "Do you want to add MoonBrew to autostart?"
           if [ $? = 0 ]; then
-            sudo sed "s@#DIR#@${PWD}@g" MBC_boot > /etc/init.d/MBC_boot
-            sudo chmod 755 /etc/init.d/MBC_boot;
-            sudo update-rc.d MBC_boot defaults;
+            sed "s@#DIR#@${PWD}@g" MBC_boot > /etc/init.d/MBC_boot
+            chmod 755 /etc/init.d/MBC_boot;
+            update-rc.d MBC_boot defaults;
           fi
-
-          whiptail --title "Installition Finished" --msgbox "MoonBrew installation finished! You must hit OK to continue." 8 78
-          uname="$(whoami)"
-          echo $uname
+          whiptail --title "Installation Finished" --msgbox "MoonBrew installation finished! You must hit OK to continue." 8 78
           show_menu
           ;;
 
       2)
+          confirmAnswer "Are you sure you want to add MoonBrew to autostart?"
+          if [ $? = 0 ]; then
+            sed "s@#DIR#@${PWD}@g" MBC_boot > /etc/init.d/MBC_boot
+            chmod 755 /etc/init.d/MBC_boot;
+            update-rc.d MBC_boot defaults;
+            whiptail --title "MoonBrew added to autostart" --msgbox "MoonBrew was added to autostart succesfully. You must hit OK to continue." 8 78
+          fi
+          show_menu
+          ;;
+
+      3)
+          confirmAnswer "Are you sure you want to remove MoonBrew from autostart?"
+          if [ $? = 0 ]; then
+            update-rc.d -f MBC_boot remove
+            rm /etc/init.d/MBC_boot
+          fi
+          show_menu
+          ;;
+
+      4)
+          /etc/init.d/MBC_boot start
+          ipaddr=`ifconfig wlan0 2>/dev/null|awk '/inet addr:/ {print $2}'|sed 's/addr://'`
+          whiptail --title "MoonBrew started" --msgbox "Please connect via Browser: http://$ipaddr:5000" 8 78
+          show_menu
+          ;;
+
+      5)
+          /etc/init.d/MBC_boot stop
+          whiptail --title "MoonBrew stoped" --msgbox "The software is stoped" 8 78
+          show_menu
+          ;;
+
+      6)
           confirmAnswer "Are you sure you want to install the No-IP DUC?"
           if [ $? = 0 ]; then
             mkdir ${PWD}/noip
@@ -77,42 +107,10 @@ show_menu () {
           show_menu
           ;;
 
-      3)
-          confirmAnswer "Are you sure you want to add MoonBrew to autostart?"
-          if [ $? = 0 ]; then
-            sudo sed "s@#DIR#@${PWD}@g" MBC_boot > /etc/init.d/MBC_boot
-            sudo chmod 755 /etc/init.d/MBC_boot;
-            sudo update-rc.d MBC_boot defaults;
-            whiptail --title "MoonBrew added to autostart" --msgbox "MoonBrew was added to autostart succesfully. You must hit OK to continue." 8 78
-          fi
-          show_menu
-          ;;
-
-      4)
-          confirmAnswer "Are you sure you want to remove MoonBrew from autostart?"
-          if [ $? = 0 ]; then
-            sudo update-rc.d -f MBC_boot remove
-          fi
-          show_menu
-          ;;
-
-      5)
-          sudo /etc/init.d/MBC_boot start
-          ipaddr=`ifconfig wlan0 2>/dev/null|awk '/inet addr:/ {print $2}'|sed 's/addr://'`
-          whiptail --title "MoonBrew started" --msgbox "Please connect via Browser: http://$ipaddr:5000" 8 78
-          show_menu
-          ;;
-
-      6)
-          sudo /etc/init.d/MBC_boot stop
-          whiptail --title "MoonBrew stoped" --msgbox "The software is stoped" 8 78
-          show_menu
-          ;;
-
       7)
         confirmAnswer "Are you sure you want to delete the configuration file?"
         if [ $? = 0 ]; then
-          sudo rm -f config.txt
+          rm -f config.txt
           whiptail --title "Config.txt Delted" --msgbox "The config file was succesfully deleted. You must hit OK to continue." 8 78
         fi
         show_menu
