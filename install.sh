@@ -10,12 +10,14 @@ show_menu () {
   # We show the host name right in the menu title so we know which Pi we are connected to
   OPTION=$(whiptail --title "MoonBrew 1.0" --menu "Choose your option:" 15 56 7 \
   "1" "Install MoonBrew" \
-  "2" "Install No-IP" \
-  "3" "Add MoonBrew to Autostart" \
-  "4" "Remove MoonBrew from Autostart" \
-  "5" "Start MoonBrew" \
-  "6" "Stop MoonBrew" \
-  "7" "Delete Configuration" 3>&1 1>&2 2>&3)
+  "2" "Add MoonBrew to Autostart" \
+  "3" "Remove MoonBrew from Autostart" \
+  "4" "Start MoonBrew" \
+  "5" "Stop MoonBrew" \
+  "6" "Install No-IP" \
+  "7" "Remove No-IP" \
+  "8" "Remove No-IP from Autostart" \
+  "9" "Delete Configuration" 3>&1 1>&2 2>&3)
 
   BUTTON=$?
   # Exit if user pressed cancel or escape
@@ -85,22 +87,23 @@ show_menu () {
       6)
           confirmAnswer "Are you sure you want to install the No-IP DUC?"
           if [ $? = 0 ]; then
-            mkdir ${PWD}/noip
-            cd ${PWD}/noip
-            wget https://www.noip.com/client/linux/noip-duc-linux.tar.gz
-            tar vzxf noip-duc-linux.tar.gz
-            cd noip-2.1.9-1
-            sudo make
-            sudo make install
-            sudo /usr/local/bin/noip2
-            sudo noip2 -S
+            mkdir noip
+            cd noip
+            wget --content-disposition https://www.noip.com/download/linux/latest
+            tar xf $(ls | head -n 1)
+            cd $(ls | head -n 1)/binaries
+            apt install ./$(ls | awk 'NR==2 {print}')
           fi
 
           confirmAnswer "Do you want to add No-IP to autostart?"
           if [ $? = 0 ]; then
-             sed "s@#DIR#@${PWD}@g" noip_boot > /etc/init.d/noip_boot
-             chmod 755 /etc/init.d/noip_boot;
-             update-rc.d noip_boot defaults;
+            echo "Enter NoIP username:"
+            read uname
+            echo "Enter NoIP password:"
+            read pswd
+            sed "s,#uname#,$uname,g;s,#pswd#,$pswd,g" noip_boot > /etc/init.d/noip_boot
+            chmod 755 /etc/init.d/noip_boot;
+            update-rc.d noip_boot defaults;
           fi
 
           whiptail --title "No-IP DUC added" --msgbox "The No-IP DUC was succesfully added. You must hit OK to continue." 8 78
@@ -108,6 +111,25 @@ show_menu () {
           ;;
 
       7)
+        confirmAnswer "Are you sure you want to remove No-IP?"
+        if [ $? = 0 ]; then
+          rm -R noip
+          apt remove noip-duc
+          whiptail --title "No-IP Removed" --msgbox "No-IP has been successfully removed. You must hit OK to continue." 8 78
+        fi
+        show_menu
+        ;;
+
+      8)
+          confirmAnswer "Are you sure you want to remove No-IP from autostart?"
+          if [ $? = 0 ]; then
+            update-rc.d -f noip_boot remove
+            rm /etc/init.d/noip_boot
+          fi
+          show_menu
+          ;;
+
+      9)
         confirmAnswer "Are you sure you want to delete the configuration file?"
         if [ $? = 0 ]; then
           rm -f config.txt

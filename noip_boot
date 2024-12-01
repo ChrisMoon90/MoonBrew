@@ -7,21 +7,24 @@
 # Updated again by David Courtney to "LSBize" the script for Debian 7.
 
 ### BEGIN INIT INFO
-# Provides:     noip2
+# Provides:     noip
 # Required-Start: networking
 # Required-Stop:
 # Should-Start:
 # Should-Stop:
 # Default-Start: 2 3 4 5
 # Default-Stop: 0 1 6
-# Short-Description: Start noip2 at boot time
-# Description: Start noip2 at boot time
+# Short-Description: Start noip at boot time
+# Description: Start noip at boot time
 ### END INIT INFO
 
 # . /etc/rc.d/init.d/functions  # uncomment/modify for your killproc
 
-DAEMON=/usr/local/bin/noip2
-DAEMON_NAME=noip2
+# DAEMON=/usr/local/bin/noip2
+uname=#uname#
+pwd=#pswd#
+DAEMON="noip-duc -g moonbrew.ddns.net -u $uname -p $pwd"
+DAEMON_NAME=noip
 DAEMON_USER=root
 PIDFILE=/var/run/$DAEMON_NAME.pid
 
@@ -30,24 +33,23 @@ PIDFILE=/var/run/$DAEMON_NAME.pid
 test -x $DAEMON || exit 0
 
 case "$1" in
+
     start)
     echo -n "Starting dynamic address update: "
     log_daemon_msg "Starting $DAEMON_NAME daemon"
     log_end_msg $?
     start-stop-daemon --start --exec $DAEMON
-    echo "noip2."
     ;;
+
     stop)
     echo -n "Shutting down dynamic address update:"
     start-stop-daemon --stop --oknodo --retry 30 --exec $DAEMON
-    echo "noip2."
     ;;
 
     restart)
     echo -n "Restarting dynamic address update: "
     start-stop-daemon --stop --oknodo --retry 30 --exec $DAEMON
     start-stop-daemon --start --exec $DAEMON
-    echo "noip2."
     ;;
 
     status)
@@ -57,5 +59,6 @@ case "$1" in
     *)
     echo "Usage: $0 {start|stop|restart}"
     exit 1
+
 esac
 exit 0

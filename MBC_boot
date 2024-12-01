@@ -38,7 +38,7 @@ do_start () {
     sleep 16
     log_daemon_msg "Starting $DAEMON_NAME daemon" $(timestamp)
     log_end_msg $?
-    start-stop-daemon --start -v --pidfile $PIDFILE --make-pidfile --user $DAEMON_USER --chuid $DAEMON_USER --chdir $DIR --startas $DAEMON -- $DAEMON_OPTS
+    start-stop-daemon --start --background -v --pidfile $PIDFILE --make-pidfile --user $DAEMON_USER --chuid $DAEMON_USER --chdir $DIR --startas $DAEMON -- $DAEMON_OPTS
     # add --background above
     log_daemon_msg "$DAEMON_NAME has started"
     log_end_msg $?
