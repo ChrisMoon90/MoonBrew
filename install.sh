@@ -93,6 +93,7 @@ show_menu () {
             tar xf $(ls | head -n 1)
             cd $(ls | head -n 1)/binaries
             apt install ./$(ls | awk 'NR==2 {print}')
+            cd ../../..
           fi
 
           confirmAnswer "Do you want to add No-IP to autostart?"
@@ -101,9 +102,14 @@ show_menu () {
             read uname
             echo "Enter NoIP password:"
             read pswd
-            sed "s,#uname#,$uname,g;s,#pswd#,$pswd,g" noip_boot > /etc/init.d/noip_boot
-            chmod 755 /etc/init.d/noip_boot;
-            update-rc.d noip_boot defaults;
+            # sed "s,#uname#,$uname,g;s,#pswd#,$pswd,g" noip_boot > /etc/init.d/noip_boot
+            # chmod 755 /etc/init.d/noip_boot;
+            # update-rc.d noip_boot defaults;
+            cp ./noip/$(cd ./noip; ls | head -n 1)/debian/service /etc/systemd/system/noip-duc.service
+            printf "NOIP_USERNAME=$uname\nNOIP_PASSWORD=$pswd\nNOIP_HOSTNAMES=moonbrew.ddns.net" > /etc/default/noip-duc
+            systemctl daemon-reload
+            systemctl enable noip-duc
+            systemctl start noip-duc
           fi
 
           whiptail --title "No-IP DUC added" --msgbox "The No-IP DUC was succesfully added. You must hit OK to continue." 8 78
@@ -123,8 +129,14 @@ show_menu () {
       8)
           confirmAnswer "Are you sure you want to remove No-IP from autostart?"
           if [ $? = 0 ]; then
-            update-rc.d -f noip_boot remove
-            rm /etc/init.d/noip_boot
+            # update-rc.d -f noip_boot remove
+            # rm /etc/init.d/noip_boot
+            systemctl stop noip-duc
+            systemctl disable noip-duc
+            rm /etc/systemd/system/noip-duc.service
+            rm /usr/lib/systemd/system/noip-duc.service
+            systemctl daemon-reload
+            systemctl reset-failed
           fi
           show_menu
           ;;
