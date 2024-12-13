@@ -53,7 +53,6 @@ show_menu () {
           systemctl stop MBC
           systemctl disable MBC
           rm /etc/systemd/system/MBC.service
-          rm /usr/lib/systemd/system/MBC.service
           systemctl daemon-reload
           systemctl reset-failed
         fi
@@ -108,7 +107,6 @@ show_menu () {
           systemctl stop noip-duc
           systemctl disable noip-duc
           rm /etc/systemd/system/noip-duc.service
-          rm /usr/lib/systemd/system/noip-duc.service
           systemctl daemon-reload
           systemctl reset-failed
         fi

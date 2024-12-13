@@ -1,6 +1,7 @@
 [Unit]
 Description=Moon Brew Co. Startup Service
-After=network.target auditd.service
+Wants=network-online.target
+After=network.target network-online.target
 
 [Service]
 WorkingDirectory=#DIR#
