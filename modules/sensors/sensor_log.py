@@ -12,7 +12,8 @@ class logAPI:
     run_state = False
     log_rate = cache['SYSTEM']['Static']['log_rate']
     last_send = datetime.now()
-    filename = "./logs/sensors.csv"
+    dir = "./logs/"
+    fn = "sensors.csv"
 
     async def set_log_rate():
         logAPI.log_rate = cache['SYSTEM']['Static']['log_rate']
@@ -47,13 +48,17 @@ class logAPI:
                 if delta.total_seconds() >= logAPI.log_rate * 60:
                     msg = await logAPI.get_cur_data()               
                     print("Saving to File: %s" % msg)
-                    if os.path.exists(logAPI.filename):
-                        with open(logAPI.filename, "a") as f:
+                    if os.path.exists(logAPI.dir + logAPI.fn):
+                        with open(logAPI.dir + logAPI.fn, "a") as f:
                             f.write("%s\n" % msg)
                     else:
                         print("sensors.csv file does not exist. File will be created.")
+                        if os.path.isdir(logAPI.dir):
+                            pass
+                        else:
+                            os.mkdir(logAPI.dir)
                         header = "Time, Sensor 1, Sensor 2, Sensor 3, Sensor 4, Sensor 5, Sensor 6\n"
-                        with open(logAPI.filename, 'a') as f:
+                        with open(logAPI.dir + logAPI.fn, 'a') as f:
                             f.write(header)
                             f.write("%s\n" % msg)
                     logAPI.last_send = now
