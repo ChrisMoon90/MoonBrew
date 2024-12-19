@@ -32,7 +32,8 @@ class ftdiAPI(SensorBase):
                     if lines[i][0] != '*':
                         read_raw = lines[i]
                 new_read = float(read_raw.strip())
-            except: #except pylibftdi.FtdiError as e:         
+            except Exception as e: #except pylibftdi.FtdiError as e:  
+                sys_log('execute_ftdi error: ' + e)       
                 new_read = "ERR"
             await SensorBase.Atlas_error_check(self.s_num, new_read)
             await socketio.sleep(sleep)

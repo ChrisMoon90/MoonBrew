@@ -58,12 +58,9 @@ class SensorBase():
                         msg = "Large Value Change Error: sensor %s, Current Temp: %s, Previous Temp: %s" % (s_num, new_read, prev_read)
                         sys_log(msg)
                 SensorBase.prev_read[s_num] = new_read 
-        except:
-            msg = ("Error Running Temp Loop Thread on Sensor ", s_num)
+        except Exception as e:
+            msg = 'Error Running Temp Loop Thread on Sensor ' + s_num + ': ' + e
             sys_log(msg)         
         
-
-
-
 
 cache['INIT'].append({'function': SensorBase.emit_reading, 'sleep': 5})
