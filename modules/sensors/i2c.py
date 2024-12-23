@@ -7,6 +7,8 @@ from modules.sensors.AtlasI2C import (
 
 from modules.sensors.SensorBase import SensorBase
 from modules.app_config import socketio, cache
+from modules.sys_log import sys_log
+
 
 class i2cAPI(SensorBase):   
 
@@ -28,8 +30,9 @@ class i2cAPI(SensorBase):
                 split_read = lines.split(":")
                 read_raw = split_read[1].rstrip("\x00")
                 new_read = float(read_raw)
-            except: #except pylibftdi.FtdiError as e:         
+            except Exception as e: #except pylibftdi.FtdiError as e:         
                 new_read = "ERR"
+                sys_log('execute_I2C error: ', str(e))
             await SensorBase.Atlas_error_check(self.s_num, new_read)
             await socketio.sleep(sleep)
 

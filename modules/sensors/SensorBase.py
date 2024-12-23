@@ -59,8 +59,7 @@ class SensorBase():
                         sys_log(msg)
                 SensorBase.prev_read[s_num] = new_read 
         except Exception as e:
-            msg = 'Error Running Temp Loop Thread on Sensor ' + s_num + ': ' + e
-            sys_log(msg)         
+            sys_log('Error Running Temp Loop Thread on Sensor ' + str(s_num) + ': ' + str(e))      
         
 
 cache['INIT'].append({'function': SensorBase.emit_reading, 'sleep': 5})

@@ -58,12 +58,13 @@ class logAPI:
                         else:
                             os.mkdir(logAPI.dir)
                         header = "Time, Sensor 1, Sensor 2, Sensor 3, Sensor 4, Sensor 5, Sensor 6\n"
+                        print(logAPI.dir + logAPI.fn)
                         with open(logAPI.dir + logAPI.fn, 'a') as f:
                             f.write(header)
                             f.write("%s\n" % msg)
                     logAPI.last_send = now
-            except:
-                print('Logging Error')
+            except Exception as e:
+                print('Logging Error: ' + str(e))
             await socketio.sleep(1)
         print('Logging Coroutine Exited')
 

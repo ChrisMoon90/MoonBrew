@@ -11,7 +11,6 @@ from modules.app_config import socketio, cache
 from modules.sys_log import sys_log
 
 
-
 class ftdiAPI(SensorBase):
     
     def __init__(self, dev, type):
@@ -33,7 +32,7 @@ class ftdiAPI(SensorBase):
                         read_raw = lines[i]
                 new_read = float(read_raw.strip())
             except Exception as e: #except pylibftdi.FtdiError as e:  
-                sys_log('execute_ftdi error: ' + e)       
+                sys_log('execute_ftdi error: ' + str(e))       
                 new_read = "ERR"
             await SensorBase.Atlas_error_check(self.s_num, new_read)
             await socketio.sleep(sleep)

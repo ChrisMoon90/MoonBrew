@@ -40,7 +40,7 @@ class Tilt(SensorBase):
             except ConstError:
                 pass
             except Exception as e:
-                sys_log('Run_tilt error: ' + e + self.t_cache)
+                sys_log('Run_tilt error: ' + str(e) + str(self.t_cache))
             await socketio.sleep(sleep)
 
 
@@ -80,7 +80,7 @@ async def tilt_init():
         await socketio.sleep(3)
         await scanner.stop()
     except Exception as e:
-        print(str(e))
+        print('tilt_init error: ' + str(e))
             
 async def device_found(device, advertisement_data):
     try:
@@ -96,8 +96,8 @@ async def device_found(device, advertisement_data):
         pass
     except ConstError:
         pass
-    except:
-        print('Other device_found Error')
+    except Exception as e:
+        print('Other device_found Error: ' + str(e))
 
 a_tilts = []
 async def unique(uuid):

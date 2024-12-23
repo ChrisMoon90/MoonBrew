@@ -1,5 +1,5 @@
 SYSTEM
-'Static': {'Mode': 'Ferment', 'log_rate': 0.5}
+'Static': {'Mode': 'Ferment', 'log_rate': 7}
 
 Boil_Kettle
 'Actors': {0: {'name': 'Heat', 'index': 2, 'type': 'Heater'}, 1: {'name': 'Pump 1', 'index': 0, 'type': 'Pump'}}
