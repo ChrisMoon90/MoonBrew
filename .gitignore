@@ -7,3 +7,4 @@ env/
 MBC-venv/
 vscode/
 .vscode/
+noip/*
