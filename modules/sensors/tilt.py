@@ -18,8 +18,8 @@ class Tilt(SensorBase):
         self.t_cache = {'temp': 0, 'sg': 0, 'txpower': 0, 'rssi': 0}
         self.dev_name = SensorBase.sensor_type('SG')
         self.s_num = SensorBase.s_count['Total'] - 1
-        cache['INIT'].append({'function': self.run_tilt, 'sleep': 3})
-        cache['SENSORS'][self.s_num] = {'com_type': 'ble', 'dev_name': self.dev_name, 'cur_read': "{0:.3f}".format(0)} # 'dev_id': self.uuid, 
+        cache['INIT'].append({'function': self.run_tilt, 'sleep': 5})
+        cache['SENSORS'][self.s_num] = {'dev_id': self.uuid, 'com_type': 'ble', 'dev_name': self.dev_name, 'cur_read': "{0:.3f}".format(0)}
 
     def get_t_cache(self):
         return self.t_cache
@@ -28,16 +28,19 @@ class Tilt(SensorBase):
         print("Starting Tilt Thread as Sensor %s" % self.s_num)  
         while True: 
             try:
-                t = await BleakScanner.find_device_by_address(self.addr, 5)
+                t = await BleakScanner.find_device_by_address(self.addr, 10)
                 ad_data = t.details['props']['ManufacturerData'][0x004C]
                 ibeacon = ibeacon_format.parse(ad_data)
                 rssi = t.details['props']['RSSI']
                 self.t_cache = {'temp': ibeacon.major, 'sg': float(ibeacon.minor)/10000, 'txpower': ibeacon.power, 'rssi': rssi}
                 cache['SENSORS'][self.s_num]['cur_read'] = self.t_cache['sg']
+                sys_log('t_cache: ' + str(self.t_cache))
                 print('t_cache: ', self.t_cache)
-            except KeyError:
+            except KeyError as k:
+                sys_log('KeyError: ' + str(k))
                 pass
-            except ConstError:
+            except ConstError as c:
+                sys_log('ConstError: ' + str(c))
                 pass
             except Exception as e:
                 sys_log('Run_tilt error: ' + str(e) + str(self.t_cache))

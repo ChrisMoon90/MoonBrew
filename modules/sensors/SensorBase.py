@@ -35,9 +35,9 @@ class SensorBase():
         while True:
             f_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) 
             print(70 * "-")
-            print(f_time)
+            print(f_time + ': Reading Update')
             pprint.pprint(cache['SENSORS'])
-            await socketio.emit('cache', cache)
+            await socketio.emit('reading_update', cache)
             await socketio.sleep(sleep)
 
     async def Atlas_error_check(s_num, new_read):

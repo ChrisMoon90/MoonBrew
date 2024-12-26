@@ -55,7 +55,7 @@ def get_config_params():
         print("Index file does not exist. Config file will be created.")
         with open(filename, 'w') as f:
             f.write("SYSTEM\n")
-            f.write("'Static': {'Mode': 'Brew', 'log_rate': 1}\n\n")
+            f.write("'Static': {'version': 2.3, 'Mode': 'Brew', 'log_rate': 1}\n\n")
             a = {'Actors': {},
                 'Sensors': {},
                 'Params': {'tar_temp': 200, 'temp_tol': 2}}

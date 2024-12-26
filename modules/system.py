@@ -2,6 +2,9 @@ print('Loading System module...')
 
 import os
 from modules.app_config import socketio
+from modules.sys_log import sys_log
+from modules.sensors.ftdi import re_init_ftdi
+from modules.sensors.tilt import tilt_init
 
 async def delete_log(target): 
     path = './logs/' + target  
@@ -15,11 +18,21 @@ async def delete_log(target):
         print(a_msg)
         await socketio.emit('alert_warn', a_msg)
 
+async def sensor_init():
+    sys_log('Re-Initializing Sensors...')
+    # await re_init_ftdi()
+    await tilt_init()
+
 
 # SYSTEM SOCKETIO FUNCTIONS ############################
 @socketio.on('delete')
 async def del_log(sid, target):
     await delete_log(target)
+
+@socketio.on('init_sensors')
+async def init_sensors(sid):
+    print('Re-Initializing Sensors')
+    await sensor_init()
 
 @socketio.on('reboot')
 async def restart(sid):
