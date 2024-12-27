@@ -24,6 +24,22 @@ Type <code>sudo bash ./install.sh</code>
 
 Follow the prompts to install MoonBrew dependencies.
 
+Note: do not forget to enable I2C and Serial Port in the RPi Configuration menu.
+
+
+## External Antenna:
+
+To add external antenna funcationality for CM5, modfy the boot config file:
+
+<code>sudo nano /boot/firmware/config.txt</code>
+
+Add the following to the end of the file:
+
+<code>
+# Switch to external antenna
+dtparam=ant2
+</code>
+
 
 <!-- ## Misc Notes for Future Dev:
 
