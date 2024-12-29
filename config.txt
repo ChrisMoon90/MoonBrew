@@ -1,5 +1,5 @@
 SYSTEM
-'Static': {'version': 2.3, 'Mode': 'Brew', 'log_rate': 5.5}
+'Static': {'version': 2.3, 'Mode': 'Ferment', 'log_rate': 5.5}
 
 Boil_Kettle
 'Actors': {0: {'name': 'Heater', 'index': 2, 'type': 'Heater'}, 1: {'name': 'Pump 1', 'index': 0, 'type': 'Pump'}}

@@ -4,7 +4,7 @@ from datetime import datetime
 import os
 
 from modules.app_config import socketio, cache
-from modules.cache import update_cache
+from modules.system import update_system
 
 
 class logAPI:
@@ -72,5 +72,5 @@ class logAPI:
 # SENSOR LOG SOCKETIO FUNCTIONS ############################
 @socketio.on('set_log_state')
 async def set_log_state(sid, s_dict):
-    await update_cache('SYSTEM', s_dict)
+    await update_system(s_dict)
     await logAPI.set_log_state()

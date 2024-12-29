@@ -2,8 +2,6 @@ print('Loading Cache Module...')
 
 from pprint import pprint
 
-from modules.controls.hysteresis import HysteresisAPI
-from modules.controls.actors import ActorAPI
 from modules.app_config import socketio, cache, update_config
 
 
@@ -14,22 +12,6 @@ async def send_cache():
     except:
         pass
     await socketio.emit('cache', cache_emit)
-
-async def update_cache(dir, *args):
-    args = await convert_strings(*args) 
-    if dir == "ACTORS":
-        print(args)
-        cache[dir] = args[0]
-        await ActorAPI.update_actors()
-    else:         
-        if dir == 'SYSTEM':          
-            cache[dir] = args[0]
-            await HysteresisAPI.update_auto_states()
-        if dir == 'VESSELS':
-            cache[dir][args[0]] = args[1]
-    await send_cache()
-    await update_config(dir, *args)       
-    pprint(cache)
 
 async def add_remove_hardware(mod_type, vessel, hw_type):
     v_dict = cache['VESSELS'][vessel]
@@ -44,7 +26,7 @@ async def add_remove_hardware(mod_type, vessel, hw_type):
     else:
         print("Deleting " + hw_type + ' from ' + vessel)
         del v_dict[hw_type][int(count - 1)]
-    await update_cache('VESSELS', vessel, v_dict)
+    await update_vessel('VESSELS', vessel, v_dict)
 
 async def convert_strings(*args):
     args_out = []
@@ -80,6 +62,15 @@ def dfilter(d):
                     pass
     return d_new
 
+async def update_vessel(*args):
+    args = await convert_strings(*args) 
+    pprint(args[0])
+    pprint(args[1])   
+    cache['VESSELS'][args[0]] = args[1]
+    await send_cache()
+    await update_config(dir, args) 
+    pprint(cache)
+
 
 # CONNECTION FUNCTIONS ######################
 @socketio.on('connect')
@@ -97,18 +88,10 @@ async def MBC_disconnect(sid):
 async def get_cache(sid):
     await send_cache()
 
-@socketio.on('system_update')
-async def update_system(sid, s_dict):
-    await update_cache('SYSTEM', s_dict)
-
 @socketio.on('vessel_update')
-async def update_vessel(sid, vessel, v_dict):
-    await update_cache('VESSELS', vessel, v_dict)
+async def vessel_update(sid, *args):
+    await update_vessel(*args)
 
 @socketio.on('add_rm_hardware')
 async def add_rm_hw(sid, mod_type, vessel,  hw_type):
     await add_remove_hardware(mod_type, vessel, hw_type)
-
-@socketio.on('actor_update')
-async def actor_update(sid, a_dict):
-    await update_cache('ACTORS', a_dict)

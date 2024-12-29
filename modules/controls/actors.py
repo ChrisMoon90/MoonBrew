@@ -2,9 +2,11 @@ print('Loading Actors module...')
 
 import time
 import gpiod
+from pprint import pprint
 
-from modules.app_config import cache
+from modules.app_config import cache, socketio, update_config
 from modules.sys_log import sys_log
+from modules.cache import convert_strings, send_cache
 
 class ActorAPI():
 
@@ -33,9 +35,20 @@ class ActorAPI():
                     else: 
                         request.set_value(pin, gpiod.line.Value.INACTIVE)
         sys_log('Actor states updated: ' + str(msg))
-        
-    # def cleanup():
-    #     GPIO.cleanup()
+        await send_cache()
+
+async def actor_update(a_dict):
+    args = await convert_strings(a_dict) 
+    cache['ACTORS'] = args[0]
+    await ActorAPI.update_actors()
+    await update_config(dir, args) 
+    pprint(cache)
+
+
+# ACTOR SOCKETIO FUNCTIONS ############################
+@socketio.on('actor_update')
+async def update_actor(sid, a_dict):
+    await actor_update(a_dict)
 
 
 #FOR DEVELOPMENT PURPOSES
