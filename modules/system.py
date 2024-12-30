@@ -3,9 +3,9 @@ print('Loading System module...')
 import os
 from pprint import pprint
 
-from modules.app_config import socketio, cache, update_config
+from modules.app_config import socketio, cache, update_config, convert_strings, send_cache
 from modules.sys_log import sys_log
-from modules.cache import convert_strings, send_cache
+# from modules.cache import convert_strings, send_cache
 from modules.controls.hysteresis import HysteresisAPI
 from modules.sensors.ftdi import re_init_ftdi
 from modules.sensors.tilt import tilt_init
@@ -28,7 +28,7 @@ async def update_system(s_dict):
     cache['SYSTEM'] = args[0]
     await HysteresisAPI.update_auto_states()
     await send_cache()
-    await update_config(dir, args) 
+    await update_config('SYSTEM', args) 
     pprint(cache)
 
 async def sensor_init():
@@ -40,7 +40,6 @@ async def sensor_init():
 # SYSTEM SOCKETIO FUNCTIONS ############################
 @socketio.on('system_update')
 async def system_update(sid, s_dict): 
-    
     await update_system(s_dict)
 
 @socketio.on('delete')

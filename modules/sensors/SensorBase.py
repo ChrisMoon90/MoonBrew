@@ -1,6 +1,5 @@
 print('Loading SensorBase Module...')
 
-import asyncio
 import pprint
 import time
 
