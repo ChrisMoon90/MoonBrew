@@ -35,13 +35,6 @@ class Tilt(SensorBase):
                 self.t_cache = {'temp': ibeacon.major, 'sg': float(ibeacon.minor)/10000, 'txpower': ibeacon.power, 'rssi': rssi}
                 cache['SENSORS'][self.s_num]['cur_read'] = self.t_cache['sg']
                 sys_log('t_cache: ' + str(self.t_cache))
-                print('t_cache: ', self.t_cache)
-            except KeyError as k:
-                sys_log('KeyError: ' + str(k))
-                pass
-            except ConstError as c:
-                sys_log('ConstError: ' + str(c))
-                pass
             except Exception as e:
                 sys_log('Run_tilt error: ' + str(e) + str(self.t_cache))
             await socketio.sleep(sleep)

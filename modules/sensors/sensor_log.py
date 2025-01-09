@@ -5,13 +5,15 @@ import os
 
 from modules.app_config import socketio, cache
 from modules.system import update_system
+from modules.sys_log import sys_log
 
 
 class logAPI:
 
     run_state = False
     log_rate = cache['SYSTEM']['Static']['log_rate']
-    last_send = datetime.now()
+    t = datetime.now()
+    last_send = t.replace(year=1990, month=12, day=25, hour=10, minute=30, second=0)
     dir = "./logs/"
     fn = "sensors.csv"
 
@@ -24,7 +26,6 @@ class logAPI:
             t = socketio.start_background_task(target = logAPI.save_to_file)
         else:
             a_msg = 'Sensor Logging Stopped'
-            print(a_msg)
             await socketio.emit('alert_warn', a_msg)
 
     async def get_cur_data():
@@ -38,8 +39,8 @@ class logAPI:
 
     async def save_to_file():
         a_msg = 'Sensor Logging Started'
-        print(a_msg)
         await socketio.emit('alert_success', a_msg)
+        sys_log(a_msg)
         while logAPI.run_state: 
             try:
                 await logAPI.set_log_rate()
@@ -58,15 +59,17 @@ class logAPI:
                         else:
                             os.mkdir(logAPI.dir)
                         header = "Time, Sensor 1, Sensor 2, Sensor 3, Sensor 4, Sensor 5, Sensor 6\n"
-                        print(logAPI.dir + logAPI.fn)
                         with open(logAPI.dir + logAPI.fn, 'a') as f:
                             f.write(header)
                             f.write("%s\n" % msg)
                     logAPI.last_send = now
+                    await socketio.emit('sensor_log_update')
             except Exception as e:
-                print('Logging Error: ' + str(e))
+                sys_log('Logging Error: ' + str(e))
             await socketio.sleep(1)
-        print('Logging Coroutine Exited')
+        t = datetime.now()
+        logAPI.last_send = t.replace(year=1990, month=12, day=25, hour=10, minute=30, second=0)
+        sys_log('Sensor logging coroutine exited')
 
 
 # SENSOR LOG SOCKETIO FUNCTIONS ############################

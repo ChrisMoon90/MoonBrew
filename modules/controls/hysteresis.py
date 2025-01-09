@@ -72,8 +72,10 @@ class HysteresisAPI():
                     if update == True:
                         await ActorAPI.update_actors()            
             except Exception as e:
-                print('Error running hysteresis loop on ' + vessel + ': ' + str(e))
+                msg = 'Error running hysteresis loop on ' + vessel + ': ' + str(e)
+                print (msg)
+                sys_log(msg)
             await socketio.sleep(sleep)
-        a_msg = "Auto Control Stopped on " + v_out
+        a_msg = "Auto Control Exited on " + v_out
         sys_log(a_msg) 
         await socketio.emit('alert_warn', a_msg)

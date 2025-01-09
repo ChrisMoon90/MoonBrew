@@ -1,10 +1,12 @@
 print('Loading Config module...')
 
 from aiohttp import web
+from pprint import pprint
 # import ssl
 import socketio as sio
 import os
-from pprint import pprint
+
+from modules.sys_log import sys_log
 
 # ssl_context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
 # ssl_context.load_cert_chain('./certs/certificate.pem', './certs/key.pem')
@@ -124,7 +126,7 @@ async def add_remove_hardware(mod_type, vessel, hw_type):
     else:
         print("Deleting " + hw_type + ' from ' + vessel)
         del v_dict[hw_type][int(count - 1)]
-    await update_vessel('VESSELS', vessel, v_dict)
+    await update_vessel(vessel, v_dict)
 
 async def convert_strings(*args):
     args_out = []
@@ -173,7 +175,8 @@ get_config_params()
 # CONNECTION FUNCTIONS ######################
 @socketio.on('connect')
 async def connect(sid, environ, auth):
-    print('Client Connected at SID: ', sid)
+    msg = 'Client Connected at SID: ' + sid
+    sys_log(msg)
     await send_cache()
    
 @socketio.on('disconnect')

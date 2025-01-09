@@ -36,7 +36,7 @@ async def redirect(request):
     
 app.add_routes([web.get('/', index),
                 web.get('/chart', index),
-                web.get('/settings', index),
+                web.get('/config', index),
                 web.get('/system', index),
                 web.get('/diagnostics', index),
                 web.get('/api/sensors', send_sensor_data),
