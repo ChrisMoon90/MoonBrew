@@ -1,6 +1,6 @@
 print('Loading Hysteresis module...')
 
-from modules.app_config import socketio, cache
+from modules.app_config import socketio, cache, convert_strings, send_cache
 from modules.controls.actors import ActorAPI
 from modules.sys_log import sys_log
 
@@ -20,7 +20,6 @@ class HysteresisAPI():
                     setattr(HysteresisAPI, key, val) 
                     a_indexes = await HysteresisAPI.get_a_indexes(cache['VESSELS'][key])
                     await HysteresisAPI.heat_chill_off(a_indexes)
-        print('AutoStates Updated')
 
     async def heat_chill_off(a_indexes):
         for key, val in a_indexes.items():
@@ -28,6 +27,7 @@ class HysteresisAPI():
                 if cache['ACTORS'][val]['state'] == True:
                     cache['ACTORS'][val]['state'] = False
         await ActorAPI.update_actors()
+        await send_cache()
 
     async def get_a_indexes(v_dict):
         a_indexes = {}
@@ -70,12 +70,21 @@ class HysteresisAPI():
                             cache['ACTORS'][a_indexes['Chiller']]['state'] = False
                             update = True
                     if update == True:
-                        await ActorAPI.update_actors()            
+                        await ActorAPI.update_actors() 
+                        await send_cache()       
             except Exception as e:
                 msg = 'Error running hysteresis loop on ' + vessel + ': ' + str(e)
-                print (msg)
                 sys_log(msg)
             await socketio.sleep(sleep)
         a_msg = "Auto Control Exited on " + v_out
         sys_log(a_msg) 
         await socketio.emit('alert_warn', a_msg)
+
+
+# HYSTERESIS SOCKETIO FUNCTIONS ############################
+@socketio.on('auto_update')
+async def auto_update(sid, s_dict): 
+    args = await convert_strings(s_dict)    
+    cache['SYSTEM'] = args[0]
+    await HysteresisAPI.update_auto_states()
+    await send_cache()

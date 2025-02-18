@@ -35,19 +35,16 @@ class ActorAPI():
                     else: 
                         request.set_value(pin, gpiod.line.Value.INACTIVE)
         sys_log('Actor states updated: ' + str(msg))
-        await send_cache()
-
-async def actor_update(a_dict):
-    args = await convert_strings(a_dict) 
-    cache['ACTORS'] = args[0]
-    await ActorAPI.update_actors()
-    pprint(cache)
 
 
 # ACTOR SOCKETIO FUNCTIONS ############################
 @socketio.on('actor_update')
 async def update_actor(sid, a_dict):
-    await actor_update(a_dict)
+    args = await convert_strings(a_dict) 
+    cache['ACTORS'] = args[0]
+    await ActorAPI.update_actors()
+    await send_cache()
+    pprint(cache)
 
 
 #FOR DEVELOPMENT PURPOSES
