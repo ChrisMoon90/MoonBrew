@@ -3,8 +3,7 @@ print('Loading Sensor Logging module...')
 from datetime import datetime
 import os
 
-from modules.app_config import socketio, cache
-from modules.system import update_system
+from modules.app_config import socketio, cache, update_config, convert_strings
 from modules.sys_log import sys_log
 
 
@@ -16,6 +15,12 @@ class logAPI:
     last_send = t.replace(year=1990, month=12, day=25, hour=10, minute=30, second=0)
     dir = "./logs/"
     fn = "sensors.csv"
+
+    async def update_sys_log_state(s_dict): 
+        args = await convert_strings(s_dict)    
+        cache['SYSTEM'] = args[0]
+        await socketio.emit('log_update', cache)
+        await update_config('SYSTEM', args) 
 
     async def set_log_rate():
         logAPI.log_rate = cache['SYSTEM']['Static']['log_rate']
@@ -75,5 +80,5 @@ class logAPI:
 # SENSOR LOG SOCKETIO FUNCTIONS ############################
 @socketio.on('set_log_state')
 async def set_log_state(sid, s_dict):
-    await update_system(s_dict)
+    await logAPI.update_sys_log_state(s_dict)
     await logAPI.set_log_state()

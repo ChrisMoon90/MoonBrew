@@ -1,5 +1,5 @@
 SYSTEM
-'Static': {'version': 2.3, 'Mode': 'Ferment', 'log_rate': 7}
+'Static': {'version': '2.3.1', 'Mode': 'Ferment', 'log_rate': 7}
 
 Boil_Kettle
 'Actors': {0: {'name': 'Heater', 'index': 2, 'type': 'Heater'}, 1: {'name': 'Pump 1', 'index': 0, 'type': 'Pump'}}
@@ -19,7 +19,7 @@ Hot_Liquor_Tank
 Fermenter
 'Actors': {0: {'name': 'Heater', 'index': 0, 'type': 'Heater'}, 1: {'name': 'Chiller', 'index': 1, 'type': 'Chiller'}}
 'Sensors': {0: {'name': 'Internal Temp', 'index': 2}, 1: {'name': 'Ambient Temp', 'index': 1}, 2: {'name': 'Specific Gravity', 'index': 0}}
-'Params': {'tar_temp': 68, 'temp_tol': 0.5}
+'Params': {'tar_temp': 36, 'temp_tol': 0.5}
 
 Smoker
 'Actors': {0: {'name': 'Heat Fan', 'index': 0, 'type': 'Pump'}, 1: {'name': 'Circ Fan', 'index': 0, 'type': 'Pump'}}

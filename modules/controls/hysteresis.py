@@ -27,7 +27,7 @@ class HysteresisAPI():
                 if cache['ACTORS'][val]['state'] == True:
                     cache['ACTORS'][val]['state'] = False
         await ActorAPI.update_actors()
-        await send_cache()
+        await socketio.emit('actor_update', cache)
 
     async def get_a_indexes(v_dict):
         a_indexes = {}
@@ -71,7 +71,7 @@ class HysteresisAPI():
                             update = True
                     if update == True:
                         await ActorAPI.update_actors() 
-                        await send_cache()       
+                        await socketio.emit('actor_update', cache)    
             except Exception as e:
                 msg = 'Error running hysteresis loop on ' + vessel + ': ' + str(e)
                 sys_log(msg)
@@ -87,4 +87,4 @@ async def auto_update(sid, s_dict):
     args = await convert_strings(s_dict)    
     cache['SYSTEM'] = args[0]
     await HysteresisAPI.update_auto_states()
-    await send_cache()
+    await socketio.emit('auto_update', cache)

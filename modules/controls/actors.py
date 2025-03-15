@@ -4,9 +4,8 @@ import time
 import gpiod
 from pprint import pprint
 
-from modules.app_config import cache, socketio, convert_strings, send_cache
+from modules.app_config import cache, socketio, convert_strings
 from modules.sys_log import sys_log
-# from modules.cache import convert_strings, send_cache
 
 class ActorAPI():
 
@@ -43,7 +42,7 @@ async def update_actor(sid, a_dict):
     args = await convert_strings(a_dict) 
     cache['ACTORS'] = args[0]
     await ActorAPI.update_actors()
-    await send_cache()
+    await socketio.emit('actor_update', cache)
     pprint(cache)
 
 
